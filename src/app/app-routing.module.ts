@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
   },
   {
+    path: 'calendar',
+    loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule)
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }
