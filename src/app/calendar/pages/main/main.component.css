@@ -1,0 +1,21 @@
+.container-fluid {
+    padding-top: 80px;
+}
+
+  /* calendar.component.css */
+:host ::ng-deep .fc .fc-button {
+    background-color: #0085db; /* Customize as needed */
+    color: white;
+    border-color: #0a7bc6;
+  }
+  
+  :host ::ng-deep .fc .fc-button:hover {
+    background-color: #149bf5;
+    border-color: #0a7bc6;
+  }
+
+  .fc-button-active {
+    background-color: #0c6fb1;
+    border-color: #0a7bc6;
+  }
+  

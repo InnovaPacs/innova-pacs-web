@@ -1,3 +1,7 @@
 .container-fluid {
     padding-top: 80px;
 }
+
+tr.fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event {
+    cursor: pointer;
+}
