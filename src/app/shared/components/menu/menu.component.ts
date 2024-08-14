@@ -1,4 +1,5 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
+import { AuthService } from '../../../auth/services/auth.service';
 declare var $: any;
 
 @Component({
@@ -7,6 +8,11 @@ declare var $: any;
   styleUrl: './menu.component.css'
 })
 export class MenuComponent implements AfterViewInit {
+  private authService = inject(AuthService);
+
+  logOut() {
+    this.authService.logOut();
+  }
   
   ngAfterViewInit(): void {
     $("#sidebarCollapse, #headerCollapse").on("click", function () {

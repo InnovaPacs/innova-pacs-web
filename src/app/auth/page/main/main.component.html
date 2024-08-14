@@ -11,14 +11,20 @@
                   <img src="../../../../assets/images/logos/innovapacs_logo.jpeg" width="180" alt="">
                 </div>
                 <p class="text-center">Tu pacs de confianza</p>
-                <form>
+                <form autocomplete="off"
+                    [formGroup]="loginForm"
+                    (ngSubmit)="login()">
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="exampleInputUserName" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="exampleInputUserName" aria-describedby="emailHelp"
+                      placeholder="Correo electrónico"
+                      formControlName="username">
                   </div>
                   <div class="mb-4">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
+                    <input type="password" class="form-control" id="exampleInputPassword1"
+                      placeholder="Ingrese su contraseña"
+                      formControlName="password">
                   </div>
                   <!--
                   <div class="d-flex align-items-center justify-content-between mb-4">
@@ -31,7 +37,10 @@
                     <a class="text-primary fw-bold" href="./index.html">Forgot Password ?</a>
                   </div>
                   -->
-                  <a routerLink="/dashboard/main" class="btn btn-primary w-100 fs-4 mb-4 rounded-2">Sign In</a>
+                  <button class="btn btn-primary w-100 fs-4 mb-4 rounded-2"
+                    type="submit"
+                    [disabled]="loginForm.invalid"
+                  >LoginIn</button>
                   <!--
                   <div class="d-flex align-items-center justify-content-center">
                     <p class="fs-4 mb-0 fw-bold">New to Spike?</p>
