@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, map, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { User, AuthStatus, LoginResponse } from '../interfaces';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +43,10 @@ export class AuthService {
     this._currentUser.set(null);
     this._authStatus.set(AuthStatus.notAuthenticated);
     sessionStorage.removeItem('token');
-  } 
+  }
+  
+  getToken(): HttpHeaders {
+    return new HttpHeaders()
+    .set('Authorization', `Bearer ${sessionStorage.getItem('token')}`);
+  }
 }
