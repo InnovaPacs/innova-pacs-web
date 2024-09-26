@@ -35,6 +35,11 @@ const routes: Routes = [
     loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule)
   },
   {
+    path: 'medical-offices',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./medical-office/medical-office.module').then(m => m.MedicalOfficeModule)
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }
