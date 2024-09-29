@@ -42,8 +42,13 @@ export class MedicalOfficeService {
     );
   }
 
-  getById(id: string):Observable<MedicalOffice> {
-    const url = `${this.baseUrl}/api/medical-offices/${id}`;
+  getById(userId: string | null, medicalOfficeId: string):Observable<MedicalOffice> {
+    
+    if(userId === null) {
+      userId = this.authService.currentUser()!.id;
+    }
+
+    const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
     const headers = this.authService.getToken();
 
     return this.http.get<MedicalOffice>(url,  
@@ -53,10 +58,15 @@ export class MedicalOfficeService {
     );
   }
 
-  updateUserById(id: string, medicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
-    const url = `${this.baseUrl}/api/medical-offices/${id}`;
-    const headers = this.authService.getToken();
+  updateUserById(userId: string | null, medicalOfficeId: string, medicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
 
+    if(userId === null) {
+      userId = this.authService.currentUser()!.id;
+    }
+
+    const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
+    const headers = this.authService.getToken();
+    console.log(medicalOffice);
     return this.http.put<MedicalOffice>(url, medicalOffice,
       {
         headers
@@ -64,9 +74,13 @@ export class MedicalOfficeService {
     );
   }
 
-  saveUser(userId: string, updateMedicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
-    const headers = this.authService.getToken();
+  saveMedicalOffice(userId: string | null, updateMedicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
+    if(userId === null) {
+      userId = this.authService.currentUser()!.id;
+    }
 
+    const headers = this.authService.getToken();
+    
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices`;
     return this.http.post<MedicalOffice>(url, updateMedicalOffice, {
       headers

@@ -56,8 +56,6 @@ export class MainComponent implements OnInit {
         totalPages: response.totalPages,
         items: this.getItems(response.totalPages)
       }
-
-      console.log('pagination ', this.pagination);
     });
   }
 }

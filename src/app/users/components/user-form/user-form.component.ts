@@ -4,9 +4,6 @@ import { UserService } from '../../services/user.service';
 import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateUser, User } from '../../interfaces/user.interface';
-import { s } from '@fullcalendar/core/internal-common';
-import { state } from '@angular/animations';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-form',

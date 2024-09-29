@@ -23,6 +23,7 @@ export class MainComponent {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('GET DATA OF ');
     this.getAllData(0);
   }
 
@@ -41,12 +42,12 @@ export class MainComponent {
   }
 
   navigate(page: number):void {
-    console.log(page);
     this.getAllData(page);
   }
 
   private getAllData(page: number) {
     this.medicalOfficeService.getAllByUserId(null ,page).subscribe((response) => {
+      console.log('response: ', response.content);
       this.medicalOffices = response.content;
       
       this.pagination = {
