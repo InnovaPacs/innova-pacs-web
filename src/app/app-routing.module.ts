@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./medical-office/medical-office.module').then(m => m.MedicalOfficeModule)
   },
   {
+    path: 'doctors',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule)
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }

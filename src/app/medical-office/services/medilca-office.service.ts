@@ -80,7 +80,6 @@ export class MedicalOfficeService {
     }
 
     const headers = this.authService.getToken();
-    
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices`;
     return this.http.post<MedicalOffice>(url, updateMedicalOffice, {
       headers
