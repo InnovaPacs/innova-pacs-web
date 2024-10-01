@@ -68,8 +68,8 @@ export class AppointmentService {
     });
   }
 
-  getFullData():Observable<Appointment[]> {
-    const url = `${this.baseUrl}/api/appointments/full-data`;
+  getFullData(month: number, year: number):Observable<Appointment[]> {
+    const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`;
     const headers = this.authService.getToken();
 
     return this.http.get<Appointment[]>(url,
