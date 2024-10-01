@@ -5,14 +5,18 @@ import { AppointmentsRoutingModule } from './appointments-routing.module';
 import { AppointmentsLayoutComponent } from './layout/appointments-layout/appointments-layout.component';
 import { MainComponent } from './pages/main/main.component';
 import { SharedModule } from '../shared/shared.module';
+import { AppointmentFormComponent } from './components/appointment-form/appointment-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     AppointmentsLayoutComponent,
-    MainComponent
+    MainComponent,
+    AppointmentFormComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     AppointmentsRoutingModule,
     SharedModule

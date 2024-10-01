@@ -85,4 +85,15 @@ export class MedicalOfficeService {
       headers
     });
   }
+
+  getFullData():Observable<MedicalOffice[]> {
+    const url = `${this.baseUrl}/api/medical-offices/full-data`;
+    const headers = this.authService.getToken();
+
+    return this.http.get<MedicalOffice[]>(url,
+      {
+        headers
+      }
+    );
+  }
 }

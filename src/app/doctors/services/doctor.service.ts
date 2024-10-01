@@ -67,4 +67,15 @@ export class DoctorService {
       headers
     });
   }
+
+  getFullData():Observable<Doctor[]> {
+    const url = `${this.baseUrl}/api/doctors/full-data`;
+    const headers = this.authService.getToken();
+
+    return this.http.get<Doctor[]>(url,
+      {
+        headers
+      }
+    );
+  }
 }

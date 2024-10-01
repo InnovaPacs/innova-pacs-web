@@ -3,22 +3,21 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
-import { UpdateDoctor } from '../../doctors/interfaces/doctor.interface';
-import { PatientPage } from '../interfaces/patient-page.interface';
-import { Patient, UpdatePatient } from '../interfaces/patient.interface';
+import { AppointmentPage } from '../interfaces/appointment-page.interface';
+import { Appointment, AppointmentDto } from '../interfaces/appointment.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class AppointmentService {
   private readonly baseUrl = environment.baseUrl;
   private authService = inject(AuthService);
   private http = inject(HttpClient);
   
   constructor() { }
 
-  getAll(page: number):Observable<PatientPage> {
-    const url = `${this.baseUrl}/api/patients?page=${page}`;
+  getAll(page: number):Observable<AppointmentPage> {
+    const url = `${this.baseUrl}/api/appointments?page=${page}`;
     const headers = this.authService.getToken();
 
     return this.http.get(url,  
@@ -38,45 +37,34 @@ export class PatientService {
     );
   }
 
-  getById(medicalOfficeId: string):Observable<Patient> {
-    const url = `${this.baseUrl}/api/patients/${medicalOfficeId}`;
+  getById(medicalOfficeId: string):Observable<Appointment> {
+    const url = `${this.baseUrl}/api/appointments/${medicalOfficeId}`;
     const headers = this.authService.getToken();
 
-    return this.http.get<Patient>(url,  
+    return this.http.get<Appointment>(url,  
       {
         headers
       }
     );
   }
 
-  update(id: string, bodyRequest: UpdatePatient):Observable<Patient> {
-    const url = `${this.baseUrl}/api/patients/${id}`;
+  update(id: string, bodyRequest: AppointmentDto):Observable<Appointment> {
+    const url = `${this.baseUrl}/api/appointments/${id}`;
     const headers = this.authService.getToken();
     
-    return this.http.put<Patient>(url, bodyRequest,
+    return this.http.put<Appointment>(url, bodyRequest,
       {
         headers
       }
     );
   }
 
-  save(bodyRequest: UpdatePatient):Observable<Patient> {
+  save(bodyRequest: AppointmentDto):Observable<Appointment> {
     const headers = this.authService.getToken();
-    const url = `${this.baseUrl}/api/patients`;
+    const url = `${this.baseUrl}/api/appointments`;
 
-    return this.http.post<Patient>(url, bodyRequest, {
+    return this.http.post<Appointment>(url, bodyRequest, {
       headers
     });
-  }
-
-  getFullData():Observable<Patient[]> {
-    const url = `${this.baseUrl}/api/patients/full-data`;
-    const headers = this.authService.getToken();
-
-    return this.http.get<Patient[]>(url,
-      {
-        headers
-      }
-    );
   }
 }

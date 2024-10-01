@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <!--  Row 1 -->
+    <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100">
+              <div class="card-body p-4">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                      <label for="appointmentDate" class="form-label">Fecha</label>
+                      <input type="date" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita"
+                        formControlName="appointmentDate">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="patientId" class="form-label">Paciente</label>
+                        <select class="form-select" id="patientId" formControlName="patientId">
+                          @for (domain of patients; track domain.id) {
+                            <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
+                          }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="doctorId" class="form-label">Doctor</label>
+                        <select class="form-select" id="doctorId" formControlName="doctorId">
+                          @for (domain of doctors; track domain.id) {
+                            <option [value]="domain.id">{{ domain.name }} ({{ domain.specialty }})</option>
+                          }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="medicalOfficeId" class="form-label">Consultorio</label>
+                        <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
+                          @for (domain of medicalOffices; track domain.id) {
+                            <option [value]="domain.id">{{ domain.name }}</option>
+                          }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guradar</button>
+                </form>  
+                
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
