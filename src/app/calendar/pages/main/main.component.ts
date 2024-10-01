@@ -1,16 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import listPlugin from '@fullcalendar/list';
 import { CalendarOptions } from '@fullcalendar/core';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
+import { map } from 'rxjs';
+import { Appointment } from '../../../appointments/interfaces/appointment.interface';
+import { CalendarEvent } from '../../interfaces/calendar-event.interface';
+import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
+  private service = inject(AppointmentService);
+  private router = inject(Router);
+  
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, bootstrapPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
@@ -39,14 +48,63 @@ export class MainComponent {
     eventClick: this.handleEventClick.bind(this)
   };
 
-  calendarEvents = [
-    { id: '1', title: 'Jose Luis Campos Bautista [Vista]', start: '2024-08-05T14:00:00', end: '2024-08-05T15:00:00' },
-    { id: '2', title: 'Laura Campos Bautista [Test]', start: '2024-08-05T15:00:00', end: '2024-08-05T16:00:00' },
-    { id: '3', title: 'Lupita Campos Bautista [Vista]', start: '2024-08-08T14:00:00', end: '2024-08-08T16:00:00' }
-  ];
+  public calendarEvents: CalendarEvent[] = [];
 
   handleEventClick(arg:any) {
     const eventId = arg.event.id;
-    console.log('Evento ID:', arg.event.id );
+    this.openModal(eventId);
+  }
+
+  ngOnInit(): void {
+    this.service.getFullData()
+    .pipe(
+      map((resposne: Appointment[]) => {
+        return resposne.map((app: Appointment) => {
+          return {
+            id: app.id,
+            title: `${app.patient.firstName} ${app.patient.lastName} [${app.medicalOffice.name}]`,
+            start: `${app.appointmentDate}T${app.appointmentStartHour}`,
+            end: `${app.appointmentDate}T"${app.appointmentEndHour}"`
+          }
+        });
+      })
+    )
+    .subscribe(response =>  {
+      this.calendarEvents =  response;
+    });
+  }
+
+  openModal(eventId: string) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      }, buttonsStyling: false});
+
+
+    swalWithBootstrapButtons.fire({
+      title: '¿Qué deseas hacer?',
+      text: 'Selecciona una opción:',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Editar',
+      cancelButtonText: 'Eliminar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.editAction(eventId);
+      } else if (result.isDismissed) {
+        this.deleteAction(eventId);
+      }
+    });
+  }
+
+  editAction(eventId: string) {
+    this.router.navigate(['/appointments/', eventId]);
+  }
+
+  deleteAction(eventId: string) {
+    this.service.deleteById(eventId).subscribe(() => {
+      this.ngOnInit()
+    });
   }
 }

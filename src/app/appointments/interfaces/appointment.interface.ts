@@ -8,6 +8,8 @@ export interface AppointmentDto {
     patientId: string;
     doctorId: string;
     medicalOfficeId: string;
+    appointmentStartHour: string;
+    appointmentEndHour: string;
 }
 
 export interface Appointment {
@@ -17,6 +19,8 @@ export interface Appointment {
     patient: Patient;
     doctor: Doctor;
     medicalOffice: MedicalOffice;
+    appointmentStartHour: string;
+    appointmentEndHour: string;
 }
 
 export interface UpdatedAppointment {
@@ -25,5 +29,7 @@ export interface UpdatedAppointment {
     patient: Patient;
     doctor: Doctor;
     medicalOffice: MedicalOffice;
+    appointmentStartHour: string;
+    appointmentEndHour: string;
 }
 

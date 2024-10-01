@@ -35,7 +35,9 @@ export class AppointmentFormComponent {
     appointmentDate: [null],
     patientId: [null],
     doctorId: [null],
-    medicalOfficeId: [null]
+    medicalOfficeId: [null],
+    appointmentStartHour: [null],
+    appointmentEndHour: [null],
   });
 
   ngOnInit(): void {
@@ -67,12 +69,15 @@ export class AppointmentFormComponent {
   }
 
   patchForm(response: Appointment) {
+    console.log('VAlues :', response);
     this.form.patchValue({
       id: response.id,
       appointmentDate: response.appointmentDate,
       patientId: response.patient.id,
       doctorId: response.doctor.id,
-      medicalOfficeId: response.medicalOffice.id
+      medicalOfficeId: response.medicalOffice.id,
+      appointmentStartHour: response.appointmentStartHour,
+      appointmentEndHour: response.appointmentEndHour,
     });
   }
 
@@ -82,20 +87,24 @@ export class AppointmentFormComponent {
       appointmentDate,
       patientId,
       doctorId,
-      medicalOfficeId } = this.form.value;
+      medicalOfficeId,
+      appointmentStartHour,
+      appointmentEndHour  } = this.form.value;
 
     return {
       id,
       appointmentDate,
       patientId,
       doctorId,
-      medicalOfficeId
+      medicalOfficeId,
+      appointmentStartHour,
+      appointmentEndHour
     };
   }
 
   onSubmit() {
     const data = this.getFormValue();
-
+    console.log(':: Data:', data);
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
         this.router.navigate(['/calendar/main']);

@@ -12,6 +12,19 @@
                     </div>
 
                     <div class="mb-3">
+                      <label for="appointmentStartHour" class="form-label">Hora inicio</label>
+                      <input type="time" class="form-control" id="appointmentStartHour" placeholder="Ingresa hora de cita"
+                             min="00:00" max="23:59"
+                        formControlName="appointmentStartHour">
+                    </div>
+                    <div class="mb-3">
+                      <label for="appointmentEndHour" class="form-label">Horio fin</label>
+                      <input type="time" class="form-control" id="appointmentEndHour" placeholder="Ingresa hora de cita"
+                             min="00:00" max="23:59"
+                        formControlName="appointmentEndHour">
+                    </div>
+
+                    <div class="mb-3">
                         <label for="patientId" class="form-label">Paciente</label>
                         <select class="form-select" id="patientId" formControlName="patientId">
                           @for (domain of patients; track domain.id) {

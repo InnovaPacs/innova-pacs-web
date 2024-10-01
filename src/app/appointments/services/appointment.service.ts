@@ -62,9 +62,31 @@ export class AppointmentService {
   save(bodyRequest: AppointmentDto):Observable<Appointment> {
     const headers = this.authService.getToken();
     const url = `${this.baseUrl}/api/appointments`;
-
+    console.log("bodyRequest: ",bodyRequest);
     return this.http.post<Appointment>(url, bodyRequest, {
       headers
     });
+  }
+
+  getFullData():Observable<Appointment[]> {
+    const url = `${this.baseUrl}/api/appointments/full-data`;
+    const headers = this.authService.getToken();
+
+    return this.http.get<Appointment[]>(url,
+      {
+        headers
+      }
+    );
+  }
+
+  deleteById(id: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${id}`;
+    const headers = this.authService.getToken();
+
+    return this.http.delete<void>(url,
+      {
+        headers
+      }
+    );
   }
 }
