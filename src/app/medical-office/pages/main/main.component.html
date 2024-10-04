@@ -29,10 +29,12 @@
                           <td>
                             <div class="d-flex align-items-center">
                               <div class="me-4">
-                                <img src="../../../assets/images/profile/user1.jpg"
-                                    width="50"
-                                    class="rounded-circle"
-                                    alt=""/>
+                                <img 
+                                  [src]="medicalOffice.logo ? 'http://localhost:8080/api/files/' + medicalOffice.logo : '../../../assets/images/profile/user1.jpg'" 
+                                  width="50" 
+                                  class="rounded-circle" 
+                                  [alt]="medicalOffice.logo"/>
+                                
                               </div>
                       
                               <div>

@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
+import { map, filter, switchMap, catchError, EMPTY, of } from 'rxjs';
 import { MedicalOfficeService } from '../../services/medilca-office.service';
 import { MedicalOffice, UpdateMedicalOffice } from '../../interfaces/medical-office.interface';
+import { FileService } from '../../../shared/services/file.service';
+import { PacsFile } from '../../../shared/interfaces/file.interface';
 
 @Component({
   selector: 'app-medical-office-form',
@@ -15,6 +17,9 @@ export class MedicalOfficeFormComponent {
   private route = inject(ActivatedRoute);
   private medicalOfficeService = inject(MedicalOfficeService);
   private router = inject(Router);
+  private fileService = inject(FileService);
+  
+  selectedFile!: File;
   
   id!: string;
 
@@ -73,9 +78,27 @@ export class MedicalOfficeFormComponent {
     }
 
     if(!this.id) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          medicalOffice.logo = response.id;
+          return this.medicalOfficeService.saveMedicalOffice(null, medicalOffice);
+        })
+      ).subscribe(() => {
+          this.router.navigate(['/medical-offices/main']);
+        }
+      );
+
+      /*
       this.medicalOfficeService.saveMedicalOffice(null, medicalOffice).subscribe(response => {
         this.router.navigate(['/medical-offices/main']);
-      });
+      });*/
+    }
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFile = file; 
     }
   }
 }
