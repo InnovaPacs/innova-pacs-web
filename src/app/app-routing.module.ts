@@ -45,6 +45,11 @@ const routes: Routes = [
     loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule)
   },
   {
+    path: 'radiology-exams',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./radiology-exam/radiology-exam.module').then(m => m.RadiologyExamModule)
+  },
+  {
     path: '**',
     redirectTo: 'patients'
   }

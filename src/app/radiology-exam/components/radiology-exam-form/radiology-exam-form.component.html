@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <!--  Row 1 -->
+    <div class="row">
+        <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100">
+              <div class="card-body p-4">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Tipo</label>
+                        <select class="form-select" id="type" formControlName="type">
+                            <option value="MRI">MRI</option>
+                            <option value="CT_SCAN">CT_SCAN</option>
+                            <option value="X_RAY">X_RAY</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="examDate" class="form-label">Fecha de estudio</label>
+                        <input type="date" class="form-control" id="examDate" placeholder="Ingresa fecha de estudio"
+                          formControlName="examDate">
+                    </div>
+  
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Tipo</label>
+                        <select class="form-select" id="status" formControlName="status">
+                            <option value="PENDING">PENDING</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="result" class="form-label">Resultado</label>
+                        <input type="text" class="form-control" id="result" placeholder="Resultado"
+                          formControlName="result">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guradar</button>
+                </form>  
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

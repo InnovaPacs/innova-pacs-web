@@ -10,7 +10,6 @@ import { Appointment } from '../../../appointments/interfaces/appointment.interf
 import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
-import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-main',
@@ -78,6 +77,7 @@ export class MainComponent implements OnInit {
         html: `
           <button id="editBtn" class="btn btn-primary" style="margin-right: 10px;">Editar</button>
           <button id="deleteBtn" class="btn btn-danger" style="margin-right: 10px;">Eliminar</button>
+          <button id="addStudyBtn" class="btn btn-success" style="margin-right: 10px;">Ver estudio</button>
         `,
         showCancelButton: false,
         showConfirmButton: false,
@@ -86,6 +86,7 @@ export class MainComponent implements OnInit {
         didRender: () => {
           const editBtn = document.getElementById('editBtn');
           const deleteBtn = document.getElementById('deleteBtn');
+          const addStudyBtn = document.getElementById('addStudyBtn');
       
           editBtn!.addEventListener('click', () => {
             swalWithBootstrapButtons.close();
@@ -95,6 +96,11 @@ export class MainComponent implements OnInit {
           deleteBtn!.addEventListener('click', () => {
             swalWithBootstrapButtons.close();
             this.deleteAction(eventId);
+          });
+
+          addStudyBtn!.addEventListener('click', () => {
+            swalWithBootstrapButtons.close();
+            this.addStudy(eventId);
           });
         }
       });
@@ -139,5 +145,10 @@ export class MainComponent implements OnInit {
     .subscribe(response =>  {
       this.calendarEvents =  response;
     });
-  } 
+  }
+
+  addStudy(eventId: string) {
+    console.log('eventId ',eventId);
+    this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: eventId } });
+  }
 }

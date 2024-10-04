@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
 import { Appointment, AppointmentDto } from '../interfaces/appointment.interface';
+import { RadiolodyExam } from '../../radiology-exam/interfaces/radiology-exam.interface';
+import { RadiolodyExamPage } from '../../radiology-exam/interfaces/radiology-exam-page.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +89,27 @@ export class AppointmentService {
       {
         headers
       }
+    );
+  }
+
+  getRadiologyExamsByAppointmentId(page: number, appointmentId: string):Observable<RadiolodyExamPage> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/radiologyExams?page=${page}`;
+    const headers = this.authService.getToken();
+
+    return this.http.get(url,  
+      {
+        headers
+      }
+    ).pipe(
+      map((response: any) => {
+        return {
+          content: response.content,
+          totalElements: response.totalElements,
+          size: response.size,
+          number: response.number,
+          totalPages: response.totalPages
+        }
+      })
     );
   }
 }
