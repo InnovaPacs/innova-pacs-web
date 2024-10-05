@@ -4,6 +4,7 @@ export interface Doctor {
 	specialty: string;
 	phone: string;
 	email: string;
+	photo: string;
 }
 
 export interface UpdateDoctor {
@@ -11,4 +12,5 @@ export interface UpdateDoctor {
 	specialty: string;
 	phone: string;
 	email: string;
+	photo: string;
 }

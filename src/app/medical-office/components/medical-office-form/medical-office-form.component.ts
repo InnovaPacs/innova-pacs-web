@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY, of } from 'rxjs';
 import { MedicalOfficeService } from '../../services/medilca-office.service';
@@ -19,14 +19,14 @@ export class MedicalOfficeFormComponent {
   private router = inject(Router);
   private fileService = inject(FileService);
   
-  selectedFile!: File;
-  
-  id!: string;
+  private selectedFile!: File;
+  private id!: string;
 
   public medicalOfficeForm: FormGroup = this.fb.group({
-    name: [null],
-    address: [null],
-    phone: [null]
+    name: [null, Validators.required],
+    address: [null, Validators.required],
+    phone: [null, Validators.required],
+    logo: [null]
   });
 
   ngOnInit(): void {
@@ -51,7 +51,8 @@ export class MedicalOfficeFormComponent {
       id: medicalOffice.id,
       name: medicalOffice.name,
       address: medicalOffice.address,
-      phone: medicalOffice.phone
+      phone: medicalOffice.phone,
+      logo: medicalOffice.logo
     });
   }
 
@@ -67,38 +68,55 @@ export class MedicalOfficeFormComponent {
   }
 
   onSubmit() {
-    const medicalOffice = this.getMedicalOfficeFormValue();
-
-    console.log('medicalOffice: ', medicalOffice);
-
-    if(this.id) {
-      this.medicalOfficeService.updateUserById(null, this.id, medicalOffice).subscribe(reposne => {
-        this.router.navigate(['/medical-offices/main']);
-      });
+    if (this.medicalOfficeForm.invalid) {
+      console.warn('Form is invalid');
+      return;
     }
 
-    if(!this.id) {
-      this.fileService.save(this.selectedFile).pipe(
-        switchMap((response) => {
-          medicalOffice.logo = response.id;
-          return this.medicalOfficeService.saveMedicalOffice(null, medicalOffice);
-        })
-      ).subscribe(() => {
-          this.router.navigate(['/medical-offices/main']);
-        }
-      );
+    const medicalOffice = this.getMedicalOfficeFormValue();
 
-      /*
-      this.medicalOfficeService.saveMedicalOffice(null, medicalOffice).subscribe(response => {
-        this.router.navigate(['/medical-offices/main']);
-      });*/
+    if(this.id) {
+      this.handleUpdate(medicalOffice);
+    } else {
+      this.handleCreate(medicalOffice);
     }
   }
 
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
+    
     if (file) {
       this.selectedFile = file; 
     }
+  }
+
+  handleUpdate(medicalOffice: UpdateMedicalOffice): void {
+    if(this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          medicalOffice.logo = response.id;
+          return this.medicalOfficeService.updateUserById(null, this.id, medicalOffice);
+        })
+      ).subscribe(() => {
+          this.router.navigate(['/medical-offices/main']);
+        }
+      );
+    } else {
+      this.medicalOfficeService.updateUserById(null, this.id, medicalOffice).subscribe(reposne => {
+        this.router.navigate(['/medical-offices/main']);
+      });
+    }
+  }
+
+  handleCreate(medicalOffice: UpdateMedicalOffice): void {
+    this.fileService.save(this.selectedFile).pipe(
+      switchMap((response) => {
+        medicalOffice.logo = response.id;
+        return this.medicalOfficeService.saveMedicalOffice(null, medicalOffice);
+      })
+    ).subscribe(() => {
+        this.router.navigate(['/medical-offices/main']);
+      }
+    );
   }
 }

@@ -35,10 +35,11 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="me-4">
-                              <img src="../../../assets/images/profile/user1.jpg"
-                                  width="50"
-                                  class="rounded-circle"
-                                  alt=""/>
+                              <img 
+                                [src]="domain.photo ? 'http://localhost:8080/api/files/' + domain.photo : '../../../assets/images/profile/unknown.jpg'" 
+                                width="50" 
+                                class="rounded-circle" 
+                                [alt]="domain.photo"/>
                             </div>
                     
                             <div>

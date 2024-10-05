@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { PatientService } from '../../services/patient.service';
 import { Patient, UpdatePatient } from '../../interfaces/patient.interface';
+import { FileService } from '../../../shared/services/file.service';
 
 @Component({
   selector: 'app-patient-form',
@@ -11,21 +12,24 @@ import { Patient, UpdatePatient } from '../../interfaces/patient.interface';
   styleUrl: './patient-form.component.css'
 })
 export class PatientFormComponent {
+  private selectedFile!: File;
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private service = inject(PatientService);
   private router = inject(Router);
+  private fileService = inject(FileService);
   
   id!: string;
 
   public form: FormGroup = this.fb.group({
-    firstName: [null],
-    lastName: [null],
-    birthDate: [null],
-    gender: [null],
-    address: [null],
-    phone: [null],
-    email: [null]
+    firstName: [null, Validators.required],
+    lastName: [null, Validators.required],
+    birthDate: [null, Validators.required],
+    gender: [null, Validators.required],
+    address: [null, Validators.required],
+    phone: [null, Validators.required],
+    email: [null, Validators.required],
+    photo: [null]
   });
 
   ngOnInit(): void {
@@ -54,31 +58,71 @@ export class PatientFormComponent {
       gender: response.gender,
       address: response.address,
       phone: response.phone,
-      email: response.email
+      email: response.email,
+      photo: response.photo
     });
   }
 
   getFormValue(): UpdatePatient {
-    const { firstName, lastName, birthDate, gender, address, phone, email } = this.form.value;
+    const { firstName, lastName, birthDate, gender, address, phone, email, photo } = this.form.value;
 
     return {
-      firstName, lastName, birthDate, gender, address, phone, email
+      firstName, lastName, birthDate, gender, address, phone, email, photo
     };
   }
 
   onSubmit() {
+    if (this.form.invalid) {
+      console.warn('Form is invalid');
+      return;
+    }
+
     const data = this.getFormValue();
 
     if(this.id) {
-      this.service.update(this.id, data).subscribe(reposne => {
-        this.router.navigate(['/patients/main']);
-      });
+      this.handleUpdate(data);
+    } else {
+      this.handleCreate(data);
     }
+  }
 
-    if(!this.id) {
-      this.service.save(data).subscribe(response => {
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    
+    if (file) {
+      this.selectedFile = file; 
+    }
+  }
+
+  handleUpdate(update: UpdatePatient): void {
+    if(this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.service.update(this.id, update);
+        })
+      ).subscribe(() => {
+          this.router.navigate(['/patients/main']);
+        }
+      );
+    } else {
+      this.service.update(this.id, update).subscribe(reposne => {
         this.router.navigate(['/patients/main']);
       });
     }
+  }
+
+  handleCreate(update: UpdatePatient): void {
+    this.fileService.save(this.selectedFile).pipe(
+      switchMap((response) => {
+        update.photo = response.id;
+        console.log("PHOTO: ",response);
+        console.log("PATIENT : ",update);
+        return this.service.save(update);
+      })
+    ).subscribe(() => {
+        this.router.navigate(['/patients/main']);
+      }
+    );
   }
 }

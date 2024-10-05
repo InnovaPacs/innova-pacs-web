@@ -7,6 +7,7 @@ export interface Patient {
 	address: string;
 	phone: string;
 	email: string;
+	photo: string;
 }
 
 export interface UpdatePatient {
@@ -17,4 +18,5 @@ export interface UpdatePatient {
 	address: string;
 	phone: string;
 	email: string;
+	photo: string;
 }

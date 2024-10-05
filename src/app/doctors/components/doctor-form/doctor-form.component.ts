@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { DoctorService } from '../../services/doctor.service';
 import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
+import { UpdateMedicalOffice } from '../../../medical-office/interfaces/medical-office.interface';
+import { FileService } from '../../../shared/services/file.service';
 
 @Component({
   selector: 'app-doctor-form',
@@ -11,17 +13,19 @@ import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
   styleUrl: './doctor-form.component.css'
 })
 export class DoctorFormComponent {
+  private selectedFile!: File;
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private service = inject(DoctorService);
   private router = inject(Router);
+  private fileService = inject(FileService);
   
   id!: string;
 
   public form: FormGroup = this.fb.group({
-    name: [null],
-    phone: [null],
-    email: [null],
+    name: [null, Validators.required],
+    phone: [null, Validators.required],
+    email: [null, Validators.required],
     specialty: [null]
   });
 
@@ -48,34 +52,73 @@ export class DoctorFormComponent {
       name: response.name,
       phone: response.phone,
       email: response.email,
-      specialty: response.specialty
+      specialty: response.specialty,
+      photo: response.photo
     });
   }
 
   getFormValue(): UpdateDoctor {
-    const { name, specialty, phone, email } = this.form.value;
+    const { name, specialty, phone, email, photo } = this.form.value;
 
     return {
       name,
       specialty,
       phone,
-      email
+      email,
+      photo
     };
   }
 
   onSubmit() {
+    if (this.form.invalid) {
+      console.warn('Form is invalid');
+      return;
+    }
+    
     const data = this.getFormValue();
 
     if(this.id) {
-      this.service.update(this.id, data).subscribe(reposne => {
-        this.router.navigate(['/doctors/main']);
-      });
+      this.handleUpdate(data);
+    } else {
+      this.handleCreate(data);
     }
+  }
 
-    if(!this.id) {
-      this.service.save(data).subscribe(response => {
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    
+    if (file) {
+      this.selectedFile = file; 
+    }
+  }
+
+  handleUpdate(update: UpdateDoctor): void {
+    if(this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.service.update(this.id, update);
+        })
+      ).subscribe(() => {
+          this.router.navigate(['/doctors/main']);
+        }
+      );
+    } else {
+      this.service.update(this.id, update).subscribe(reposne => {
         this.router.navigate(['/doctors/main']);
       });
     }
+  }
+
+  handleCreate(update: UpdateDoctor): void {
+    this.fileService.save(this.selectedFile).pipe(
+      switchMap((response) => {
+        update.photo = response.id;
+        return this.service.save(update);
+      })
+    ).subscribe(() => {
+        this.router.navigate(['/doctors/main']);
+      }
+    );
   }
 }
