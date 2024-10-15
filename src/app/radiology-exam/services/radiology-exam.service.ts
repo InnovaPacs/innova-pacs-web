@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
 import { Patient, UpdatePatient } from '../../patients/interfaces/patient.interface';
 import { RadiolodyExam, RadiologyExamDto, UpdateRadiolodyExam } from '../interfaces/radiology-exam.interface';
+import { RadiolodyExamType } from '../interfaces/radiology-exam-type.interface';
+import { RadiolodyExamStudy } from '../interfaces/radiology-exam-study.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +77,28 @@ export class RadiologyExamService {
     const headers = this.authService.getToken();
 
     return this.http.get<RadiolodyExam[]>(url,
+      {
+        headers
+      }
+    );
+  }
+
+  getAllRadiologyExamType():Observable<RadiolodyExamType[]> {
+    const url = `${this.baseUrl}/api/radiology-exams-types`;
+    const headers = this.authService.getToken();
+
+    return this.http.get<RadiolodyExamType[]>(url,
+      {
+        headers
+      }
+    );
+  }
+
+  getAllRadiologyExamStudy(radiologyExamTypeId: string):Observable<RadiolodyExamStudy[]> {
+    const url = `${this.baseUrl}/api/radiology-exams-types/${radiologyExamTypeId}/studies`;
+    const headers = this.authService.getToken();
+
+    return this.http.get<RadiolodyExamStudy[]>(url,
       {
         headers
       }

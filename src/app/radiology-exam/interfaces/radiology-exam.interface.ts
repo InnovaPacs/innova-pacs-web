@@ -11,6 +11,7 @@ export interface RadiolodyExam {
 	patient: Patient;
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
+	study: string;
 }
 
 export interface UpdateRadiolodyExam {
@@ -22,6 +23,7 @@ export interface UpdateRadiolodyExam {
 	patient: Patient;
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
+	study: string;
 }
 
 export interface RadiologyExamDto {
@@ -33,4 +35,5 @@ export interface RadiologyExamDto {
 	patientId: string;
 	medicalOfficeId: string;
 	appointmentId: string;
+	study: string;
 }
