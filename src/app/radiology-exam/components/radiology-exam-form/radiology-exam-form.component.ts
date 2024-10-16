@@ -23,12 +23,14 @@ export class RadiologyExamFormComponent {
 
   public form: FormGroup = this.fb.group({
     id: [null],
-    type: [null],
+    radiologyExamTypeId: [null],
     examDate: [null],
     status: [null],
     result: [null],
+    patientId: [null],
+    medicalOfficeId: [null],
     appointmentId: [null],
-    study: [null]
+    radiologyExamStudyId: [null]
   });
 
   public radiologyExamTypes: RadiolodyExamType[] =  [];
@@ -42,7 +44,6 @@ export class RadiologyExamFormComponent {
   patchForm(response: RadiolodyExam) {
     this.form.patchValue({
       id: response.id,
-      type: response.type,
       examDate: response.examDate,
       status: response.status,
       result: response.result,
@@ -50,19 +51,32 @@ export class RadiologyExamFormComponent {
       medicalOfficeId: response.medicalOffice.id,
       appointmentId: response.appointment.id,
     });
+
+    if(response!.radiologyExamType) {
+      this.form.patchValue({
+        radiologyExamTypeId: response.radiologyExamType.id
+      });
+    }
+
+    if(response!.radiologyExamStudy) {
+      this.form.patchValue({
+        radiologyExamStudyId: response.radiologyExamStudy.id
+      });
+    }
   }
 
   getFormValue(): RadiologyExamDto {
-    const { id, type, examDate, status, result, patientId, medicalOfficeId, appointmentId, study } = this.form.value;
+    const { id, radiologyExamTypeId, examDate, status, result, patientId, medicalOfficeId, appointmentId, radiologyExamStudyId } = this.form.value;
 
     return {
-      id, type, examDate, status, result, patientId, medicalOfficeId, appointmentId, study
+      id, radiologyExamTypeId, examDate, status, result, patientId, medicalOfficeId, appointmentId, radiologyExamStudyId
     };
   }
 
   onSubmit() {
     const data = this.getFormValue();
-
+    console.log('data: ', data);
+    
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
         this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: this.appointmentId } });
@@ -115,7 +129,6 @@ export class RadiologyExamFormComponent {
   onSelectRadiologyExamType(selectRadiologyExamTypeId: any) {
     const selectedId = selectRadiologyExamTypeId.target.value;    
     this.service.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
-      console.log('data: ',data);
       this.radiologyExamStudy = data;
     });
   }

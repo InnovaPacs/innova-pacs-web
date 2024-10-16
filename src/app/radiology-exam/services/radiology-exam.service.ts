@@ -54,7 +54,8 @@ export class RadiologyExamService {
   update(id: string, bodyRequest: RadiologyExamDto):Observable<RadiolodyExam> {
     const url = `${this.baseUrl}/api/radiology-exams/${id}`;
     const headers = this.authService.getToken();
-    
+    console.log('bodyRequest: ', bodyRequest.radiologyExamStudyId);
+    console.log('bodyRequest: ', bodyRequest.radiologyExamTypeId);
     return this.http.put<RadiolodyExam>(url, bodyRequest,
       {
         headers

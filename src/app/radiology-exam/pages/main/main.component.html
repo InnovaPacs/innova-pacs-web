@@ -42,7 +42,9 @@
                               </div>
                       
                               <div>
-                                <h6 class="mb-1 fw-bolder">{{ domain.type }}</h6>
+                                <h6 class="mb-1 fw-bolder">
+                                  {{ domain?.radiologyExamType?.name ? domain.radiologyExamType.name : 'No Exam Type Available' }}
+                                </h6>
                               </div>
                             </div>
                           </td>

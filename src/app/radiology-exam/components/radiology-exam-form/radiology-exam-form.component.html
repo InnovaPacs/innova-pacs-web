@@ -5,16 +5,6 @@
             <div class="card w-100">
               <div class="card-body p-4">
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                    <!--
-                    <div class="mb-3">
-                        <label for="type" class="form-label">Tipo</label>
-                        <select class="form-select" id="type" formControlName="type">
-                            <option value="MRI">MRI</option>
-                            <option value="CT_SCAN">CT_SCAN</option>
-                            <option value="X_RAY">X_RAY</option>
-                        </select>
-                    </div>
-                    -->
                     <div class="mb-3">
                         <label for="examDate" class="form-label">Fecha de estudio</label>
                         <input type="date" class="form-control" id="examDate" placeholder="Ingresa fecha de estudio"
@@ -22,8 +12,8 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="type" class="form-label">Tipo</label>
-                        <select class="form-select" id="type" formControlName="type" (change)="onSelectRadiologyExamType($event)">
+                        <label for="radiologyExamTypeId" class="form-label">Tipo</label>
+                        <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
                             @for (domain of radiologyExamTypes; track domain.id) {
                                 <option [value]="domain.id">{{ domain.name }}</option>
                             }
@@ -31,8 +21,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="study" class="form-label">Estudio</label>
-                        <select class="form-select" id="study" formControlName="study">
+                        <label for="radiologyExamStudyId" class="form-label">Estudio</label>
+                        <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
                             @for (domain of radiologyExamStudy; track domain.id) {
                                 <option [value]="domain.id">{{ domain.name }}</option>
                             }
