@@ -18,4 +18,34 @@
     background-color: #0c6fb1;
     border-color: #0a7bc6;
   }
-  
+
+
+  /* calendar.component.css */
+.fc-event {
+  font-size: 14px;
+}
+
+.fc-event-description {
+  font-style: italic;
+  color: #333;
+}
+
+.fc-event .fc-event-start .fc-event-end .fc-event-future .fc-daygrid-event .fc-daygrid-dot-event {
+  background-color: #0085db;
+  color: #ffffff;
+}
+
+.fc-daygrid-day-events {
+  background-color: #0085db;
+  color: #ffffff;
+}
+
+.fc-daygrid-event-harness {
+  background-color: #0085db;
+  color: #ffffff;
+}
+
+.fc-event-title {
+  background-color: #0085db;
+  color: #ffffff; 
+}

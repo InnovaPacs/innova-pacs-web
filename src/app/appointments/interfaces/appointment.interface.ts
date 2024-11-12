@@ -21,6 +21,22 @@ export interface Appointment {
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
+    radiologyExamType: string;
+    radiologyExamTypeColor: string;
+}
+
+export interface AppointmentFullData {
+	id: string;
+	appointmentDate: Date;
+	status: string;
+	patientFirstName: string;
+	doctorName: string;
+	medicalOfficeName: string;
+	appointmentStartHour: string;
+	appointmentEndHour: string;
+	examTypeName: string;
+	examTypeColor: string;
+	examTypeDescription: string;
 }
 
 export interface UpdatedAppointment {

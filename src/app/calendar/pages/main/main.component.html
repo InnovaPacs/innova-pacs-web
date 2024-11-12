@@ -6,7 +6,8 @@
               <div class="card-body p-4 ">
                 <div class="d-flex mb-4 justify-content-between align-items-center">
                   <h5 class="mb-0 fw-bold">Detalle de consultas medicas</h5>
-
+                  <div class="mb-3">
+                </div>
                   <div>
                     <button class="btn btn-primary me-2" [routerLink]="['/appointments']">Ver lista</button>
                     <button class="btn btn-primary" [routerLink]="['/appointments/register']">Registrar consulta</button>
@@ -14,11 +15,22 @@
                 </div>
                 
                 <hr class="my-4">
-                
+
+                <select class="form-select" id="radiolodyExamTypeId" formControlName="radiolodyExamTypeId" (change)="onSelectChange($event)">
+                  <option value="none" selected>Seleccione un tipo de examen</option>
+
+                  @for (domain of radiolodyExamTypes; track domain.id) {
+                    <option [value]="domain.id"><b>[{{ domain.name }}]</b> {{ domain.description }}</option>
+                  }
+                </select>
+
+                <hr class="my-4">
+
                 <full-calendar
                   [options]="calendarOptions"
-                  [events]="calendarEvents">
-              </full-calendar>
+                  [events]="calendarEvents"
+                  >
+                </full-calendar>
               </div>
             </div>
         </div>

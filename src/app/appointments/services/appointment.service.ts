@@ -4,7 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
-import { Appointment, AppointmentDto } from '../interfaces/appointment.interface';
+import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
 import { RadiolodyExam } from '../../radiology-exam/interfaces/radiology-exam.interface';
 import { RadiolodyExamPage } from '../../radiology-exam/interfaces/radiology-exam-page.interface';
 
@@ -70,11 +70,12 @@ export class AppointmentService {
     });
   }
 
-  getFullData(month: number, year: number):Observable<Appointment[]> {
-    const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`;
+  getFullData(month: number, year: number, radiologyExamType: string|null):Observable<AppointmentFullData[]> {
+    const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`
+    + (radiologyExamType && radiologyExamType !== 'none' ? `&radiologyExamType=${radiologyExamType}` : '');
     const headers = this.authService.getToken();
 
-    return this.http.get<Appointment[]>(url,
+    return this.http.get<AppointmentFullData[]>(url,
       {
         headers
       }

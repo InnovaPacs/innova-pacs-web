@@ -60,7 +60,6 @@ export class MainComponent {
 
   private getAllData(appointmentId: string, page: number) {
     this.service.getAll(appointmentId, page).subscribe((response) => {
-      console.log('response: ', response.content);
       this.domains = response.content;
       
       this.pagination = {
