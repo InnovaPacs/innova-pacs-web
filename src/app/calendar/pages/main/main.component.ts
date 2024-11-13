@@ -6,7 +6,7 @@ import listPlugin from '@fullcalendar/list';
 import { CalendarOptions, DatesSetArg } from '@fullcalendar/core';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { map } from 'rxjs';
-import { Appointment, AppointmentFullData } from '../../../appointments/interfaces/appointment.interface';
+import { AppointmentFullData } from '../../../appointments/interfaces/appointment.interface';
 import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
