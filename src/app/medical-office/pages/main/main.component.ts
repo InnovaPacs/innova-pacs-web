@@ -59,4 +59,8 @@ export class MainComponent {
       }
     });
   }
+
+  onCardClick() {
+    console.log("----------");
+  }
 }

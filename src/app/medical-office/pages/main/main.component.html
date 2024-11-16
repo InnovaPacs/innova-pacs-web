@@ -12,7 +12,7 @@
                 </div>
 
                 <hr class="my-4">
-                
+                <!--
                 <div class="table-responsive" data-simplebar>
                   <table class="table table-borderless align-middle text-nowrap">
                     <thead>
@@ -79,6 +79,61 @@
                     </ul>
                   </nav>
                 </div>
+                -->
+                <div class="container-fluid">
+                  <div class="row">
+                    @for (medicalOffice of medicalOffices; track medicalOffice.id) {
+                      <div class="card mb-3 mx-auto" style="max-width: 540px; cursor: pointer;">
+                        <div class="d-flex align-items-center justify-content-between mb-10">
+                          <div class="">
+                            <h5 class="card-title fw-semibold">{{ medicalOffice.name }}</h5>
+                          </div>
+                          <div class="dropdown">
+                            <button
+                              id="dropdownMenuButton1"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              class="rounded-circle btn-transparent rounded-circle btn-sm px-1 btn shadow-none"
+                            >
+                              <i class="ti ti-dots-vertical fs-7 d-block"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                              <li>
+                                <a class="dropdown-item" [routerLink]="['/medical-offices/', medicalOffice.id]">Editar</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="row g-0 align-items-center">
+                          <div class="col-auto">
+                            <img 
+                            [src]="medicalOffice.logo ? 'http://localhost:8080/api/files/' + medicalOffice.logo : '../../../assets/images/profile/unknown.jpg'" 
+                              alt="Logo" 
+                              class="img-fluid rounded-circle" 
+                              style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #ddd;">
+                          </div>
+                          <div class="col">
+                            <div class="card-body">
+                              <h5 class="card-title mb-1">{{ medicalOffice.name }}</h5>
+                              <p class="card-text mb-0"><strong>Dirección:</strong> {{ medicalOffice.address }}</p>
+                              <p class="card-text"><strong>Teléfono:</strong> {{ medicalOffice.phone }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div> 
+                    }
+                  </div>
+                </div>
+
+                <nav aria-label="Page navigation example" [class.disabled]="true">
+                  <ul class="pagination">
+                    <li class="page-item" [class.disabled]="pagination.currentPage === 0"><a class="page-link" (click)="navigate(pagination.currentPage - 1)">Anterior</a></li>
+                    @for (item of pagination.items; track $index) {
+                      <li class="page-item"><a class="page-link" [class.disabled]="item.index === pagination.currentPage" [ngClass]="{ 'active': item.index === pagination.currentPage }" (click)="navigate(item.index)">{{ item.name }}</a></li>
+                    }
+                    <li class="page-item" [class.disabled]="pagination.currentPage === (pagination.totalPages - 1)"><a class="page-link" (click)="navigate(pagination.currentPage + 1)">Siguiente</a></li>
+                  </ul>
+                </nav>
               </div>
             </div>
           </div>

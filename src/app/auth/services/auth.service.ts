@@ -32,7 +32,6 @@ export class AuthService {
   }
 
   private setAuthentication(user: User, token: string, tokenType: string): boolean {
-    console.log(user, token, tokenType);
     this._currentUser.set(user);
     this._authStatus.set(AuthStatus.authenticated);
     sessionStorage.setItem('token', token);
