@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MedicalOfficeService } from '../../services/medilca-office.service';
 import { MedicalOffice } from '../../interfaces/medical-office.interface';
 import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -10,6 +12,8 @@ import { Item, Pagination } from '../../../shared/interfaces/pagination.interfac
 })
 export class MainComponent {
   private medicalOfficeService = inject(MedicalOfficeService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
   medicalOffices: MedicalOffice[] = [];
 
   pagination: Pagination = {
@@ -23,7 +27,6 @@ export class MainComponent {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('GET DATA OF ');
     this.getAllData(0);
   }
 
@@ -47,7 +50,6 @@ export class MainComponent {
 
   private getAllData(page: number) {
     this.medicalOfficeService.getAllByUserId(null ,page).subscribe((response) => {
-      console.log('response: ', response.content);
       this.medicalOffices = response.content;
       
       this.pagination = {
@@ -60,7 +62,8 @@ export class MainComponent {
     });
   }
 
-  onCardClick() {
-    console.log("----------");
+  onCardClick(medicalOfficeId: string) {
+    this.authService.selectMedicalOffice(medicalOfficeId);
+    this.router.navigate(['/patients/main']);
   }
 }

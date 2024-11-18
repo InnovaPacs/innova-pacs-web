@@ -83,7 +83,7 @@
                 <div class="container-fluid">
                   <div class="row">
                     @for (medicalOffice of medicalOffices; track medicalOffice.id) {
-                      <div class="card mb-3 mx-auto" style="max-width: 540px; cursor: pointer;">
+                      <div class="card mb-3 mx-auto mat-card-hover" style="max-width: 540px; cursor: pointer;"  (click)="onCardClick(medicalOffice.id)">
                         <div class="d-flex align-items-center justify-content-between mb-10">
                           <div class="">
                             <h5 class="card-title fw-semibold">{{ medicalOffice.name }}</h5>

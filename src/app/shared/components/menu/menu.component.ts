@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 declare var $: any;
 
@@ -7,11 +7,16 @@ declare var $: any;
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
-export class MenuComponent implements AfterViewInit {
+export class MenuComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
+  medicalOfficeStatus = this.authService.getMedicalOfficeStatus;
 
   logOut() {
     this.authService.logOut();
+  }
+  
+  ngOnInit(): void {
+    
   }
   
   ngAfterViewInit(): void {

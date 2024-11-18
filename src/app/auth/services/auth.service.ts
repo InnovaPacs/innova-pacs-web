@@ -11,9 +11,12 @@ export class AuthService {
   private readonly baseUrl = environment.baseUrl;
   private _currentUser = signal<User | null>(null);
   private _authStatus = signal<AuthStatus>(AuthStatus.checking);
+  private _medicalOfficeSelected = signal<boolean>(false);
 
   public currentUser = computed(this._currentUser);
   public authStatus = computed(this._authStatus);
+  //public medicalOfficeSelected = computed(this._medicalOfficeSelected);
+
   private http = inject(HttpClient);
   
   constructor() { }
@@ -47,5 +50,15 @@ export class AuthService {
   getToken(): HttpHeaders {
     return new HttpHeaders()
     .set('Authorization', `Bearer ${sessionStorage.getItem('token')}`);
+  }
+
+  selectMedicalOffice(medicalOfficeId: string) {
+    sessionStorage.setItem('medicalOfficeId', medicalOfficeId);
+    this._medicalOfficeSelected.set(true);
+    console.log(this._medicalOfficeSelected());
+  }
+
+  get getMedicalOfficeStatus() {
+    return this._medicalOfficeSelected;
   }
 }
