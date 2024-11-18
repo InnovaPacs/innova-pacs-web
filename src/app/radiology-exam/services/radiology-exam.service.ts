@@ -21,7 +21,7 @@ export class RadiologyExamService {
 
   getAll(appointmentId: string, page: number):Observable<RadiolodyExamPage> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/radiology-exams?page=${page}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
       {
@@ -42,7 +42,7 @@ export class RadiologyExamService {
 
   getById(id: string):Observable<RadiolodyExam> {
     const url = `${this.baseUrl}/api/radiology-exams/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<RadiolodyExam>(url,  
       {
@@ -53,7 +53,7 @@ export class RadiologyExamService {
 
   update(id: string, bodyRequest: RadiologyExamDto):Observable<RadiolodyExam> {
     const url = `${this.baseUrl}/api/radiology-exams/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     console.log('bodyRequest: ', bodyRequest.radiologyExamStudyId);
     console.log('bodyRequest: ', bodyRequest.radiologyExamTypeId);
     return this.http.put<RadiolodyExam>(url, bodyRequest,
@@ -64,7 +64,7 @@ export class RadiologyExamService {
   }
 
   save(bodyRequest: RadiologyExamDto):Observable<RadiolodyExam> {
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/radiology-exams`;
 
     console.log('RadiologyExamDto: ', bodyRequest);
@@ -75,7 +75,7 @@ export class RadiologyExamService {
 
   getFullData():Observable<RadiolodyExam[]> {
     const url = `${this.baseUrl}/api/radiology-exams/full-data`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<RadiolodyExam[]>(url,
       {
@@ -86,7 +86,7 @@ export class RadiologyExamService {
 
   getAllRadiologyExamType():Observable<RadiolodyExamType[]> {
     const url = `${this.baseUrl}/api/radiology-exams-types`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<RadiolodyExamType[]>(url,
       {
@@ -97,7 +97,7 @@ export class RadiologyExamService {
 
   getAllRadiologyExamStudy(radiologyExamTypeId: string):Observable<RadiolodyExamStudy[]> {
     const url = `${this.baseUrl}/api/radiology-exams-types/${radiologyExamTypeId}/studies`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<RadiolodyExamStudy[]>(url,
       {

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
@@ -23,8 +23,8 @@ export class MedicalOfficeService {
     }
     
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices?page=${page}`;
-    const headers = this.authService.getToken();
-
+    const headers = this.authService.getHeaders();
+    console.log('headers: ', headers);
     return this.http.get(url,  
       {
         headers
@@ -49,7 +49,7 @@ export class MedicalOfficeService {
     }
 
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<MedicalOffice>(url,  
       {
@@ -65,8 +65,8 @@ export class MedicalOfficeService {
     }
 
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
-    const headers = this.authService.getToken();
-    console.log(medicalOffice);
+    const headers = this.authService.getHeaders();
+    
     return this.http.put<MedicalOffice>(url, medicalOffice,
       {
         headers
@@ -79,7 +79,7 @@ export class MedicalOfficeService {
       userId = this.authService.currentUser()!.id;
     }
 
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices`;
     return this.http.post<MedicalOffice>(url, updateMedicalOffice, {
       headers
@@ -88,7 +88,7 @@ export class MedicalOfficeService {
 
   getFullData():Observable<MedicalOffice[]> {
     const url = `${this.baseUrl}/api/medical-offices/full-data`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<MedicalOffice[]>(url,
       {

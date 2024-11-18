@@ -19,7 +19,7 @@ export class PatientService {
 
   getAll(page: number):Observable<PatientPage> {
     const url = `${this.baseUrl}/api/patients?page=${page}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
       {
@@ -40,7 +40,7 @@ export class PatientService {
 
   getById(medicalOfficeId: string):Observable<Patient> {
     const url = `${this.baseUrl}/api/patients/${medicalOfficeId}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<Patient>(url,  
       {
@@ -51,7 +51,7 @@ export class PatientService {
 
   update(id: string, bodyRequest: UpdatePatient):Observable<Patient> {
     const url = `${this.baseUrl}/api/patients/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     
     return this.http.put<Patient>(url, bodyRequest,
       {
@@ -62,7 +62,7 @@ export class PatientService {
 
   save(bodyRequest: UpdatePatient):Observable<Patient> {
     console.log('bodyRequest: ', bodyRequest);
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/patients`;
 
     return this.http.post<Patient>(url, bodyRequest, {
@@ -72,7 +72,7 @@ export class PatientService {
 
   getFullData():Observable<Patient[]> {
     const url = `${this.baseUrl}/api/patients/full-data`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<Patient[]>(url,
       {

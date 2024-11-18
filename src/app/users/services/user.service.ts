@@ -18,7 +18,7 @@ export class UserService {
 
   getAll(page: number):Observable<UserPage> {
     const url = `${this.baseUrl}/api/users?page=${page}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
       {
@@ -39,7 +39,7 @@ export class UserService {
 
   getById(id: string):Observable<User> {
     const url = `${this.baseUrl}/api/users/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<User>(url,  
       {
@@ -50,7 +50,7 @@ export class UserService {
 
   updateUserById(id: string, user: UpdateUser):Observable<User> {
     const url = `${this.baseUrl}/api/users/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.put<User>(url, user,
       {
@@ -60,7 +60,7 @@ export class UserService {
   }
 
   saveUser(user: UpdateUser):Observable<User> {
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     const url = `${this.baseUrl}/api/users`;
     return this.http.post<User>(url, user, {

@@ -15,7 +15,6 @@ export class AuthService {
 
   public currentUser = computed(this._currentUser);
   public authStatus = computed(this._authStatus);
-  //public medicalOfficeSelected = computed(this._medicalOfficeSelected);
 
   private http = inject(HttpClient);
   
@@ -44,7 +43,9 @@ export class AuthService {
   logOut() {
     this._currentUser.set(null);
     this._authStatus.set(AuthStatus.notAuthenticated);
+    this._medicalOfficeSelected.set(false)
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('medical-office-id-selected');
   }
   
   getToken(): HttpHeaders {
@@ -53,12 +54,24 @@ export class AuthService {
   }
 
   selectMedicalOffice(medicalOfficeId: string) {
-    sessionStorage.setItem('medicalOfficeId', medicalOfficeId);
+    sessionStorage.setItem('medical-office-id-selected', medicalOfficeId);
     this._medicalOfficeSelected.set(true);
-    console.log(this._medicalOfficeSelected());
+  }
+
+  discardMedicalOffice() {
+    console.log("MEdical");
+    sessionStorage.removeItem('medical-office-id-selected');
+    this._medicalOfficeSelected.set(false);
   }
 
   get getMedicalOfficeStatus() {
     return this._medicalOfficeSelected;
+  }
+
+  getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${sessionStorage.getItem('token') || ''}`,
+      'X-MEDICAL-OFFICE-ID': `${sessionStorage.getItem('medical-office-id-selected') || ''}`,
+    });
   }
 }

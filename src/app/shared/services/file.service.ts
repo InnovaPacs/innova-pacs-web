@@ -16,7 +16,7 @@ export class FileService {
   constructor() { }
 
   save(file: File):Observable<PacsFile> {
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/files/upload`;
 
     const formData = new FormData();

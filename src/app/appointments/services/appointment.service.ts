@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
 import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
-import { RadiolodyExam } from '../../radiology-exam/interfaces/radiology-exam.interface';
 import { RadiolodyExamPage } from '../../radiology-exam/interfaces/radiology-exam-page.interface';
 
 @Injectable({
@@ -20,7 +19,7 @@ export class AppointmentService {
 
   getAll(page: number):Observable<AppointmentPage> {
     const url = `${this.baseUrl}/api/appointments?page=${page}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
       {
@@ -41,7 +40,7 @@ export class AppointmentService {
 
   getById(medicalOfficeId: string):Observable<Appointment> {
     const url = `${this.baseUrl}/api/appointments/${medicalOfficeId}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<Appointment>(url,  
       {
@@ -52,7 +51,7 @@ export class AppointmentService {
 
   update(id: string, bodyRequest: AppointmentDto):Observable<Appointment> {
     const url = `${this.baseUrl}/api/appointments/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     
     return this.http.put<Appointment>(url, bodyRequest,
       {
@@ -62,7 +61,7 @@ export class AppointmentService {
   }
 
   save(bodyRequest: AppointmentDto):Observable<Appointment> {
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/appointments`;
     console.log("bodyRequest: ",bodyRequest);
     return this.http.post<Appointment>(url, bodyRequest, {
@@ -73,7 +72,7 @@ export class AppointmentService {
   getFullData(month: number, year: number, radiologyExamType: string|null):Observable<AppointmentFullData[]> {
     const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`
     + (radiologyExamType && radiologyExamType !== 'none' ? `&radiologyExamType=${radiologyExamType}` : '');
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get<AppointmentFullData[]>(url,
       {
@@ -84,7 +83,7 @@ export class AppointmentService {
 
   deleteById(id: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${id}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.delete<void>(url,
       {
@@ -95,7 +94,7 @@ export class AppointmentService {
 
   getRadiologyExamsByAppointmentId(page: number, appointmentId: string):Observable<RadiolodyExamPage> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/radiologyExams?page=${page}`;
-    const headers = this.authService.getToken();
+    const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
       {

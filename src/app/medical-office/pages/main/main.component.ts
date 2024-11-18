@@ -27,6 +27,7 @@ export class MainComponent {
   constructor() { }
 
   ngOnInit(): void {
+    this.authService.discardMedicalOffice();
     this.getAllData(0);
   }
 
