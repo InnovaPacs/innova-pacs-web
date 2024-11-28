@@ -8,6 +8,13 @@ export interface Patient {
 	phone: string;
 	email: string;
 	photo: string;
+	documentId: string;
+	city: string;
+	state: string;
+	postalCode: string;
+	country: string;
+	notes: string;
+	maritalStatus: string;
 }
 
 export interface UpdatePatient {
@@ -19,4 +26,11 @@ export interface UpdatePatient {
 	phone: string;
 	email: string;
 	photo: string;
+	documentId: string;
+	city: string;
+	state: string;
+	postalCode: string;
+	country: string;
+	notes: string;
+	maritalStatus: string;
 }

@@ -64,10 +64,23 @@ export class PatientFormComponent {
   }
 
   getFormValue(): UpdatePatient {
-    const { firstName, lastName, birthDate, gender, address, phone, email, photo } = this.form.value;
+    const { firstName, lastName, birthDate, gender, address, phone, email, photo, documentId,
+      city,
+      state,
+      postalCode,
+      country,
+      notes,
+      maritalStatus } = this.form.value;
 
     return {
-      firstName, lastName, birthDate, gender, address, phone, email, photo
+      firstName, lastName, birthDate, gender, address, phone, email, photo,
+      documentId,
+      city,
+      state,
+      postalCode,
+      country,
+      notes,
+      maritalStatus
     };
   }
 
