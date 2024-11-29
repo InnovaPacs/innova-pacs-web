@@ -50,6 +50,11 @@ const routes: Routes = [
     loadChildren: () => import('./radiology-exam/radiology-exam.module').then(m => m.RadiologyExamModule)
   },
   {
+    path: 'pacs-configurations',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./pacs-configuration/pacs-configuration.module').then(m => m.PacsConfigurationModule)
+  },
+  {
     path: '**',
     redirectTo: 'patients'
   }

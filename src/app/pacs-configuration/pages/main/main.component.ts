@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { PatientService } from '../../services/patient.service';
-import { Patient } from '../../interfaces/patient.interface';
+import { PacsConfigurationService } from '../../service/pacs-configuration.service';
+import { PacsConfiguration } from '../../interfaces/pacs-configuration.interface';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
 
 @Component({
@@ -9,8 +9,8 @@ import { Pagination, Item } from '../../../shared/interfaces/pagination.interfac
   styleUrl: './main.component.css'
 })
 export class MainComponent {
-  private service = inject(PatientService);
-  domains: Patient[] = [];
+  private service = inject(PacsConfigurationService);
+  domains: PacsConfiguration[] = [];
 
   pagination: Pagination = {
     currentPage: 0,
@@ -58,3 +58,4 @@ export class MainComponent {
     });
   }
 }
+
