@@ -3,6 +3,7 @@ export interface PacsConfiguration {
     title: string;
     port: string;
     ipAddress: string;
+    isActive: boolean;
     medicalOfficeId: string;
 }
 
@@ -10,4 +11,5 @@ export interface UpdatePacsConfiguration {
     title: string;
     port: string;
     ipAddress: string;
+    isActive: boolean;
 }

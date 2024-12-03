@@ -5,3 +5,7 @@
 tr.fc-event.fc-event-start.fc-event-end.fc-event-past.fc-list-event {
     cursor: pointer;
 }
+
+.table.table-borderless.align-middle.text-nowrap {
+    margin-bottom: 50px;
+}

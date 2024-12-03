@@ -21,7 +21,8 @@ export class PacsConfigurationFormComponent {
   public form: FormGroup = this.fb.group({
     title: [null, Validators.required],
     ipAddress: [null, Validators.required],
-    port: [null, Validators.required]
+    port: [null, Validators.required],
+    isActive: [null, Validators.required]
   });
 
   ngOnInit(): void {
@@ -47,14 +48,15 @@ export class PacsConfigurationFormComponent {
       id: response.id,
       title: response.title,
       ipAddress: response.ipAddress,
-      port: response.port
+      port: response.port,
+      isActive: response.isActive
     });
   }
 
   getFormValue(): UpdatePacsConfiguration {
-    const { title, ipAddress, port } = this.form.value;
+    const { title, ipAddress, port, isActive } = this.form.value;
 
-    return { title, ipAddress, port };
+    return { title, ipAddress, port, isActive };
   }
 
   onSubmit() {
@@ -64,7 +66,6 @@ export class PacsConfigurationFormComponent {
     }
 
     const data = this.getFormValue();
-    console.log("data: ", data);
     if(this.id) {
       this.handleUpdate(data);
     } else {
@@ -73,14 +74,12 @@ export class PacsConfigurationFormComponent {
   }
 
   handleUpdate(update: UpdatePacsConfiguration): void {
-    console.log("data: ", update);
     this.service.update(this.id, update).subscribe(reposne => {
       this.router.navigate(['/pacs-configurations/main']);
     });
   }
 
   handleCreate(update: UpdatePacsConfiguration): void {
-    console.log("data: ", update);
     this.service.save(update).subscribe(response => {
       this.router.navigate(['/pacs-configurations']);
     });

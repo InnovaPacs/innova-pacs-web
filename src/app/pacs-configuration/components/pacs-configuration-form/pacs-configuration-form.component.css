@@ -1,3 +1,7 @@
 .container-fluid {
     padding-top: 80px;
 }
+
+.table.table-borderless.align-middle.text-nowrap {
+    margin-bottom: 50px;
+}
