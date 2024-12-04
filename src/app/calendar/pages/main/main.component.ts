@@ -165,9 +165,13 @@ export class MainComponent implements OnInit {
   }
 
   handleDatesSet(event: DatesSetArg) {
-    if(event.view.type === 'dayGridMonth'){
-      this.currentMonth = event.end.getMonth();
-      this.currentYear = event.end.getFullYear();
+    if(event.view.type === 'dayGridMonth') {
+      console.log('-------------');
+      console.log('event.end.getMonth() ', this.getMonth(event.end.getMonth()));
+      console.log('event.end.getFullYear() ', this.getYear(event.end.getMonth(), event.end.getFullYear()) );
+
+      this.currentMonth = this.getMonth(event.end.getMonth());
+      this.currentYear = this.getYear(event.end.getMonth(), event.end.getFullYear());
       this.getAllData(this.currentMonth, this.currentYear, null);
     }
   }
@@ -202,5 +206,19 @@ export class MainComponent implements OnInit {
     const selectedId = (event.target as HTMLSelectElement).value;
     console.log('Selected radiology exam type ID:', selectedId);
     this.getAllData(this.currentMonth, this.currentYear, selectedId);
+  }
+
+  getMonth(month: number): number {
+    if(0 === month) {
+      return 12;
+    }
+    return month;
+  }
+
+  getYear(month: number, year: number): number {
+    if(0 === month) {
+      return year - 1;
+    }
+    return year;
   }
 }
