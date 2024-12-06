@@ -129,8 +129,6 @@ export class PatientFormComponent {
     this.fileService.save(this.selectedFile).pipe(
       switchMap((response) => {
         update.photo = response.id;
-        console.log("PHOTO: ",response);
-        console.log("PATIENT : ",update);
         return this.service.save(update);
       })
     ).subscribe(() => {

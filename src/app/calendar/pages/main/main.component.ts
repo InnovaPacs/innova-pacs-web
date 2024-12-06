@@ -166,10 +166,6 @@ export class MainComponent implements OnInit {
 
   handleDatesSet(event: DatesSetArg) {
     if(event.view.type === 'dayGridMonth') {
-      console.log('-------------');
-      console.log('event.end.getMonth() ', this.getMonth(event.end.getMonth()));
-      console.log('event.end.getFullYear() ', this.getYear(event.end.getMonth(), event.end.getFullYear()) );
-
       this.currentMonth = this.getMonth(event.end.getMonth());
       this.currentYear = this.getYear(event.end.getMonth(), event.end.getFullYear());
       this.getAllData(this.currentMonth, this.currentYear, null);

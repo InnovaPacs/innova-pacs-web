@@ -83,6 +83,18 @@
                     </div>
 
                     <div class="mb-3 col-xm-12 col-md-4">
+                      <label for="rfc" class="form-label">Ingrese RFC</label>
+                      <input type="text" class="form-control" id="rfc" placeholder="Ingrese RFC"
+                        formControlName="rfc">
+                    </div>
+
+                    <div class="mb-3 col-xm-12 col-md-4">
+                      <label for="curp" class="form-label">Ingrese CURP</label>
+                      <input type="text" class="form-control" id="curp" placeholder="Ingrese CURP"
+                        formControlName="curp">
+                    </div>
+
+                    <div class="mb-3 col-xm-12 col-md-4">
                       <label for="imageFile" class="form-label">Seleccione foto de paciente</label>
                       <input type="file" class="form-control"  accept="image/png, image/jpeg" id="imageFile" placeholder="Seleccione foto de paciente" (change)="onFileSelected($event)">
                     </div>
