@@ -5,12 +5,14 @@ import { CalendarRoutingModule } from './calendar-routing.module';
 import { CalendarLayoutComponent } from './layout/calendar-layout/calendar-layout.component';
 import { MainComponent } from './pages/main/main.component';
 import { SharedModule } from '../shared/shared.module';
-import { FullCalendarModule } from '@fullcalendar/angular'; 
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { ScheduleComponent } from './pages/schedule/schedule.component'; 
 
 @NgModule({
   declarations: [
     CalendarLayoutComponent,
-    MainComponent
+    MainComponent,
+    ScheduleComponent
   ],
   imports: [
     CommonModule,

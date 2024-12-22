@@ -1,0 +1,13 @@
+.container-fluid {
+    padding-top: 80px;
+}
+
+/* Estilo para la primera columna (20% de ancho) */
+td:first-child, th:first-child {
+  width: 10%;
+}
+
+/* Estilo para la segunda columna (80% de ancho) */
+td:last-child, th:last-child {
+  width: 90%;
+}

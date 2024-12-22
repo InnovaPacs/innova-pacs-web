@@ -6,6 +6,7 @@ import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
 import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
 import { RadiolodyExamPage } from '../../radiology-exam/interfaces/radiology-exam-page.interface';
+import { Schedule } from '../interfaces/appointment-schedule.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -110,6 +111,18 @@ export class AppointmentService {
           totalPages: response.totalPages
         }
       })
+    );
+  }
+
+  getAllSchedule(month: number, year: number, radiologyExamType: string|null):Observable<Schedule[]> {
+    const url = `${this.baseUrl}/api/appointments/schedule?month=${month === 0 ? 12 : month}&year=${year}`
+    + (radiologyExamType && radiologyExamType !== 'none' ? `&radiologyExamType=${radiologyExamType}` : '');
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<Schedule[]>(url,
+      {
+        headers
+      }
     );
   }
 }
