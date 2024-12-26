@@ -11,3 +11,69 @@ td:first-child, th:first-child {
 td:last-child, th:last-child {
   width: 90%;
 }
+
+.disabled-cell {
+  background-color: #5f5959 !important; /* Fondo gris claro */
+  color: #938c8c; /* Texto gris apagado */
+  pointer-events: none; /* Desactiva interactividad (clic, hover) */
+  opacity: 0.6; /* Reduce la opacidad para un efecto deshabilitado */
+  text-align: center; /* Opcional: Centra el texto */
+  font-style: italic; /* Opcional: Muestra el texto en cursiva */
+}
+
+.schedule-item {
+  display: flex;
+  justify-content: space-between; /* Coloca los elementos a los extremos */
+  align-items: center; /* Alinea verticalmente en el centro */
+}
+
+.schedule-details {
+  flex-grow: 1; /* Hace que este elemento tome todo el espacio disponible */
+  margin: 0;
+}
+
+.delete-button {
+  background-color: #f44336; /* Rojo */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f; /* Rojo oscuro */
+}
+
+.delete-button {
+  background-color: #f44336; /* Rojo */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 8px; /* Espaciado entre botones si hay varios */
+}
+
+.delete-button:hover {
+  background-color: #d32f2f; /* Rojo oscuro */
+}
+
+.edit-button {
+  background-color: #2196f3; /* Azul */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 8px; /* Espaciado entre botones */
+}
+
+.edit-button:hover {
+  background-color: #1976d2; /* Azul oscuro */
+}
+
+

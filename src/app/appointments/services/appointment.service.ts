@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environments';
@@ -114,13 +114,19 @@ export class AppointmentService {
     );
   }
 
-  getAllSchedule(month: number, year: number, radiologyExamType: string|null):Observable<Schedule[]> {
-    const url = `${this.baseUrl}/api/appointments/schedule?month=${month === 0 ? 12 : month}&year=${year}`
-    + (radiologyExamType && radiologyExamType !== 'none' ? `&radiologyExamType=${radiologyExamType}` : '');
+  getAllSchedule(date: string, radiologyExamType: string|null):Observable<Schedule[]> {
+    let params = new HttpParams().set('date', date);
+
+    if (radiologyExamType) {
+      params = params.set('radiologyExamType', radiologyExamType);
+    }
+    
+    const url = `${this.baseUrl}/api/appointments/schedule`;
     const headers = this.authService.getHeaders();
 
     return this.http.get<Schedule[]>(url,
       {
+        params,
         headers
       }
     );

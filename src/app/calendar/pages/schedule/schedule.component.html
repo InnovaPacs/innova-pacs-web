@@ -8,15 +8,17 @@
                   <h5 class="mb-0 fw-bold">Detalle de consultas medicas</h5>
                   <div class="mb-3">
                 </div>
-                  <div>
-                    <button class="btn btn-primary me-2" [routerLink]="['/appointments']">Ver lista</button>
-                    <button class="btn btn-primary" [routerLink]="['/appointments/register']">Registrar consulta</button>
-                  </div>
                 </div>
                 
                 <hr class="my-4">
                 
                 <form class="row">
+                  <div class="mb-3 col-xm-12 col-md-6">
+                    <label for="appointmentDate" class="form-label">Selecciona fecha</label>
+                    <input type="date" class="form-control" id="appointmentDate" placeholder="Selecciona fecha"
+                      formControlName="appointmentDate" (change)="onDateSelected($event)">
+                  </div>
+
                   <div class="mb-3 col-xm-12 col-md-6">
                     <label class="form-label">Seleccione un modalidad</label>
                     <select class="form-select" (change)="onSelectChange($event)">
@@ -25,12 +27,6 @@
                         <option [value]="domain.id"><b>[{{ domain.name }}]</b> {{ domain.description }}</option>
                       }
                     </select>
-                  </div>
-                
-                  <div class="mb-3 col-xm-12 col-md-6">
-                    <label for="birthDate" class="form-label">Ingrese fecha de nacimiento</label>
-                    <input type="date" class="form-control" id="birthDate" placeholder="Ingresa fecha de nacimiento"
-                      formControlName="birthDate">
                   </div>
                 </form>
 
@@ -44,9 +40,32 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let schedule of schedules;">
-                      <td>{{ schedule.hour }}: {{schedule.minutes}}</td>
-                      <td [ngStyle]="{ 'background-color': schedule.color }" style="color: aliceblue;">
-                        {{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.medicalOfficeName }}
+                      <td>{{ schedule.hour }}:{{schedule.minutes}}</td>
+                      <td [ngStyle]="{'border-left': '4px solid ' + (schedule.color), 'padding-left': '8px'}">
+
+                          <div class="schedule-item">
+                            @if(schedule.color) {
+                              <div class="schedule-details">
+                                [{{ schedule?.appointment?.examTypeName }}]
+                                [{{ schedule?.appointment?.doctorName }}]
+                                {{ schedule?.appointment?.medicalOfficeName }} - 
+                                {{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.patientLastName }}
+                              </div>
+                            } @else {
+                              <div class="schedule-details">
+                              </div>
+                            }
+                            
+                            @if(schedule.color) {
+                              <button class="delete-button" (click)="onDelete(schedule.appointment.id)">
+                                Eliminar
+                              </button>
+                            } @else {
+                              <button class="edit-button" (click)="onTimeSelected(schedule.hour, schedule.minutes)">
+                                Agregar
+                              </button>
+                            }
+                          </div>
                       </td>
                     </tr>
                   </tbody>

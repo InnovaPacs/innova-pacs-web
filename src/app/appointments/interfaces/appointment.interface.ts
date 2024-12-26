@@ -1,6 +1,8 @@
 import { Doctor } from "../../doctors/interfaces/doctor.interface";
 import { MedicalOffice } from "../../medical-office/interfaces/medical-office.interface";
 import { Patient } from "../../patients/interfaces/patient.interface";
+import { RadiolodyExamStudy } from "../../radiology-exam/interfaces/radiology-exam-study.interface";
+import { RadiolodyExamType } from "../../radiology-exam/interfaces/radiology-exam-type.interface";
 
 export interface AppointmentDto {
     id: string;
@@ -10,6 +12,8 @@ export interface AppointmentDto {
     medicalOfficeId: string;
     appointmentStartHour: string;
     appointmentEndHour: string;
+    radiologyExamTypeId: string;
+    radiologyExamStudyId: string;
 }
 
 export interface Appointment {
@@ -21,8 +25,9 @@ export interface Appointment {
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
-    radiologyExamType: string;
     radiologyExamTypeColor: string;
+    radiologyExamType: RadiolodyExamType;
+    radiologyExamStudy: RadiolodyExamStudy;
 }
 
 export interface AppointmentFullData {
@@ -30,6 +35,7 @@ export interface AppointmentFullData {
 	appointmentDate: Date;
 	status: string;
 	patientFirstName: string;
+    patientLastName: string;
 	doctorName: string;
 	medicalOfficeName: string;
 	appointmentStartHour: string;

@@ -1,6 +1,6 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { AppointmentService } from '../../services/appointment.service';
 import { Appointment, AppointmentDto } from '../../interfaces/appointment.interface';
@@ -10,6 +10,10 @@ import { MedicalOffice } from '../../../medical-office/interfaces/medical-office
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
+import { RadiolodyExamStudy } from '../../../radiology-exam/interfaces/radiology-exam-study.interface';
+import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
+import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-appointment-form',
@@ -24,10 +28,14 @@ export class AppointmentFormComponent {
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
   private medicalOfficeService = inject(MedicalOfficeService);
+  private radiologyExamService = inject(RadiologyExamService);
 
-  patients: Patient[] = [];
-  doctors: Doctor[] = [];
-  medicalOffices: MedicalOffice[] = [];
+  public patients: Patient[] = [];
+  public doctors: Doctor[] = [];
+  public medicalOffices: MedicalOffice[] = [];
+
+  public radiologyExamTypes: RadiolodyExamType[] =  [];
+  public radiologyExamStudy: RadiolodyExamStudy[] =  [];
   
   id!: string;
 
@@ -36,11 +44,14 @@ export class AppointmentFormComponent {
     patientId: [null],
     doctorId: [null],
     medicalOfficeId: [null],
+    radiologyExamTypeId: [null],
+    radiologyExamStudyId: [null],
     appointmentStartHour: [null],
     appointmentEndHour: [null],
   });
 
   ngOnInit(): void {
+    this.getRadiologyExamData();
     this.doctorService.getFullData().subscribe(repsosne => {
       this.doctors = repsosne;
     });
@@ -66,10 +77,23 @@ export class AppointmentFormComponent {
     ).subscribe(response => {
       this.patchForm(response);
     });
+
+    this.route.queryParamMap.subscribe(data => {
+      this.form.patchValue({
+        appointmentStartHour: this.getInitHour(data),
+        appointmentEndHour: this.getEndHour(data),
+        radiologyExamTypeId: this.getModality(data),
+        appointmentDate: this.getAppointmentDate(data)
+      })
+    });
+
+    this.disableControl('appointmentStartHour');
+    this.disableControl('appointmentEndHour');
+    this.disableControl('appointmentDate');
+    this.disableControl('radiologyExamTypeId');
   }
 
   patchForm(response: Appointment) {
-    console.log('VAlues :', response);
     this.form.patchValue({
       id: response.id,
       appointmentDate: response.appointmentDate,
@@ -78,6 +102,8 @@ export class AppointmentFormComponent {
       medicalOfficeId: response.medicalOffice.id,
       appointmentStartHour: response.appointmentStartHour,
       appointmentEndHour: response.appointmentEndHour,
+      radiologyExamType: response.radiologyExamType.id,
+      radiologyExamStudy: response.radiologyExamStudy.id,
     });
   }
 
@@ -89,7 +115,9 @@ export class AppointmentFormComponent {
       doctorId,
       medicalOfficeId,
       appointmentStartHour,
-      appointmentEndHour  } = this.form.value;
+      appointmentEndHour,
+      radiologyExamTypeId,
+      radiologyExamStudyId } = this.form.getRawValue();
 
     return {
       id,
@@ -98,7 +126,9 @@ export class AppointmentFormComponent {
       doctorId,
       medicalOfficeId,
       appointmentStartHour,
-      appointmentEndHour
+      appointmentEndHour,
+      radiologyExamTypeId,
+      radiologyExamStudyId
     };
   }
 
@@ -116,5 +146,76 @@ export class AppointmentFormComponent {
         this.router.navigate(['/calendar/main']);
       });
     }
+  }
+
+  getRadiologyExamData(): void {
+    this.radiologyExamService.getAllRadiologyExamType().subscribe((data) => {
+      this.radiologyExamTypes = data;
+    });
+  }
+
+  onSelectRadiologyExamType(selectRadiologyExamTypeId: any) {
+    const selectedId = selectRadiologyExamTypeId?.target?.value ? selectRadiologyExamTypeId.target.value : selectRadiologyExamTypeId;
+    this.radiologyExamService.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
+      this.radiologyExamStudy = data;
+    });
+  }
+
+  private getAppointmentDate(data: ParamMap):string| null {
+    const date = data.get('appointmentDate');
+
+    if(date) {
+      return date;
+    }
+
+    return null;
+  }
+
+  private getModality(data: ParamMap):string| null {
+    const modality = data.get('modality');
+
+    if(modality) {
+      this.onSelectRadiologyExamType(modality);
+      return modality;
+    }
+
+    return null;
+  }
+
+  private getInitHour(data: ParamMap):string | null {
+    const hour = data.get('hour');
+    
+    if(hour) {
+      return `${parseInt(hour).toString().padStart(2, '0')}:${data.get('minute')}`;  
+    }
+    
+    return null;
+  }
+
+  private getEndHour(data: ParamMap):string | null {
+    const hour = data.get('hour');
+    const minutes = data.get('minute');
+    const duration = data.get('duration');
+    
+    if(hour && minutes && duration) {
+      let currentHour =  parseInt(hour);
+      let currentMinutes =  parseInt(minutes);
+      let currentDuration =  parseInt(duration);
+      let handleMinutes = (currentMinutes + currentDuration);
+
+      if(handleMinutes === 60) {
+        const newHour = currentHour + 1;
+        const newMinutes = 0;
+        return `${newHour.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+      } else if(handleMinutes < 60) {
+        return `${parseInt(hour).toString().padStart(2, '0')}:${handleMinutes.toString().padStart(2, '0')}`;
+      }
+    }
+    
+    return null;
+  }
+
+  private disableControl(controlName: string) {
+    this.form.get(controlName)?.disable();
   }
 }

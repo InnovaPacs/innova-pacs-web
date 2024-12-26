@@ -15,7 +15,7 @@
                       <label for="appointmentStartHour" class="form-label">Hora inicio</label>
                       <input type="time" class="form-control" id="appointmentStartHour" placeholder="Ingresa hora de cita"
                              min="00:00" max="23:59"
-                        formControlName="appointmentStartHour">
+                        formControlName="appointmentStartHour" [disabled]="true">
                     </div>
                     <div class="mb-3">
                       <label for="appointmentEndHour" class="form-label">Horio fin</label>
@@ -23,6 +23,25 @@
                              min="00:00" max="23:59"
                         formControlName="appointmentEndHour">
                     </div>
+
+
+                    <div class="mb-3">
+                      <label for="radiologyExamTypeId" class="form-label">Tipo</label>
+                      <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
+                          @for (domain of radiologyExamTypes; track domain.id) {
+                              <option [value]="domain.id">{{ domain.name }}</option>
+                          }
+                      </select>
+                  </div>
+
+                  <div class="mb-3">
+                      <label for="radiologyExamStudyId" class="form-label">Estudio</label>
+                      <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
+                          @for (domain of radiologyExamStudy; track domain.id) {
+                              <option [value]="domain.id">{{ domain.name }}</option>
+                          }
+                      </select>
+                  </div>
 
                     <div class="mb-3">
                         <label for="patientId" class="form-label">Paciente</label>
@@ -50,6 +69,7 @@
                           }
                         </select>
                     </div>
+
                     <button type="submit" class="btn btn-primary">Guradar</button>
                 </form>  
                 
