@@ -24,11 +24,19 @@ export class PatientFormComponent {
   public form: FormGroup = this.fb.group({
     firstName: [null, Validators.required],
     lastName: [null, Validators.required],
-    birthDate: [null, Validators.required],
+    dateOfBirth: [null, Validators.required],
     gender: [null, Validators.required],
     address: [null, Validators.required],
-    phone: [null, Validators.required],
+    phoneNumber: [null, Validators.required],
     email: [null, Validators.required],
+    city: [null, Validators.required],
+    maritalStatus: [null, Validators.required],
+    notes: [null, Validators.required],
+    postalCode: [null, Validators.required],
+    curp: [null, Validators.required],
+    rfc: [null, Validators.required],
+    country: [null, Validators.required],
+    state: [null, Validators.required],
     photo: [null]
   });
 
@@ -54,39 +62,51 @@ export class PatientFormComponent {
       id: response.id,
       firstName: response.firstName,
       lastName: response.lastName,
-      birthDate: response.birthDate,
+      dateOfBirth: response.dateOfBirth,
       gender: response.gender,
       address: response.address,
-      phone: response.phone,
+      phoneNumber: response.phoneNumber,
       email: response.email,
-      photo: response.photo
+      photo: response.photo,
+      city: response.city,
+      maritalStatus: response.maritalStatus,
+      notes: response.notes,
+      postalCode: response.postalCode,
+      curp: response.curp,
+      rfc: response.rfc,
+      country: response.country,
+      state: response.state,
+      
     });
   }
 
   getFormValue(): UpdatePatient {
-    const { firstName, lastName, birthDate, gender, address, phone, email, photo, documentId,
+    const { firstName, lastName, dateOfBirth, gender, address, phoneNumber, email, photo, documentId,
       city,
       state,
       postalCode,
       country,
       notes,
-      maritalStatus } = this.form.value;
+      maritalStatus,
+      rfc,
+      curp} = this.form.value;
 
     return {
-      firstName, lastName, birthDate, gender, address, phone, email, photo,
+      firstName, lastName, dateOfBirth, gender, address, phoneNumber, email, photo,
       documentId,
       city,
       state,
       postalCode,
       country,
       notes,
-      maritalStatus
+      maritalStatus,
+      rfc,
+      curp
     };
   }
 
   onSubmit() {
     if (this.form.invalid) {
-      console.warn('Form is invalid');
       return;
     }
 

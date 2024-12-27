@@ -2,10 +2,10 @@ export interface Patient {
 	id: string;
 	firstName: string;
 	lastName: string;
-	birthDate: Date;
+	dateOfBirth: Date;
 	gender: string;
 	address: string;
-	phone: string;
+	phoneNumber: string;
 	email: string;
 	photo: string;
 	documentId: string;
@@ -15,15 +15,17 @@ export interface Patient {
 	country: string;
 	notes: string;
 	maritalStatus: string;
+	curp: string;
+	rfc: string;
 }
 
 export interface UpdatePatient {
 	firstName: string;
 	lastName: string;
-	birthDate: Date;
+	dateOfBirth: Date;
 	gender: string;
 	address: string;
-	phone: string;
+	phoneNumber: string;
 	email: string;
 	photo: string;
 	documentId: string;
@@ -33,4 +35,6 @@ export interface UpdatePatient {
 	country: string;
 	notes: string;
 	maritalStatus: string;
+	curp: string;
+	rfc: string;
 }

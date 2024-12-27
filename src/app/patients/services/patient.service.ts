@@ -50,6 +50,7 @@ export class PatientService {
   }
 
   update(id: string, bodyRequest: UpdatePatient):Observable<Patient> {
+    console.log('bodyRequest: ', bodyRequest)
     const url = `${this.baseUrl}/api/patients/${id}`;
     const headers = this.authService.getHeaders();
     
