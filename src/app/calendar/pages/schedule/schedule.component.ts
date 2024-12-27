@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
 import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
 import { Schedule } from '../../../appointments/interfaces/appointment-schedule.interface';
 import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule',
@@ -17,11 +18,19 @@ export class ScheduleComponent implements OnInit {
   private radiologyExamService = inject(RadiologyExamService);
   public radiolodyExamTypes: RadiolodyExamType[] = [];
   public schedules: Schedule[] = [];
-  private date?: string;
-  private modalitySelected?: string;
+  private date: string | null | undefined;
+  private modalitySelected: string | null | undefined;
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
 
+  public form: FormGroup = this.fb.group({
+    appointmentDate: [null],
+    radiologyExamTypeId: [null]
+  });
+  
   ngOnInit(): void {
     this.getRadiologyExams();
+    this.getQueryParams();
   }
 
   private getRadiologyExams() {
@@ -87,5 +96,29 @@ export class ScheduleComponent implements OnInit {
         });
       }
     });
-  }  
+  }
+
+  private getQueryParams() {
+    this.route.queryParamMap.subscribe(data => {
+      this.modalitySelected = this.getModality(data);
+      this.date = this.getAppointmentDate(data);
+      
+      if(this.date && this.modalitySelected) {
+        this.form.patchValue({
+          appointmentDate: this.date,
+          radiologyExamTypeId: this.modalitySelected
+        });
+        
+        this.getSchedule(this.date, this.modalitySelected);
+      }
+    });
+  }
+
+  private getModality(data: ParamMap):string| null {
+    return  data.get('modality');;
+  }
+
+  private getAppointmentDate(data: ParamMap):string| null {
+    return data.get('appointmentDate');;
+  }
 }

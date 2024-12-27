@@ -12,7 +12,7 @@
                 
                 <hr class="my-4">
                 
-                <form class="row">
+                <form class="row" [formGroup]="form">
                   <div class="mb-3 col-xm-12 col-md-6">
                     <label for="appointmentDate" class="form-label">Selecciona fecha</label>
                     <input type="date" class="form-control" id="appointmentDate" placeholder="Selecciona fecha"
@@ -20,8 +20,8 @@
                   </div>
 
                   <div class="mb-3 col-xm-12 col-md-6">
-                    <label class="form-label">Seleccione un modalidad</label>
-                    <select class="form-select" (change)="onSelectChange($event)">
+                    <label class="form-label" for="radiologyExamTypeId">Seleccione un modalidad</label>
+                    <select class="form-select" (change)="onSelectChange($event)" formControlName="radiologyExamTypeId" id="radiologyExamTypeId">
                       <option value="none" selected>No ha seleccionado una modalidad</option>
                       @for (domain of radiolodyExamTypes; track domain.id) {
                         <option [value]="domain.id"><b>[{{ domain.name }}]</b> {{ domain.description }}</option>

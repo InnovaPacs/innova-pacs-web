@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateUser, User } from '../../interfaces/user.interface';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-user-form',
@@ -15,6 +16,7 @@ export class UserFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private router = inject(Router);
+  private authService = inject(AuthService);
   
   id!: string;
 
@@ -41,6 +43,9 @@ export class UserFormComponent implements OnInit {
     ).subscribe(user => {
       this.patchUserForm(user);
     });
+
+    this.disableControl('status');
+    this.disableControl('role');
   }
 
   patchUserForm(user: User) {
@@ -51,8 +56,6 @@ export class UserFormComponent implements OnInit {
       role: user.roles[0].name,
       status: user.status
     });
-
-    console.log(this.userForm.get('role')!.value);
   }
 
   getUserFormValue(): UpdateUser {
@@ -72,12 +75,17 @@ export class UserFormComponent implements OnInit {
 
     if(this.id) {
       this.userService.updateUserById(this.id, user).subscribe();
+      this.authService.logOut();
     }
 
     if(!this.id) {
       this.userService.saveUser(user).subscribe();
     }
 
-    this.router.navigate(['/users']);
+    this.router.navigate(['/auth/login']);
+  }
+
+  private disableControl(controlName: string) {
+    this.userForm.get(controlName)?.disable();
   }
 }

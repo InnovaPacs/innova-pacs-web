@@ -61,7 +61,7 @@
           </a>
         </li>
         
-        <li class="sidebar-item" [ngClass]="{ 'disabled': !medicalOfficeStatus() }" routerLink="/users">
+        <li class="sidebar-item" [ngClass]="{ 'disabled': !medicalOfficeStatus() }" (click)="goToProfile()">
           <a
             class="sidebar-link sidebar-link success-hover-bg"
             style="cursor: pointer;"
@@ -70,7 +70,7 @@
             <span class="aside-icon p-2 bg-light-success rounded-3">
               <i class="ti ti-users fs-7 text-success"></i>
             </span>
-            <span class="hide-menu ms-2 ps-1">Usuarios</span>
+            <span class="hide-menu ms-2 ps-1">Perfil</span>
           </a>
         </li>
 

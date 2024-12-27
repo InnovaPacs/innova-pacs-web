@@ -16,6 +16,11 @@
                       <input type="email" class="form-control" id="email" placeholder="Ingresa email" formControlName="email">
                     </div>
                   
+                    <div class="mb-3">
+                      <label for="password" class="form-label">Nuevo password</label>
+                      <input type="password" class="form-control" id="password" placeholder="Ingresa nuevo password" formControlName="password">
+                    </div>
+                    
                     @if (id) {
                       <div class="mb-3">
                         <label for="roles" class="form-label">Estatus</label>
@@ -23,13 +28,6 @@
                           <option value="ACTIVE">ACTIVO</option>
                           <option value="INACTIVE">INACTIVO</option>
                         </select>
-                      </div>
-                    }
-
-                    @if (!id) {
-                      <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Ingresa email" formControlName="password">
                       </div>
                     }
 

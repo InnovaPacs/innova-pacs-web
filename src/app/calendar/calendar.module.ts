@@ -7,6 +7,7 @@ import { MainComponent } from './pages/main/main.component';
 import { SharedModule } from '../shared/shared.module';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ScheduleComponent } from './pages/schedule/schedule.component'; 
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ScheduleComponent } from './pages/schedule/schedule.component';
     ScheduleComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     CalendarRoutingModule,
     SharedModule,

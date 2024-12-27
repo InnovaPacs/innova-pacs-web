@@ -13,7 +13,6 @@ import { MedicalOfficeService } from '../../../medical-office/services/medilca-o
 import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
 import { RadiolodyExamStudy } from '../../../radiology-exam/interfaces/radiology-exam-study.interface';
 import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
-import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-appointment-form',
@@ -36,6 +35,9 @@ export class AppointmentFormComponent {
 
   public radiologyExamTypes: RadiolodyExamType[] =  [];
   public radiologyExamStudy: RadiolodyExamStudy[] =  [];
+
+  private radiologyExamTypeId?: string|null;
+  private appointmentDate?: string|null;
   
   id!: string;
 
@@ -51,46 +53,9 @@ export class AppointmentFormComponent {
   });
 
   ngOnInit(): void {
-    this.getRadiologyExamData();
-    this.doctorService.getFullData().subscribe(repsosne => {
-      this.doctors = repsosne;
-    });
-
-    this.patientService.getFullData().subscribe(response => {
-      this.patients = response;
-    });
-
-    this.medicalOfficeService.getFullData().subscribe(response => {
-      this.medicalOffices = response;
-    });
-
-    this.route.paramMap.pipe(
-      map(params => params.get('id')),
-      filter(id => !!id),
-      switchMap(id => {
-        this.id = id!;
-        return this.service.getById(this.id);
-      }),
-      catchError(error => {
-        return EMPTY;
-      })
-    ).subscribe(response => {
-      this.patchForm(response);
-    });
-
-    this.route.queryParamMap.subscribe(data => {
-      this.form.patchValue({
-        appointmentStartHour: this.getInitHour(data),
-        appointmentEndHour: this.getEndHour(data),
-        radiologyExamTypeId: this.getModality(data),
-        appointmentDate: this.getAppointmentDate(data)
-      })
-    });
-
-    this.disableControl('appointmentStartHour');
-    this.disableControl('appointmentEndHour');
-    this.disableControl('appointmentDate');
-    this.disableControl('radiologyExamTypeId');
+    this.getMainData();
+    this.getPathParams();
+    this.getQueryParams();
   }
 
   patchForm(response: Appointment) {
@@ -134,7 +99,6 @@ export class AppointmentFormComponent {
 
   onSubmit() {
     const data = this.getFormValue();
-    console.log(':: Data:', data);
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
         this.router.navigate(['/calendar/main']);
@@ -143,7 +107,12 @@ export class AppointmentFormComponent {
 
     if(!this.id) {
       this.service.save(data).subscribe(response => {
-        this.router.navigate(['/calendar/main']);
+        this.router.navigate(['/calendar/schedule'], {
+          queryParams: {
+            modality: this.radiologyExamTypeId,
+            appointmentDate:  this.appointmentDate
+          }
+        });
       });
     }
   }
@@ -217,5 +186,58 @@ export class AppointmentFormComponent {
 
   private disableControl(controlName: string) {
     this.form.get(controlName)?.disable();
+  }
+
+  private getMainData(): void {
+    this.radiologyExamService.getAllRadiologyExamType().subscribe((data) => {
+      this.radiologyExamTypes = data;
+    });
+
+    this.doctorService.getFullData().subscribe(repsosne => {
+      this.doctors = repsosne;
+    });
+
+    this.patientService.getFullData().subscribe(response => {
+      this.patients = response;
+    });
+
+    this.medicalOfficeService.getFullData().subscribe(response => {
+      this.medicalOffices = response;
+    });
+  }
+
+  private getPathParams(): void {
+    this.route.paramMap.pipe(
+      map(params => params.get('id')),
+      filter(id => !!id),
+      switchMap(id => {
+        this.id = id!;
+        return this.service.getById(this.id);
+      }),
+      catchError(error => {
+        return EMPTY;
+      })
+    ).subscribe(response => {
+      this.patchForm(response);
+    });
+  }
+
+  private getQueryParams() {
+    this.route.queryParamMap.subscribe(data => {
+      this.form.patchValue({
+        appointmentStartHour: this.getInitHour(data),
+        appointmentEndHour: this.getEndHour(data),
+        radiologyExamTypeId: this.getModality(data),
+        appointmentDate: this.getAppointmentDate(data)
+      })
+
+      this.radiologyExamTypeId = this.getModality(data);
+      this.appointmentDate = this.getAppointmentDate(data);
+    });
+
+    this.disableControl('appointmentStartHour');
+    this.disableControl('appointmentEndHour');
+    this.disableControl('appointmentDate');
+    this.disableControl('radiologyExamTypeId');
   }
 }
