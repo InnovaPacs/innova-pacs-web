@@ -57,8 +57,8 @@
                             }
                             
                             @if(schedule.color) {
-                              <button class="delete-button" (click)="onDelete(schedule.appointment.id)">
-                                Eliminar
+                              <button class="delete-button" (click)="onCancel(schedule.appointment.id)">
+                                Cancelar
                               </button>
                             } @else {
                               <button class="edit-button" (click)="onTimeSelected(schedule.hour, schedule.minutes)">

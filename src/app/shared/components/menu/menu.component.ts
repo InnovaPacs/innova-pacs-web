@@ -25,6 +25,10 @@ export class MenuComponent implements AfterViewInit, OnInit {
     this.router.navigate([`/users/${this.authService.currentUser()!.id}`]);
   }
 
+  get currentUser(): string {
+    return this.authService.currentUser()!.id;
+  }
+
   ngAfterViewInit(): void {
     $("#sidebarCollapse, #headerCollapse").on("click", function () {
       $("#main-wrapper").toggleClass("mini-sidebar");

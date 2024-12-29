@@ -75,18 +75,18 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  onDelete(scheduleId: string): void {
+  onCancel(scheduleId: string): void {
     Swal.fire({
-      title: "¿Estas segunro de eliminar?",
+      title: "¿Estas segunro de cancelar?",
       icon: "warning",
       confirmButtonColor: "#3085d6",
-      confirmButtonText: "¡Si, Eliminar!"
+      confirmButtonText: "¡Si, cancelar!"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.service.deleteById(scheduleId).subscribe(() => {
+        this.service.cancelById(scheduleId).subscribe(() => {
           Swal.fire({
-            title: "¡Elimiar!",
-            text: "La cita fue eliminada.",
+            title: "Cancelar!",
+            text: "La cita fue cancelada.",
             icon: "success"
           });
 

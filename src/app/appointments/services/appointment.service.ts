@@ -64,7 +64,6 @@ export class AppointmentService {
   save(bodyRequest: AppointmentDto):Observable<Appointment> {
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/appointments`;
-    console.log("bodyRequest: ",bodyRequest);
     return this.http.post<Appointment>(url, bodyRequest, {
       headers
     });
@@ -86,6 +85,17 @@ export class AppointmentService {
     const url = `${this.baseUrl}/api/appointments/${id}`;
     const headers = this.authService.getHeaders();
 
+    return this.http.delete<void>(url,
+      {
+        headers
+      }
+    );
+  }
+
+  cancelById(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel`;
+    const headers = this.authService.getHeaders();
+    
     return this.http.delete<void>(url,
       {
         headers

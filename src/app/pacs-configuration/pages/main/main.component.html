@@ -25,6 +25,7 @@
                         <th scope="col">ITitle</th>
                         <th scope="col">Dirección IP</th>
                         <th scope="col">Puerto</th>
+                        <th scope="col">Estatus</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
@@ -45,6 +46,15 @@
   
                           <td>
                             <p class="fs-3 fw-normal mb-0">{{ domain.port }}</p>
+                          </td>
+
+                          <td>
+                            @if (domain.isActive) {
+                              <p class="fs-3 fw-normal mb-0"><i class="ti ti-check fs-7 text-success"></i></p>
+                            } @else {
+                              <p class="fs-3 fw-normal mb-0"><i class="ti ti-x fs-7 text-warning"></i></p>
+                            }
+                            
                           </td>
   
                           <td>
