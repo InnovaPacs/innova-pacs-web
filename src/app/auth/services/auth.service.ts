@@ -59,7 +59,6 @@ export class AuthService {
   }
 
   discardMedicalOffice() {
-    console.log("MEdical");
     sessionStorage.removeItem('medical-office-id-selected');
     this._medicalOfficeSelected.set(false);
   }

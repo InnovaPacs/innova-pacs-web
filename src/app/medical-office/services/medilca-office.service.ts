@@ -24,7 +24,7 @@ export class MedicalOfficeService {
     
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices?page=${page}`;
     const headers = this.authService.getHeaders();
-    
+
     return this.http.get(url,  
       {
         headers
