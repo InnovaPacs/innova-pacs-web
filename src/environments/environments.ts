@@ -1,5 +1,5 @@
 export const  environment = {
-    name: 'prod',
-    production: true,
-    baseUrl: 'http://localhost:8080',
+    name: 'dev',
+    production: false,
+    baseUrl: 'https://persist.rocks/posventa-api',
 };
