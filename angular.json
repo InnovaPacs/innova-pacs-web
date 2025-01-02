@@ -63,7 +63,7 @@
               ],
               "outputHashing": "all"
             },
-            "dev": {
+            "development": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -83,8 +83,8 @@
             "production": {
               "buildTarget": "innova-pacs:build:production"
             },
-            "dev": {
-              "buildTarget": "innova-pacs:build:dev"
+            "development": {
+              "buildTarget": "innova-pacs:build:development"
             }
           },
           "defaultConfiguration": "development"

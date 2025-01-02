@@ -22,4 +22,12 @@ export class LoadingService {
   hideLoading() {
     Swal.close();
   }
+
+   showErrorMessage(message: string):void {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: message,
+      });
+    }
 }

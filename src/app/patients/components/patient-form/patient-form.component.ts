@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
+import { map, filter, switchMap, catchError, EMPTY, of } from 'rxjs';
 import { PatientService } from '../../services/patient.service';
 import { Patient, UpdatePatient } from '../../interfaces/patient.interface';
 import { FileService } from '../../../shared/services/file.service';
@@ -151,9 +151,11 @@ export class PatientFormComponent {
         update.photo = response.id;
         return this.service.save(update);
       })
-    ).subscribe(() => {
+    )
+    .subscribe({
+      next: () => {
         this.router.navigate(['/patients/main']);
       }
-    );
+    });
   }
 }
