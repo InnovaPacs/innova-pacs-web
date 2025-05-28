@@ -21,6 +21,10 @@ export class MenuComponent implements AfterViewInit, OnInit {
     
   }
   
+  goToMedicalOffice() {
+    this.router.navigate([`/medical-offices/${this.authService.currentMedicalOfficeId()}`]);
+  }
+
   goToProfile() {
     this.router.navigate([`/users/${this.authService.currentUser()!.id}`]);
   }

@@ -96,4 +96,20 @@ export class MedicalOfficeService {
       }
     );
   }
+
+    getLastByUserId(userId: string | null):Observable<MedicalOffice> {
+
+    if(userId === null) {
+      userId = this.authService.currentUser()!.id;
+    }
+    
+    const url = `${this.baseUrl}/api/users/${userId}/medical-office`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<MedicalOffice>(url,  
+      {
+        headers
+      }
+    );
+  }
 }

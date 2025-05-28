@@ -98,12 +98,12 @@ export class MedicalOfficeFormComponent {
           return this.medicalOfficeService.updateUserById(null, this.id, medicalOffice);
         })
       ).subscribe(() => {
-          this.router.navigate(['/medical-offices/main']);
+          this.router.navigate(['/patients']);
         }
       );
     } else {
       this.medicalOfficeService.updateUserById(null, this.id, medicalOffice).subscribe(reposne => {
-        this.router.navigate(['/medical-offices/main']);
+        this.router.navigate(['/patients']);
       });
     }
   }
@@ -115,7 +115,7 @@ export class MedicalOfficeFormComponent {
         return this.medicalOfficeService.saveMedicalOffice(null, medicalOffice);
       })
     ).subscribe(() => {
-        this.router.navigate(['/medical-offices/main']);
+        this.router.navigate(['/patients']);
       }
     );
   }

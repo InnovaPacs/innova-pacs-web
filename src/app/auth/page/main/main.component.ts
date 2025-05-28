@@ -24,7 +24,7 @@ export class MainComponent {
     
     this.authService.login(username||'', password||'').subscribe(
       {
-        next: () => this.router.navigateByUrl('/medical-offices'),
+        next: () => this.router.navigateByUrl('/patients'),
         error: (error) => {
           Swal.fire('Error', error, 'error');
         }

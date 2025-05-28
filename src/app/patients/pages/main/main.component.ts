@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { PatientService } from '../../services/patient.service';
 import { Patient } from '../../interfaces/patient.interface';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
+import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { AuthService } from '../../../auth/services/auth.service';
+import { el } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-main',
@@ -10,6 +13,9 @@ import { Pagination, Item } from '../../../shared/interfaces/pagination.interfac
 })
 export class MainComponent {
   private service = inject(PatientService);
+  private medicalOfficeService = inject(MedicalOfficeService);
+  private authService = inject(AuthService)
+
   domains: Patient[] = [];
 
   pagination: Pagination = {
@@ -23,7 +29,16 @@ export class MainComponent {
   constructor() { }
 
   ngOnInit(): void {
-    this.getAllData(0);
+    if(this.authService.getMedicalOfficeStatus()) {
+      this.getAllData(0);
+    } else {
+      this.medicalOfficeService.getLastByUserId(null).subscribe((medicalOffice) => {
+      console.log("medicalOffice ", medicalOffice);
+      this.authService.selectMedicalOffice(medicalOffice.id);
+
+      this.getAllData(0);
+    });
+    }
   }
 
   getItems(totalPages: number):Item[] {
@@ -45,6 +60,7 @@ export class MainComponent {
   }
 
   private getAllData(page: number) {
+    console.log("GET ALLL")
     this.service.getAll(page).subscribe((response) => {
       this.domains = response.content;
       

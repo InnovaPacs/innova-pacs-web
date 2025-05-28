@@ -12,9 +12,11 @@ export class AuthService {
   private _currentUser = signal<User | null>(null);
   private _authStatus = signal<AuthStatus>(AuthStatus.checking);
   private _medicalOfficeSelected = signal<boolean>(false);
+  private _currentMedicalOfficeId = signal<string | null>(null);
 
   public currentUser = computed(this._currentUser);
   public authStatus = computed(this._authStatus);
+  public currentMedicalOfficeId = computed(this._currentMedicalOfficeId);
 
   private http = inject(HttpClient);
   
@@ -54,6 +56,7 @@ export class AuthService {
   }
 
   selectMedicalOffice(medicalOfficeId: string) {
+    this._currentMedicalOfficeId.set(medicalOfficeId);
     sessionStorage.setItem('medical-office-id-selected', medicalOfficeId);
     this._medicalOfficeSelected.set(true);
   }
