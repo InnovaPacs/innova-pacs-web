@@ -1,75 +1,216 @@
 <div class="container-fluid">
+ <!--
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <strong>Selección de pacientes</strong>
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+              <div class="container bg-white p-4 rounded shadow-sm">
+                <form class="row g-3 mb-4">
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="Buscar por nombre o curp..." id="searchInput">
+                  </div>
+                  <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                  </div>
+                  <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">Nuevo</button>
+                  </div>
+                </form>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                      <tr>
+                        <th>CURP</th>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Género</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>CABL900209HDFMT00</td>
+                        <td>Jose Luis Campos Bautista</td>
+                        <td>35</td>
+                        <td>Masculino</td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary">Seleccionar</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <strong>Detalle de paciente</strong>
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div class="container bg-white p-4 rounded shadow-sm">
+              <ul>
+                <li><strong>Edad:</strong> 45 años</li>
+                <li><strong>Género:</strong> Masculino</li>
+                <li><strong>Correo:</strong> juancorreo.com</li>
+                <li><strong>Teléfono:</strong> +52 555-123-4567</li>
+                <li><strong>Diagnósticos:</strong> Diabetes tipo 2</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <strong>Detalle de estidio</strong>
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          </div>
+        </div>
+      </div>
+    </div>
+  -->
     <!--  Row 1 -->
     <div class="row">
         <div class="col-lg-12 d-flex align-items-stretch">
             <div class="card w-100">
               <div class="card-body p-4">
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                    <div class="mb-3">
-                      <label for="appointmentDate" class="form-label">Fecha</label>
-                      <input type="date" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita"
-                        formControlName="appointmentDate">
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="appointmentStartHour" class="form-label">Hora inicio</label>
-                      <input type="time" class="form-control" id="appointmentStartHour" placeholder="Ingresa hora de cita"
-                             min="00:00" max="23:59"
-                        formControlName="appointmentStartHour" [disabled]="true">
-                    </div>
-                    <div class="mb-3">
-                      <label for="appointmentEndHour" class="form-label">Horio fin</label>
-                      <input type="time" class="form-control" id="appointmentEndHour" placeholder="Ingresa hora de cita"
-                             min="00:00" max="23:59"
-                        formControlName="appointmentEndHour">
-                    </div>
-
-
-                    <div class="mb-3">
-                      <label for="radiologyExamTypeId" class="form-label">Tipo</label>
-                      <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
-                          @for (domain of radiologyExamTypes; track domain.id) {
+                    <div class="row border rounded p-3 mb-4">
+                      <h5 class="text-primary mb-3">📋 Información del estudio</h5>
+                      <div class="mb-3">
+                        <label for="medicalOfficeId" class="form-label">Consultorio</label>
+                          <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
+                            @for (domain of medicalOffices; track domain.id) {
                               <option [value]="domain.id">{{ domain.name }}</option>
-                          }
-                      </select>
-                  </div>
+                            }
+                          </select>
+                        </div>
 
-                  <div class="mb-3">
-                      <label for="radiologyExamStudyId" class="form-label">Estudio</label>
-                      <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
-                          @for (domain of radiologyExamStudy; track domain.id) {
-                              <option [value]="domain.id">{{ domain.name }}</option>
-                          }
-                      </select>
-                  </div>
+                        <div class="mb-3 col-xm-12 col-md-3">
+                          <label for="appointmentDate" class="form-label">Fecha</label>
+                          <input type="date" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita"
+                            formControlName="appointmentDate">
+                        </div>
 
-                    <div class="mb-3">
+                        <div class="mb-3 col-xm-12 col-md-3">
+                          <label for="appointmentStartHour" class="form-label">Hora inicio</label>
+                          <input type="time" class="form-control" id="appointmentStartHour" placeholder="Ingresa hora de cita"
+                                min="00:00" max="23:59"
+                            formControlName="appointmentStartHour" [disabled]="true">
+                        </div>
+
+                        <div class="mb-3 col-xm-12 col-md-3">
+                          <label for="appointmentEndHour" class="form-label">Horio fin</label>
+                          <input type="time" class="form-control" id="appointmentEndHour" placeholder="Ingresa hora de cita"
+                                min="00:00" max="23:59"
+                            formControlName="appointmentEndHour">
+                        </div>
+
+                        <div class="mb-3 col-xm-12 col-md-3">
+                          <label for="radiologyExamTypeId" class="form-label">Tipo</label>
+                          <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
+                              @for (domain of radiologyExamTypes; track domain.id) {
+                                  <option [value]="domain.id">{{ domain.name }}</option>
+                              }
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="radiologyExamStudyId" class="form-label">Estudio</label>
+                          <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
+                              @for (domain of radiologyExamStudy; track domain.id) {
+                                  <option [value]="domain.id">{{ domain.name }}</option>
+                              }
+                          </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label for="doctorId" class="form-label">Médico Solicitante</label>
+                          <select class="form-select" id="doctorId" formControlName="doctorId">
+                            @for (domain of doctors; track domain.id) {
+                              <option [value]="domain.id">{{ domain.name }} ({{ domain.specialty }})</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="doctorId" class="form-label">Médico Radiologo</label>
+                          <select class="form-select" id="doctorId" formControlName="doctorId">
+                            @for (domain of doctors; track domain.id) {
+                              <option [value]="domain.id">{{ domain.name }} ({{ domain.specialty }})</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div class="mb-3 col-xm-12 col-md-12">
+                          <label for="notes" class="form-label">Indicaciones</label>
+                          <textarea type="text" class="form-control" id="maritalStatus" placeholder="Notas de pacient"
+                            formControlName="notes"rows="3"></textarea>
+                        </div>
+                      </div>
+                    
+                    <div class="row border rounded p-3 mb-4">
+                      <h5 class="text-primary mb-3">🧑‍🧒 Información de paciente</h5>
+                      <div class="container bg-white p-4 rounded shadow-sm">
+                          <form class="row g-3 mb-4">
+                            <div class="col-md-8">
+                              <input type="text" class="form-control" placeholder="Buscar por nombre o curp..." id="searchInput">
+                            </div>
+                            <div class="col-md-2 d-grid">
+                              <button type="submit" class="btn btn-primary">Buscar</button>
+                            </div>
+                            <div class="col-md-2 d-grid">
+                              <button type="submit" class="btn btn-success">Nuevo</button>
+                            </div>
+                          </form>
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                              <thead class="table-light">
+                                <tr>
+                                  <th>CURP</th>
+                                  <th>Nombre</th>
+                                  <th>Edad</th>
+                                  <th>Género</th>
+                                  <th>Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>CABL900209HDFMT00</td>
+                                  <td>Jose Luis Campos Bautista</td>
+                                  <td>35</td>
+                                  <td>Masculino</td>
+                                  <td>
+                                    <button class="btn btn-sm btn-outline-primary">Seleccionar</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      <div class="mb-3">
                         <label for="patientId" class="form-label">Paciente</label>
                         <select class="form-select" id="patientId" formControlName="patientId">
                           @for (domain of patients; track domain.id) {
                             <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
                           }
                         </select>
+                      </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="doctorId" class="form-label">Doctor</label>
-                        <select class="form-select" id="doctorId" formControlName="doctorId">
-                          @for (domain of doctors; track domain.id) {
-                            <option [value]="domain.id">{{ domain.name }} ({{ domain.specialty }})</option>
-                          }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="medicalOfficeId" class="form-label">Consultorio</label>
-                        <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
-                          @for (domain of medicalOffices; track domain.id) {
-                            <option [value]="domain.id">{{ domain.name }}</option>
-                          }
-                        </select>
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Guradar</button>
                 </form>  
                 
@@ -78,3 +219,10 @@
         </div>
     </div>
 </div>
+
+<input class="form-control" list="pacientes" id="pacienteInput" placeholder="Buscar paciente...">
+<datalist id="pacientes">
+  <option value="Juan Pérez">
+  <option value="Ana Martínez">
+  <option value="Carlos López">
+</datalist>

@@ -13,6 +13,7 @@ import { MedicalOfficeService } from '../../../medical-office/services/medilca-o
 import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
 import { RadiolodyExamStudy } from '../../../radiology-exam/interfaces/radiology-exam-study.interface';
 import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -28,6 +29,7 @@ export class AppointmentFormComponent {
   private patientService = inject(PatientService);
   private medicalOfficeService = inject(MedicalOfficeService);
   private radiologyExamService = inject(RadiologyExamService);
+  private auth = inject(AuthService)
 
   public patients: Patient[] = [];
   public doctors: Doctor[] = [];
@@ -228,7 +230,8 @@ export class AppointmentFormComponent {
         appointmentStartHour: this.getInitHour(data),
         appointmentEndHour: this.getEndHour(data),
         radiologyExamTypeId: this.getModality(data),
-        appointmentDate: this.getAppointmentDate(data)
+        appointmentDate: this.getAppointmentDate(data),
+        medicalOfficeId: this.getMedicalOffice(data),
       })
 
       this.radiologyExamTypeId = this.getModality(data);
@@ -239,5 +242,30 @@ export class AppointmentFormComponent {
     this.disableControl('appointmentEndHour');
     this.disableControl('appointmentDate');
     this.disableControl('radiologyExamTypeId');
+    this.disableControl('medicalOfficeId');
+  }
+
+  private getMedicalOffice(data: ParamMap):string| null {
+    return this.auth.currentMedicalOfficeId();;
+  }
+
+    selectedPatient: string | null = null;
+  searchTerm: string = '';
+
+  public patientss = [
+    { id: '1', name: 'Juan Pérez' },
+    { id: '2', name: 'Ana Martínez' },
+    { id: '3', name: 'Carlos López' },
+    { id: '4', name: 'Lucía Torres' },
+  ];
+
+  filteredPatients() {
+    return this.patientss.filter(p =>
+      p.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  addPatient() {
+    alert('Agregar paciente');
   }
 }

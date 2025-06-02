@@ -14,7 +14,7 @@ import { LoadingInterceptor } from './shared/interceptor/login.interceptor';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
-  ],
+],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
   ],

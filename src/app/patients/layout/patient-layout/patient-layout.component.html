@@ -1,11 +1,5 @@
-<!--  Body Wrapper -->
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-  data-sidebar-position="fixed" data-header-position="fixed">
-
-    <app-menu></app-menu>
-  
-    <div class="body-wrapper">
-        <app-header [title]="title"></app-header>
-        <router-outlet />
-    </div>
-</div>
+<main class="main" id="top">
+   <app-menu>
+      <router-outlet/>
+   </app-menu>
+</main>

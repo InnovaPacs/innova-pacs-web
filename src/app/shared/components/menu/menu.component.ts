@@ -15,6 +15,7 @@ export class MenuComponent implements AfterViewInit, OnInit {
 
   logOut() {
     this.authService.logOut();
+    this.router.navigate([`/auth/login`]);
   }
   
   ngOnInit(): void {
@@ -34,17 +35,5 @@ export class MenuComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    $("#sidebarCollapse, #headerCollapse").on("click", function () {
-      $("#main-wrapper").toggleClass("mini-sidebar");
-      $("#main-wrapper").toggleClass("show-sidebar");
-  
-      if ($("#main-wrapper").hasClass("mini-sidebar")) {
-        $("#sidebartoggler").prop("checked", true);
-        $("#main-wrapper").attr("data-sidebartype", "mini-sidebar");
-      } else {
-        $("#sidebartoggler").prop("checked", false);
-        $("#main-wrapper").attr("data-sidebartype", "full");
-      }
-    });
   }
 }

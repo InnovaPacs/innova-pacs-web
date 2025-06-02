@@ -35,16 +35,22 @@
               "src/assets"
             ],
             "styles": [
-              "./src/assets/css/styles.min.css"
+              "./src/assets/theme/assets/css/theme.min.css"
             ],
             "scripts": [
-              "./src/assets/libs/jquery/dist/jquery.min.js",
-              "./src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "./src/assets/js/sidebarmenu.js",
-              "./src/assets/js/app.min.js",
-              "./src/assets/libs/apexcharts/dist/apexcharts.min.js",
-              "./src/assets/libs/simplebar/dist/simplebar.js",
-              "./src/assets/js/dashboard.js"
+              "./src/assets/theme/vendors/popper/popper.min.js",
+              "./src/assets/theme/vendors/bootstrap/bootstrap.min.js",
+              "./src/assets/theme/vendors/anchorjs/anchor.min.js",
+              "./src/assets/theme/vendors/is/is.min.js",
+              "./src/assets/theme/vendors/fontawesome/all.min.js",
+              "./src/assets/theme/vendors/lodash/lodash.min.js",
+              "./src/assets/theme/vendors/list.js/list.min.js",
+              "./src/assets/theme/vendors/feather-icons/feather.min.js",
+              "./src/assets/theme/vendors/dayjs/dayjs.min.js",
+              "./src/assets/theme/vendors/leaflet/leaflet.js",
+              "./src/assets/theme/vendors/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js",
+              "./src/assets/theme/assets/js/phoenix.js",
+              "./src/assets/theme/vendors/echarts/echarts.min.js"
             ]
           },
           "configurations": {

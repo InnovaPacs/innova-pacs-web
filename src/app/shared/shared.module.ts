@@ -20,7 +20,6 @@ import { FooterComponent } from './components/footer/footer.component';
   exports: [
     HeaderComponent,
     MenuComponent,
-    RouterModule,
     FooterComponent
   ]
 })
