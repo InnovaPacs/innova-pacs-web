@@ -30,6 +30,7 @@ export class AppointmentFormComponent {
   private medicalOfficeService = inject(MedicalOfficeService);
   private radiologyExamService = inject(RadiologyExamService);
   private auth = inject(AuthService)
+  public title: string = 'Registrar cita médica';
 
   public patients: Patient[] = [];
   public doctors: Doctor[] = [];
@@ -247,25 +248,5 @@ export class AppointmentFormComponent {
 
   private getMedicalOffice(data: ParamMap):string| null {
     return this.auth.currentMedicalOfficeId();;
-  }
-
-    selectedPatient: string | null = null;
-  searchTerm: string = '';
-
-  public patientss = [
-    { id: '1', name: 'Juan Pérez' },
-    { id: '2', name: 'Ana Martínez' },
-    { id: '3', name: 'Carlos López' },
-    { id: '4', name: 'Lucía Torres' },
-  ];
-
-  filteredPatients() {
-    return this.patientss.filter(p =>
-      p.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
-
-  addPatient() {
-    alert('Agregar paciente');
   }
 }

@@ -36,9 +36,11 @@
             ],
             "styles": [
               "./src/assets/theme/assets/css/theme.min.css",
-              "./src/assets/theme/assets/css/user.css"
+              "./src/assets/theme/assets/css/user.css",
+              "./src/assets/theme/vendors/choices/choices.min.css"
             ],
             "scripts": [
+              "./src/assets/theme/vendors/choices/choices.min.js",
               "./src/assets/theme/vendors/popper/popper.min.js",
               "./src/assets/theme/vendors/bootstrap/bootstrap.min.js",
               "./src/assets/theme/vendors/anchorjs/anchor.min.js",

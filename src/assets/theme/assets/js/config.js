@@ -21,7 +21,7 @@
   };
 
   const initialConfig = {
-    phoenixIsNavbarVerticalCollapsed: false,
+    phoenixIsNavbarVerticalCollapsed: true,
     phoenixTheme: 'dark',
     phoenixNavbarTopStyle: 'darker',
     phoenixNavbarVerticalStyle: 'darker',
@@ -34,7 +34,6 @@
   const CONFIG = { ...initialConfig };
 
   const setConfig = (payload, persist = true) => {
-    alert("HEllo")
     Object.keys(payload).forEach(key => {
       CONFIG[key] = payload[key];
       if (persist) {
