@@ -21,7 +21,7 @@
                       <th class="sort align-middle" scope="col">FECHA DE NACIMIENTO</th>
                       <th class="sort align-middle pe-3" scope="col">TELEFONO</th>
                       <th class="sort align-middle" scope="col">EMAIL</th>
-                      <th class="sort align-middle" scope="col">Acciones</th>
+                      <th class="sort align-middle" scope="col">ACCIONES</th>
 
                     </tr>
                   </thead>
@@ -36,8 +36,8 @@
                           <h6 class="mb-0 ms-3 fw-semibold" [routerLink]="['/patients/', domain.id]">{{ domain.firstName }} {{ domain.lastName }}</h6>
                         </a>
                       </td>
-                      <td class="email align-middle white-space-nowrap"><a class="fw-semibold">{{ domain.dateOfBirth }}</a></td>
-                      <td class="mobile_number align-middle white-space-nowrap"><a class="fw-bold text-body-emphasis" href="tel:+912346578">{{ domain.phoneNumber }}</a></td>
+                      <td class="email align-middle white-space-nowrap">{{ domain.dateOfBirth }}</td>
+                      <td class="mobile_number align-middle white-space-nowrap">{{ domain.phoneNumber }}</td>
                       <td class="city align-middle white-space-nowrap text-body">{{ domain.email }}</td>
                       <td>
                         <div class="btn-reveal-trigger position-static">

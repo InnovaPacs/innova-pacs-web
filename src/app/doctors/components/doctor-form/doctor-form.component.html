@@ -1,43 +1,59 @@
-<div class="container-fluid">
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+      <div class="card w-100">
+        <div class="card-body p-4">
+          
+          <div class="d-flex mb-4 justify-content-between align-items-center">
+            <h3>{{title}}</h3>
+            @if (id) {
+              <button class="btn btn-danger" >Eliminar</button>
+            }
+          </div>
+
+          <hr class="my-4">
     <!--  Row 1 -->
-    <div class="row">
-        <div class="col-lg-12 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                
-                <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                    <div class="mb-3">
-                      <label for="imageFile" class="form-label">Seleccione foto</label>
-                      <input type="file" class="form-control"  accept="image/png, image/jpeg" id="imageFile" placeholder="Seleccione foto" (change)="onFileSelected($event)">
-                    </div>
-                    
-                    <div class="mb-3">
-                      <label for="name" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="name" placeholder="Ingresa nombre"
-                        formControlName="name">
-                    </div>
+          <div class="row">
+              <div class="col-lg-12 d-flex align-items-stretch">
+                  <div class="card w-100">
+                    <div class="card-body p-4">
+                      
+                      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="row">
+                          <div class="mb-3">
+                            <label for="imageFile" class="form-label">Seleccione foto</label>
+                            <input type="file" class="form-control"  accept="image/png, image/jpeg" id="imageFile" placeholder="Seleccione foto" (change)="onFileSelected($event)">
+                          </div>
+                          
+                          <div class="mb-3">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="name" placeholder="Ingresa nombre"
+                              formControlName="name">
+                          </div>
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Ingresa email"
-                          formControlName="email">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Ingrese telefono</label>
-                        <input type="text" class="form-control" id="phone" placeholder="Ingresa telefono"
-                          formControlName="phone">
-                    </div>
+                          <div class="mb-3">
+                              <label for="email" class="form-label">Email</label>
+                              <input type="email" class="form-control" id="email" placeholder="Ingresa email"
+                                formControlName="email">
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="phone" class="form-label">Ingrese telefono</label>
+                              <input type="text" class="form-control" id="phone" placeholder="Ingresa telefono"
+                                formControlName="phone">
+                          </div>
 
-                    <div class="mb-3">
-                        <label for="specialty" class="form-label">Ingrese especialidad</label>
-                        <input type="text" class="form-control" id="specialty" placeholder="Ingrese especialidad"
-                          formControlName="specialty">
+                          <div class="mb-3">
+                              <label for="specialty" class="form-label">Ingrese especialidad</label>
+                              <input type="text" class="form-control" id="specialty" placeholder="Ingrese especialidad"
+                                formControlName="specialty">
+                          </div>
+                          <button type="submit" class="btn btn-primary">Guradar</button>
+                      </form>
                     </div>
-                    <button type="submit" class="btn btn-primary">Guradar</button>
-                </form>
+                  </div>
               </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+  <app-footer></app-footer>

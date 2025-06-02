@@ -19,6 +19,7 @@ export class DoctorFormComponent {
   private service = inject(DoctorService);
   private router = inject(Router);
   private fileService = inject(FileService);
+  title: string = 'Registrar médico';
   
   id!: string;
 
@@ -42,6 +43,7 @@ export class DoctorFormComponent {
         return EMPTY;
       })
     ).subscribe(response => {
+      this.title = `Editar médico "${response.name}"`;
       this.patchForm(response);
     });
   }

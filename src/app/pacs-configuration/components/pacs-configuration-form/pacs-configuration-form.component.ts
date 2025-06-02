@@ -15,6 +15,7 @@ export class PacsConfigurationFormComponent {
   private route = inject(ActivatedRoute);
   private service = inject(PacsConfigurationService);
   private router = inject(Router);
+  public title: string = 'Crear Pacs';
   
   id!: string;
 
@@ -38,7 +39,7 @@ export class PacsConfigurationFormComponent {
         return EMPTY;
       })
     ).subscribe(response => {
-      console.log("response: ", response);
+      this.title = `Editar pacs "${response.title}"`;
       this.patchForm(response);
     });
   }
