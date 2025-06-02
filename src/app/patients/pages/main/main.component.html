@@ -12,78 +12,61 @@
           <hr class="my-4">
         
           <div class="table-responsive" data-simplebar>
-            <table
-              class="table table-borderless align-middle text-nowrap"
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Fecha de nacimiento</th>
-                  <th scope="col">Telefono</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (domain of domains; track domain.id) {
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="me-4">
-                          <img 
-                            [src]="domain.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + domain.photo : 'assets/images/profile/unknown.jpg'" 
-                            width="50" 
-                            class="rounded-circle" 
-                            [alt]="domain.photo"/>
+            <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1">
+              <div class="table-responsive scrollbar ms-n1 ps-1">
+                <table class="table table-sm fs-9 mb-0">
+                  <thead>
+                    <tr>
+                      <th class="sort align-middle" scope="col">PACIENTE</th>
+                      <th class="sort align-middle" scope="col">FECHA DE NACIMIENTO</th>
+                      <th class="sort align-middle pe-3" scope="col">TELEFONO</th>
+                      <th class="sort align-middle" scope="col">EMAIL</th>
+                      <th class="sort align-middle" scope="col">Acciones</th>
+
+                    </tr>
+                  </thead>
+                  <tbody class="list" id="members-table-body">
+                    @for (domain of domains; track domain.id) {
+                    <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                      <td class="customer align-middle white-space-nowrap">
+                        <a class="d-flex align-items-center text-body text-hover-1000" style="cursor: pointer;">
+                          <div class="avatar avatar-m"><img class="rounded-circle" [src]="domain.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + domain.photo : 'assets/images/profile/unknown.jpg'"  
+                              [alt]="domain.photo"/>
+                          </div>
+                          <h6 class="mb-0 ms-3 fw-semibold" [routerLink]="['/patients/', domain.id]">{{ domain.firstName }} {{ domain.lastName }}</h6>
+                        </a>
+                      </td>
+                      <td class="email align-middle white-space-nowrap"><a class="fw-semibold">{{ domain.dateOfBirth }}</a></td>
+                      <td class="mobile_number align-middle white-space-nowrap"><a class="fw-bold text-body-emphasis" href="tel:+912346578">{{ domain.phoneNumber }}</a></td>
+                      <td class="city align-middle white-space-nowrap text-body">{{ domain.email }}</td>
+                      <td>
+                        <div class="btn-reveal-trigger position-static">
+                          <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                          <div class="dropdown-menu dropdown-menu-end py-2">
+                            <a class="dropdown-item"  [routerLink]="['/patients/', domain.id]">Editar</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" style="cursor: pointer;">Eliminar</a>
+                          </div>
                         </div>
-                
-                        <div>
-                          <h6 class="mb-1 fw-bolder">{{ domain.firstName }} {{ domain.lastName }}</h6>
-                        </div>
-                      </div>
-                    </td>
-                    
-                    <td>
-                      <p class="fs-3 fw-normal mb-0">{{ domain.dateOfBirth }}</p>
-                    </td>
-
-                    <td>
-                      <p class="fs-3 fw-normal mb-0">{{ domain.phoneNumber }}</p>
-                    </td>
-
-                    <td>
-                      <p class="fs-3 fw-normal mb-0">{{ domain.email }}</p>
-                    </td>
-
-                    <td>
-                      <div class="dropdown">
-                        <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
-                          class="rounded-circle btn-transparent rounded-circle btn-sm px-1 btn shadow-none"
-                        >
-                          <i class="ti ti-dots-vertical fs-7 d-block"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                          <li>
-                            <a class="dropdown-item" [routerLink]="['/patients/', domain.id]">Editar</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+                      </td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <div class="row align-items-center justify-content-between py-2 pe-0 fs-9">
+                <nav aria-label="Page navigation example" [class.disabled]="true">
+                  <ul class="pagination">
+                    <li class="page-item" [class.disabled]="pagination.currentPage === 0"><a class="page-link" (click)="navigate(pagination.currentPage - 1)">Anterior</a></li>
+                    @for (item of pagination.items; track $index) {
+                      <li class="page-item"><a class="page-link" [class.disabled]="item.index === pagination.currentPage" [ngClass]="{ 'active': item.index === pagination.currentPage }" (click)="navigate(item.index)">{{ item.name }}</a></li>
+                    }
+                    <li class="page-item" [class.disabled]="pagination.currentPage === (pagination.totalPages - 1)"><a class="page-link" (click)="navigate(pagination.currentPage + 1)">Siguiente</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
           </div>
-          
-          <nav aria-label="Page navigation example" [class.disabled]="true">
-            <ul class="pagination">
-              <li class="page-item" [class.disabled]="pagination.currentPage === 0"><a class="page-link" (click)="navigate(pagination.currentPage - 1)">Anterior</a></li>
-              @for (item of pagination.items; track $index) {
-                <li class="page-item"><a class="page-link" [class.disabled]="item.index === pagination.currentPage" [ngClass]="{ 'active': item.index === pagination.currentPage }" (click)="navigate(item.index)">{{ item.name }}</a></li>
-              }
-              <li class="page-item" [class.disabled]="pagination.currentPage === (pagination.totalPages - 1)"><a class="page-link" (click)="navigate(pagination.currentPage + 1)">Siguiente</a></li>
-            </ul>
-          </nav>
         </div>
       </div>
     </div>
