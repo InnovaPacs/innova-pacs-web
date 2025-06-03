@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
@@ -14,6 +14,7 @@ import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-
 import { RadiolodyExamStudy } from '../../../radiology-exam/interfaces/radiology-exam-study.interface';
 import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
 import { AuthService } from '../../../auth/services/auth.service';
+import { VendorsService } from '../../../shared/services/vendors.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -42,7 +43,11 @@ export class AppointmentFormComponent {
   private radiologyExamTypeId?: string|null;
   private appointmentDate?: string|null;
   
-  id!: string;
+  public id!: string;
+  @ViewChild('radiologyExamStudyRef') radiologyExamStudyRef!: ElementRef;
+  public radiologyExamStudyInstance: any;
+
+  private vendorsService = inject(VendorsService);
 
   public form: FormGroup = this.fb.group({
     appointmentDate: [null],
@@ -135,6 +140,7 @@ export class AppointmentFormComponent {
     const selectedId = selectRadiologyExamTypeId?.target?.value ? selectRadiologyExamTypeId.target.value : selectRadiologyExamTypeId;
     this.radiologyExamService.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
       this.radiologyExamStudy = data;
+      this.vendorsService.initChoices(this.radiologyExamStudyInstance, this.radiologyExamStudyRef);
     });
   }
 

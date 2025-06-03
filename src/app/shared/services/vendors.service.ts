@@ -8,13 +8,13 @@ declare var flatpickr: any;
 export class VendorsService {
     constructor() { }
 
-    initChoices(rename: any, selectRef: ElementRef)  {
-    if (rename) {
-      rename.destroy();
+    initChoices(instance: any, selectRef: ElementRef)  {
+    if (instance) {
+      instance.destroy();
     }
 
     const select = selectRef.nativeElement;
-    rename = new Choices(select, {
+    instance = new Choices(select, {
       removeItemButton: false,
       placeholder: true,
       shouldSort: false
