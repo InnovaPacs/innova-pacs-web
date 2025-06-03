@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
@@ -6,8 +6,7 @@ import { RadiologyExamService } from '../../../radiology-exam/services/radiology
 import { Schedule } from '../../../appointments/interfaces/appointment-schedule.interface';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup } from '@angular/forms';
-declare var Choices: any;
-declare var flatpickr: any;
+import { VendorsService } from '../../../shared/services/vendors.service';
 
 @Component({
   selector: 'app-schedule',
@@ -30,6 +29,7 @@ export class ScheduleComponent implements OnInit {
   private modalitySelected: string | null | undefined;
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private vendorsService = inject(VendorsService);
 
   public form: FormGroup = this.fb.group({
     appointmentDate: [null],
@@ -45,8 +45,8 @@ export class ScheduleComponent implements OnInit {
     this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
       this.radiolodyExamTypes = response;
       setTimeout(() => {
-        this.initChoices();
-        this.initFlatpickr();
+        this.vendorsService.initChoices(this.examTypeChoicesInstance, this.examTypeSelectRef);
+        this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
       }, 0);
     });
   }
@@ -134,26 +134,6 @@ export class ScheduleComponent implements OnInit {
 
   private getAppointmentDate(data: ParamMap):string| null {
     return data.get('appointmentDate');;
-  }
-
-  initChoices() {
-    if (this.examTypeChoicesInstance) {
-      this.examTypeChoicesInstance.destroy();
-    }
-
-    const select = this.examTypeSelectRef.nativeElement;
-    this.examTypeChoicesInstance = new Choices(select, {
-      removeItemButton: false,
-      placeholder: true,
-      shouldSort: false
-    });
-  }
-
-  initFlatpickr() {
-    if (this.startDatepickerInstance) {
-      this.startDatepickerInstance.destroy();
-    }
-    this.startDatepickerInstance = flatpickr(this.appointmentDate.nativeElement);
   }
 }
 
