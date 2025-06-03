@@ -60,7 +60,7 @@
                 
                 <div class="col-xm-12">
                   <div class="form-floating">
-                    <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
+                    <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId" (change)="onSelectRadiologyExamTypeStudy($event)">
                         @for (domain of radiologyExamStudy; track domain.id) {
                             <option [value]="domain.id">{{ domain.name }}</option>
                         }
@@ -71,7 +71,7 @@
 
                 <div class="col-12">
                   <div class="form-floating">
-                    <textarea class="form-control" id="notes" placeholder="Notas del estudio" formControlName="notes" style="height: 128px"></textarea>
+                    <textarea class="form-control" id="notes" placeholder="Notas del estudio" formControlName="notes" style="height: 128px; white-space: pre-wrap;"></textarea>
                     <label for="notes">Notas</label>
                   </div>
                 </div>

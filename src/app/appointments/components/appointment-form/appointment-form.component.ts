@@ -53,6 +53,7 @@ export class AppointmentFormComponent {
     radiologyExamStudyId: [null],
     appointmentStartHour: [null],
     appointmentEndHour: [null],
+    notes: [null]
   });
 
   ngOnInit(): void {
@@ -248,5 +249,13 @@ export class AppointmentFormComponent {
 
   private getMedicalOffice(data: ParamMap):string| null {
     return this.auth.currentMedicalOfficeId();;
+  }
+
+  onSelectRadiologyExamTypeStudy(selectRadiologyExamTypeStudy: any) {
+    const selectedId = selectRadiologyExamTypeStudy?.target?.value ? selectRadiologyExamTypeStudy.target.value : selectRadiologyExamTypeStudy;
+    const studySelected = this.radiologyExamStudy.find(rds => rds.id === selectedId);
+    this.form.patchValue({
+      notes: studySelected!.instructions.replace(/\\n/g, '\n')
+    });
   }
 }
