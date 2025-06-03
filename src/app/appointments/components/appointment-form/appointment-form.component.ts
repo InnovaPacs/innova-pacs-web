@@ -46,6 +46,12 @@ export class AppointmentFormComponent {
   public id!: string;
   @ViewChild('radiologyExamStudyRef') radiologyExamStudyRef!: ElementRef;
   public radiologyExamStudyInstance: any;
+  @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
+  public doctorRequestedInstance: any;
+  @ViewChild('radiologistRef') radiologistRef!: ElementRef;
+  public radiologistInstance: any;
+  @ViewChild('patientRef') patientRef!: ElementRef;
+  public patientInstance: any;
 
   private vendorsService = inject(VendorsService);
 
@@ -140,7 +146,9 @@ export class AppointmentFormComponent {
     const selectedId = selectRadiologyExamTypeId?.target?.value ? selectRadiologyExamTypeId.target.value : selectRadiologyExamTypeId;
     this.radiologyExamService.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
       this.radiologyExamStudy = data;
-      this.vendorsService.initChoices(this.radiologyExamStudyInstance, this.radiologyExamStudyRef);
+      setTimeout(() => {
+        this.vendorsService.initChoices(this.radiologyExamStudyInstance, this.radiologyExamStudyRef);
+      }, 0);
     });
   }
 
@@ -209,10 +217,17 @@ export class AppointmentFormComponent {
 
     this.doctorService.getFullData().subscribe(repsosne => {
       this.doctors = repsosne;
+      setTimeout(() => {
+        this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+        this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
+      }, 0);
     });
 
     this.patientService.getFullData().subscribe(response => {
       this.patients = response;
+      setTimeout(() => {
+        this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+      }, 0);
     });
 
     this.medicalOfficeService.getFullData().subscribe(response => {
