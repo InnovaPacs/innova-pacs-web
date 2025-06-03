@@ -35,9 +35,10 @@
               "src/assets"
             ],
             "styles": [
+              "./src/assets/theme/vendors/flatpickr/flatpickr.min.css",
+              "./src/assets/theme/vendors/choices/choices.min.css",
               "./src/assets/theme/assets/css/theme.min.css",
-              "./src/assets/theme/assets/css/user.css",
-              "./src/assets/theme/vendors/choices/choices.min.css"
+              "./src/assets/theme/assets/css/user.css"
             ],
             "scripts": [
               "./src/assets/theme/vendors/choices/choices.min.js",
@@ -52,8 +53,9 @@
               "./src/assets/theme/vendors/dayjs/dayjs.min.js",
               "./src/assets/theme/vendors/leaflet/leaflet.js",
               "./src/assets/theme/vendors/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js",
-              "./src/assets/theme/assets/js/phoenix.js",
-              "./src/assets/theme/vendors/echarts/echarts.min.js"
+              "./src/assets/theme/vendors/dropzone/dropzone-min.js",
+              "./src/assets/theme/vendors/flatpickr/flatpickr.min.js",
+              "./src/assets/theme/assets/js/phoenix.js"
             ]
           },
           "configurations": {

@@ -12,17 +12,25 @@
             
             <form class="row" [formGroup]="form">
               <div class="mb-3 col-xm-12 col-md-6">
-                <label for="appointmentDate" class="form-label">Selecciona fecha</label>
-                <input type="date" class="form-control" id="appointmentDate" placeholder="Selecciona fecha"
-                  formControlName="appointmentDate" (change)="onDateSelected($event)">
+                <div class="flatpickr-input-container">
+                  <div class="form-floating">
+                    <input #appointmentDate
+                          class="form-control datetimepicker"
+                          type="text"
+                          id="appointmentDate" placeholder="Selecciona fecha"
+                          formControlName="appointmentDate" (change)="onDateSelected($event)"
+                          data-options='{"disableMobile":true}'/>
+                    <label class="ps-2" for="appointmentDate">Selecciona fecha</label>
+                  </div>
+                </div>
               </div>
-
-              <div class="mb-3 col-xm-12 col-md-6">
-                <label class="form-label" for="radiologyExamTypeId">Seleccione un modalidad</label>
-                <select class="form-select" (change)="onSelectChange($event)" formControlName="radiologyExamTypeId" id="radiologyExamTypeId">
+              
+              <div class="form-floating form-floating-advance-select mb-3 col-xm-12 col-md-6">
+                <label class="ps-4" for="radiologyExamTypeId">Modalid</label>
+                <select class="form-select" *ngIf="radiolodyExamTypes.length > 0" #examTypeSelectRef (change)="onSelectChange($event)" formControlName="radiologyExamTypeId" id="radiologyExamTypeId">
                   <option value="none" selected>No ha seleccionado una modalidad</option>
                   @for (domain of radiolodyExamTypes; track domain.id) {
-                    <option [value]="domain.id"><b>[{{ domain.name }}]</b> {{ domain.description }}</option>
+                    <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
                   }
                 </select>
               </div>

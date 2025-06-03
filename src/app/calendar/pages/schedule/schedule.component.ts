@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
 import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
@@ -6,6 +6,8 @@ import { RadiologyExamService } from '../../../radiology-exam/services/radiology
 import { Schedule } from '../../../appointments/interfaces/appointment-schedule.interface';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup } from '@angular/forms';
+declare var Choices: any;
+declare var flatpickr: any;
 
 @Component({
   selector: 'app-schedule',
@@ -13,6 +15,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './schedule.component.css'
 })
 export class ScheduleComponent implements OnInit {
+  @ViewChild('examTypeSelectRef', { static: false }) examTypeSelectRef!: ElementRef;
+  examTypeChoicesInstance: any;
+
+  @ViewChild('appointmentDate', { static: false }) appointmentDate!: ElementRef;
+  startDatepickerInstance: any;
+
   private service = inject(AppointmentService);
   private router = inject(Router);
   private radiologyExamService = inject(RadiologyExamService);
@@ -36,11 +44,14 @@ export class ScheduleComponent implements OnInit {
   private getRadiologyExams() {
     this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
       this.radiolodyExamTypes = response;
+      setTimeout(() => {
+        this.initChoices();
+        this.initFlatpickr();
+      }, 0);
     });
   }
 
   onSelectChange(event: Event) {
-
     this.modalitySelected = (event.target as HTMLSelectElement).value;
   
     if(this.date && this.modalitySelected) {
@@ -52,7 +63,10 @@ export class ScheduleComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const selectedDate = input.value; 
     this.date = selectedDate;
-  
+
+    if(this.date && this.modalitySelected) {
+      this.getSchedule(this.date, this.modalitySelected);
+    }
   }
 
   private getSchedule(date: string, modality: string) {
@@ -121,4 +135,25 @@ export class ScheduleComponent implements OnInit {
   private getAppointmentDate(data: ParamMap):string| null {
     return data.get('appointmentDate');;
   }
+
+  initChoices() {
+    if (this.examTypeChoicesInstance) {
+      this.examTypeChoicesInstance.destroy();
+    }
+
+    const select = this.examTypeSelectRef.nativeElement;
+    this.examTypeChoicesInstance = new Choices(select, {
+      removeItemButton: false,
+      placeholder: true,
+      shouldSort: false
+    });
+  }
+
+  initFlatpickr() {
+    if (this.startDatepickerInstance) {
+      this.startDatepickerInstance.destroy();
+    }
+    this.startDatepickerInstance = flatpickr(this.appointmentDate.nativeElement);
+  }
 }
+
