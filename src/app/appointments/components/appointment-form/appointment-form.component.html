@@ -78,23 +78,23 @@
 
                 <div class="col-xm-6">
                   <div class="form-floating">
-                    <select class="form-select" id="doctorId" formControlName="doctorId">
+                    <select class="form-select" id="doctorRequestedId" formControlName="doctorRequestedId">
                         @for (domain of doctors; track domain.id) {
                             <option [value]="domain.id">{{ domain.name }}</option>
                         }
                     </select>
-                    <label for="doctorId">Médico Solicitante</label>
+                    <label for="doctorRequestedId">Médico Solicitante</label>
                   </div>
                 </div>
 
                 <div class="col-xm-6">
                   <div class="form-floating">
-                    <select class="form-select" id="requestingRadiologistId" formControlName="requestingRadiologistId">
+                    <select class="form-select" id="radiologistId" formControlName="radiologistId">
                         @for (domain of doctors; track domain.id) {
                             <option [value]="domain.id">{{ domain.name }}</option>
                         }
                     </select>
-                    <label for="requestingRadiologistId">Radiologo Solicitante</label>
+                    <label for="radiologistId">Radiologo Solicitante</label>
                   </div>
                 </div>
 

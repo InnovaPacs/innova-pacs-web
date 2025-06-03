@@ -8,7 +8,8 @@ export interface AppointmentDto {
     id: string;
     appointmentDate: Date;
     patientId: string;
-    doctorId: string;
+    doctorRequestedId: string;
+    radiologistId: string;
     medicalOfficeId: string;
     appointmentStartHour: string;
     appointmentEndHour: string;
@@ -21,7 +22,8 @@ export interface Appointment {
     appointmentDate: Date;
     status: string;
     patient: Patient;
-    doctor: Doctor;
+    doctorRequested: Doctor;
+    radiologist: Doctor;
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
@@ -49,7 +51,8 @@ export interface UpdatedAppointment {
     appointmentDate: Date;
     status: string;
     patient: Patient;
-    doctor: Doctor;
+    doctorRequested: Doctor;
+    radiologistId: Doctor;
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
