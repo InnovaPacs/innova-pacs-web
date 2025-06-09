@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AppointmentFormComponent } from './components/appointment-form/appointment-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PatientsModule } from '../patients/patients.module';
+import { DoctorsModule } from "../doctors/doctors.module";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { PatientsModule } from '../patients/patients.module';
     CommonModule,
     AppointmentsRoutingModule,
     SharedModule,
+    DoctorsModule,
     PatientsModule
   ]
 })

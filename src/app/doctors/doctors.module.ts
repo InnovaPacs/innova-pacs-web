@@ -22,6 +22,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     DoctorsRoutingModule,
     SharedModule,
     MedicalOfficeRoutingModule
+  ],
+  exports: [
+    DoctorFormComponent
   ]
 })
 export class DoctorsModule { }

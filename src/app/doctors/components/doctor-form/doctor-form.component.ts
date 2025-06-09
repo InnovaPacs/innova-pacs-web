@@ -1,10 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { DoctorService } from '../../services/doctor.service';
 import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
-import { UpdateMedicalOffice } from '../../../medical-office/interfaces/medical-office.interface';
 import { FileService } from '../../../shared/services/file.service';
 
 @Component({
@@ -20,8 +19,12 @@ export class DoctorFormComponent {
   private router = inject(Router);
   private fileService = inject(FileService);
   title: string = 'Registrar médico';
-  
-  id!: string;
+  public id!: string;
+
+  @Input() 
+  origin!: string;
+  @Output() 
+  doctorCreated = new EventEmitter<Doctor>();
 
   public form: FormGroup = this.fb.group({
     name: [null, Validators.required],
@@ -118,9 +121,12 @@ export class DoctorFormComponent {
         update.photo = response.id;
         return this.service.save(update);
       })
-    ).subscribe(() => {
+    ).subscribe((result: Doctor) => {
+      if (this.origin === 'appointment') {
+        this.doctorCreated.emit(result);
+      } else {
         this.router.navigate(['/doctors/main']);
       }
-    );
+    });
   }
 }

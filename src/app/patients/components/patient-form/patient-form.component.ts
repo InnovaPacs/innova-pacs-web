@@ -25,8 +25,6 @@ export class PatientFormComponent {
   origin!: string;
   @Output() 
   patientCreated = new EventEmitter<Patient>();
-  @Output() 
-  close = new EventEmitter<void>();
 
   public form: FormGroup = this.fb.group({
     firstName: [null, Validators.required],
@@ -162,7 +160,6 @@ export class PatientFormComponent {
     )
     .subscribe(result => {
       if (this.origin === 'appointment') {
-        console.log("Close modal")
         this.patientCreated.emit(result);
       } else {
         this.router.navigate(['/patients/main']);

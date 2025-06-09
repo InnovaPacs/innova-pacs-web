@@ -56,6 +56,7 @@ export class AppointmentFormComponent {
   private vendorsService = inject(VendorsService);
   public showModal = false;
   public origing: string = 'appointment';
+  public modalType!: string;
 
 
   public form: FormGroup = this.fb.group({
@@ -302,8 +303,9 @@ export class AppointmentFormComponent {
     });
   }
 
-  public openModal() {
+  public openModal(modalType: string) {
     this.showModal = true;
+    this.modalType = modalType;
   }
 
   public closeModal() {
@@ -316,18 +318,30 @@ export class AppointmentFormComponent {
     requestAnimationFrame(() => {
       setTimeout(() => {
         this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-      
-        this.patientInstance.setChoices([
-          {
-            value: patient.id,
-            label: `${patient.firstName} ${patient.lastName}`,
-            selected: true
-          }
-        ], 'value', 'label', false);
-
+        this.doctorRequestedInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+        this.vendorsService.setChoices(this.doctorRequestedInstance, patient.id, `${patient.firstName} ${patient.lastName}`);
         this.form.patchValue({ patientId: patient.id });
-
         this.closeModal();
+      }, 0);
+    });
+  }
+
+  public handleNewDoctor(doctor: Doctor) {
+    this.doctors = [...this.doctors, doctor];
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if(this.modalType === 'radiologist') {
+          this.radiologistInstance = this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
+          this.vendorsService.setChoices(this.radiologistInstance, doctor.id, `${doctor.name}`);
+          this.form.patchValue({ radiologistId: doctor.id });
+          this.closeModal();
+        } else {
+          this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+          this.vendorsService.setChoices(this.doctorRequestedInstance, doctor.id, `${doctor.name}`);
+          this.form.patchValue({ doctorRequestedId: doctor.id });
+          this.closeModal();
+        }
       }, 0);
     });
   }

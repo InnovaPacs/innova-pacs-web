@@ -85,7 +85,7 @@
                     </select>
                   </div>
                   <div class="col-sm-1 col-xm-1 col-md-1">
-                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('doctors')">
                       <i class="fa-solid fa-user-plus"></i>
                     </button>
                   </div>
@@ -101,7 +101,7 @@
                     </select>
                   </div>
                   <div class="col-sm-1 col-xm-1 col-md-1">
-                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('radiologist')">
                       <i class="fa-solid fa-user-plus"></i>
                     </button>
                   </div>
@@ -118,7 +118,7 @@
                     <label for="patientId">Paciente</label>
                   </div>
                   <div class="col-sm-1 col-xm-1 col-md-1">
-                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal()">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('patients')">
                       <i class="fa-solid fa-user-plus"></i>
                     </button>
                   </div>
@@ -141,7 +141,13 @@
       <div class="modal-header">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
       </div>
-      <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
+        @if (modalType === 'patients') {
+          <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
+        }
+        
+        @if (modalType === 'doctors' || modalType === 'radiologist') {
+          <app-doctor-form [origin]="origing" (doctorCreated)="handleNewDoctor($event)"></app-doctor-form>
+        }
     </div>
   </div>
 </div>
