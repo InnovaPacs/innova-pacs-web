@@ -11,10 +11,11 @@ import { el } from '@fullcalendar/core/internal-common';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent {
+export class PatientMainComponent {
   private service = inject(PatientService);
   private medicalOfficeService = inject(MedicalOfficeService);
   private authService = inject(AuthService)
+  static counter = 0;
 
   domains: Patient[] = [];
 
@@ -26,16 +27,21 @@ export class MainComponent {
     items: []
   }
 
-  constructor() { }
+  constructor() { 
+    PatientMainComponent.counter++;
+    console.log(`🧱 MainComponent Constructor (instances: ${PatientMainComponent.counter})`);
+  }
 
   ngOnInit(): void {
+    console.log('📦 MainComponent ngOnInit');
     if(this.authService.getMedicalOfficeStatus()) {
+      console.log('this.authService.getMedicalOfficeStatus()');
       this.getAllData(0);
     } else {
       this.medicalOfficeService.getLastByUserId(null).subscribe((medicalOffice) => {
       console.log("medicalOffice ", medicalOffice);
       this.authService.selectMedicalOffice(medicalOffice.id);
-
+      console.log('Else this.authService.getMedicalOfficeStatus()');
       this.getAllData(0);
     });
     }
@@ -72,5 +78,10 @@ export class MainComponent {
         items: this.getItems(response.totalPages)
       }
     });
+  }
+
+  ngOnDestroy() {
+    PatientMainComponent.counter--;
+    console.log('🧹 MainComponent ngOnDestroy');
   }
 }

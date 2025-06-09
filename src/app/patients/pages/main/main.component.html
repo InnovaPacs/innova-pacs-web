@@ -55,7 +55,7 @@
                 </table>
               </div>
               <div class="row align-items-center justify-content-between py-2 pe-0 fs-9">
-                <nav aria-label="Page navigation example" [class.disabled]="true">
+                <nav aria-label="pagination" [class.disabled]="true">
                   <ul class="pagination">
                     <li class="page-item" [class.disabled]="pagination.currentPage === 0"><a class="page-link" (click)="navigate(pagination.currentPage - 1)">Anterior</a></li>
                     @for (item of pagination.items; track $index) {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY, of } from 'rxjs';
@@ -19,8 +19,14 @@ export class PatientFormComponent {
   private router = inject(Router);
   private fileService = inject(FileService);
   title: string = 'Registrar paciente';
+  public id!: string;
   
-  id!: string;
+  @Input() 
+  origin!: string;
+  @Output() 
+  patientCreated = new EventEmitter<Patient>();
+  @Output() 
+  close = new EventEmitter<void>();
 
   public form: FormGroup = this.fb.group({
     firstName: [null, Validators.required],
@@ -154,8 +160,11 @@ export class PatientFormComponent {
         return this.service.save(update);
       })
     )
-    .subscribe({
-      next: () => {
+    .subscribe(result => {
+      if (this.origin === 'appointment') {
+        console.log("Close modal")
+        this.patientCreated.emit(result);
+      } else {
         this.router.navigate(['/patients/main']);
       }
     });

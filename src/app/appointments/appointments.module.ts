@@ -7,6 +7,7 @@ import { MainComponent } from './pages/main/main.component';
 import { SharedModule } from '../shared/shared.module';
 import { AppointmentFormComponent } from './components/appointment-form/appointment-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PatientsModule } from '../patients/patients.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     CommonModule,
     AppointmentsRoutingModule,
-    SharedModule
+    SharedModule,
+    PatientsModule
   ]
 })
 export class AppointmentsModule { }

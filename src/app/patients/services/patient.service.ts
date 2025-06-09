@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
-import { UpdateDoctor } from '../../doctors/interfaces/doctor.interface';
 import { PatientPage } from '../interfaces/patient-page.interface';
 import { Patient, UpdatePatient } from '../interfaces/patient.interface';
 
@@ -50,7 +49,7 @@ export class PatientService {
   }
 
   update(id: string, bodyRequest: UpdatePatient):Observable<Patient> {
-    console.log('bodyRequest: ', bodyRequest)
+    console.log('update: ', bodyRequest)
     const url = `${this.baseUrl}/api/patients/${id}`;
     const headers = this.authService.getHeaders();
     
@@ -62,7 +61,7 @@ export class PatientService {
   }
 
   save(bodyRequest: UpdatePatient):Observable<Patient> {
-    console.log('bodyRequest: ', bodyRequest);
+    console.log('save: ', bodyRequest);
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/patients`;
 

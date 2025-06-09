@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
@@ -50,10 +50,13 @@ export class AppointmentFormComponent {
   public doctorRequestedInstance: any;
   @ViewChild('radiologistRef') radiologistRef!: ElementRef;
   public radiologistInstance: any;
-  @ViewChild('patientRef') patientRef!: ElementRef;
+  @ViewChild('patientRef', { static: false }) patientRef!: ElementRef<HTMLSelectElement>;
   public patientInstance: any;
 
   private vendorsService = inject(VendorsService);
+  public showModal = false;
+  public origing: string = 'appointment';
+
 
   public form: FormGroup = this.fb.group({
     appointmentDate: [null],
@@ -68,6 +71,8 @@ export class AppointmentFormComponent {
     notes: [null]
   });
 
+  constructor(private cdr: ChangeDetectorRef) {}
+  
   ngOnInit(): void {
     this.getMainData();
     this.getPathParams();
@@ -211,27 +216,40 @@ export class AppointmentFormComponent {
   }
 
   private getMainData(): void {
+    this.getAllRadiologyExam();
+    this.getAllDoctors();
+    this.getAllPatients();
+    this.getAllMedicalOffices();
+  }
+
+  private getAllMedicalOffices() {
+    this.medicalOfficeService.getFullData().subscribe(response => {
+      this.medicalOffices = response;
+    });
+  }
+
+  private getAllRadiologyExam() {
     this.radiologyExamService.getAllRadiologyExamType().subscribe((data) => {
       this.radiologyExamTypes = data;
     });
+  }
 
+  private getAllDoctors() {
     this.doctorService.getFullData().subscribe(repsosne => {
       this.doctors = repsosne;
       setTimeout(() => {
-        this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
-        this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
+        this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+        this.radiologistInstance = this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
       }, 0);
     });
+  }
 
+  private getAllPatients() {
     this.patientService.getFullData().subscribe(response => {
       this.patients = response;
       setTimeout(() => {
-        this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
       }, 0);
-    });
-
-    this.medicalOfficeService.getFullData().subscribe(response => {
-      this.medicalOffices = response;
     });
   }
 
@@ -281,6 +299,36 @@ export class AppointmentFormComponent {
     const studySelected = this.radiologyExamStudy.find(rds => rds.id === selectedId);
     this.form.patchValue({
       notes: studySelected!.instructions.replace(/\\n/g, '\n')
+    });
+  }
+
+  public openModal() {
+    this.showModal = true;
+  }
+
+  public closeModal() {
+    this.showModal = false;
+  }
+
+  public handleNewPatient(patient: Patient) {
+    this.patients = [...this.patients, patient];
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+      
+        this.patientInstance.setChoices([
+          {
+            value: patient.id,
+            label: `${patient.firstName} ${patient.lastName}`,
+            selected: true
+          }
+        ], 'value', 'label', false);
+
+        this.form.patchValue({ patientId: patient.id });
+
+        this.closeModal();
+      }, 0);
     });
   }
 }

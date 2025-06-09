@@ -15,179 +15,133 @@
             <div class="col-xl-12">
               <form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
                 <h4 class="fs-7 mb-0">Detalles de estudio</h4>
-                <div class="col-sm-12 col-md-12">
-                  <div class="form-floating">
-                    <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
-                      @for (domain of medicalOffices; track domain.id) {
-                        <option [value]="domain.id">{{ domain.name }}</option>
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form-floating">
+                      <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
+                        @for (domain of medicalOffices; track domain.id) {
+                          <option [value]="domain.id">{{ domain.name }}</option>
+                        }
+                      </select>
+                      <label for="medicalOfficeId">Consultorio</label>
+                    </div>
+                  </div>
+
+                  <div class="col-xm-4 col-md-3">
+                    <div class="form-floating">
+                      <input type="date" class="form-control" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita" formControlName="appointmentDate"/>
+                      <label for="appointmentDate">Fecha</label>
+                    </div>
+                  </div>
+
+                  <div class="col-xm-4 col-md-3">
+                    <div class="form-floating">
+                      <input type="time" class="form-control" class="form-control" id="appointmentStartHour" placeholder="Ingresa fecha de cita" formControlName="appointmentStartHour" min="00:00" max="23:59"/>
+                      <label for="appointmentStartHour">Hora inicio</label>
+                    </div>
+                  </div>
+
+                  <div class="col-xm-4 col-md-3">
+                    <div class="form-floating">
+                      <input type="time" class="form-control" class="form-control" id="appointmentEndHour" placeholder="Ingresa fecha de cita" formControlName="appointmentEndHour" min="00:00" max="23:59"/>
+                      <label for="appointmentEndHour">Horio fin</label>
+                    </div>
+                  </div>
+
+                  <div class="col-xm-4 col-md-3">
+                    <div class="form-floating">
+                      <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
+                          @for (domain of radiologyExamTypes; track domain.id) {
+                              <option [value]="domain.id">{{ domain.name }}</option>
+                          }
+                      </select>
+                      <label for="radiologyExamTypeId">Tipo</label>
+                    </div>
+                  </div>
+
+                  <div class="form-floating form-floating-advance-select col-xm-12">
+                    <label class="ps-4" for="radiologyExamStudyId">Estudio</label>
+                    <select class="form-select" *ngIf="radiologyExamStudy.length > 0" #radiologyExamStudyRef (change)="onSelectRadiologyExamTypeStudy($event)" formControlName="radiologyExamStudyId" id="radiologyExamStudyId">
+                      <option value="none" selected>No ha seleccionado una modalidad</option>
+                      @for (domain of radiologyExamStudy; track domain.id) {
+                        <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
                       }
                     </select>
-                    <label for="medicalOfficeId">Consultorio</label>
                   </div>
-                </div>
 
-                <div class="col-xm-4 col-md-3">
-                  <div class="form-floating">
-                    <input type="date" class="form-control" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita" formControlName="appointmentDate"/>
-                    <label for="appointmentDate">Fecha</label>
+                  <div class="col-12">
+                    <div class="form-floating">
+                      <textarea class="form-control" id="notes" placeholder="Notas del estudio" formControlName="notes" style="height: 128px; white-space: pre-wrap;"></textarea>
+                      <label for="notes">Notas</label>
+                    </div>
                   </div>
-                </div>
-
-                <div class="col-xm-4 col-md-3">
-                  <div class="form-floating">
-                    <input type="time" class="form-control" class="form-control" id="appointmentStartHour" placeholder="Ingresa fecha de cita" formControlName="appointmentStartHour" min="00:00" max="23:59"/>
-                    <label for="appointmentStartHour">Hora inicio</label>
-                  </div>
-                </div>
-
-                <div class="col-xm-4 col-md-3">
-                  <div class="form-floating">
-                    <input type="time" class="form-control" class="form-control" id="appointmentEndHour" placeholder="Ingresa fecha de cita" formControlName="appointmentEndHour" min="00:00" max="23:59"/>
-                    <label for="appointmentEndHour">Horio fin</label>
-                  </div>
-                </div>
-
-                <div class="col-xm-4 col-md-3">
-                  <div class="form-floating">
-                    <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
-                        @for (domain of radiologyExamTypes; track domain.id) {
-                            <option [value]="domain.id">{{ domain.name }}</option>
-                        }
+                  
+                  <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
+                    <label class="ps-4" for="doctorRequestedId">Médico Solicitante</label>
+                    <select class="form-select" *ngIf="doctors.length > 0" #doctorRequestedRef formControlName="doctorRequestedId" id="doctorRequestedId">
+                      <option value="none" selected>No ha seleccionado médico</option>
+                      @for (domain of doctors; track domain.id) {
+                        <option [value]="domain.id"> {{ domain.name }}</option>
+                      }
                     </select>
-                    <label for="radiologyExamTypeId">Tipo</label>
                   </div>
-                </div>
-
-                <div class="form-floating form-floating-advance-select col-xm-12">
-                  <label class="ps-4" for="radiologyExamStudyId">Estudio</label>
-                  <select class="form-select" *ngIf="radiologyExamStudy.length > 0" #radiologyExamStudyRef (change)="onSelectRadiologyExamTypeStudy($event)" formControlName="radiologyExamStudyId" id="radiologyExamStudyId">
-                    <option value="none" selected>No ha seleccionado una modalidad</option>
-                    @for (domain of radiologyExamStudy; track domain.id) {
-                      <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
-                    }
-                  </select>
-                </div>
-
-                <div class="col-12">
-                  <div class="form-floating">
-                    <textarea class="form-control" id="notes" placeholder="Notas del estudio" formControlName="notes" style="height: 128px; white-space: pre-wrap;"></textarea>
-                    <label for="notes">Notas</label>
+                  <div class="col-sm-1 col-xm-1 col-md-1">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;">
+                      <i class="fa-solid fa-user-plus"></i>
+                    </button>
                   </div>
-                </div>
+
+
+                  <div class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select ">
+                    <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
+                    <select class="form-select" *ngIf="doctors.length > 0" #radiologistRef formControlName="radiologistId" id="radiologistId">
+                      <option value="none" selected>No ha seleccionado radiologo</option>
+                      @for (domain of doctors; track domain.id) {
+                        <option [value]="domain.id"> {{ domain.name }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="col-sm-1 col-xm-1 col-md-1">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;">
+                      <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                  </div>
                 
-                <div class="form-floating form-floating-advance-select col-xm-12">
-                  <label class="ps-4" for="doctorRequestedId">Médico Solicitante</label>
-                  <select class="form-select" *ngIf="doctors.length > 0" #doctorRequestedRef formControlName="doctorRequestedId" id="doctorRequestedId">
-                    <option value="none" selected>No ha seleccionado médico</option>
-                    @for (domain of doctors; track domain.id) {
-                      <option [value]="domain.id"> {{ domain.name }}</option>
-                    }
-                  </select>
-                </div>
-
-                <div class="form-floating form-floating-advance-select col-xm-12">
-                  <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
-                  <select class="form-select" *ngIf="doctors.length > 0" #radiologistRef formControlName="radiologistId" id="radiologistId">
-                    <option value="none" selected>No ha seleccionado radiologo</option>
-                    @for (domain of doctors; track domain.id) {
-                      <option [value]="domain.id"> {{ domain.name }}</option>
-                    }
-                  </select>
-                </div>
-
-                <h4 class="fs-7 mb-0">Detalles de paciente</h4>
-
-                <div class="form-floating form-floating-advance-select col-xm-12">
-                  <label class="ps-4" for="patientId">Paciente</label>
-                  <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
-                    <option value="none" selected>No ha seleccionado paciente</option>
-                    @for (domain of patients; track domain.id) {
-                      <option [value]="domain.id"> {{ domain.firstName }} {{ domain.lastName }}</option>
-                    }
-                  </select>
-                </div>
-
-                <!--
-                <div class="col-xm-12">
-                  <div class="form-floating">
-                    <select class="form-select" id="patientId" formControlName="patientId">
-                        @for (domain of patients; track domain.id) {
-                            <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
-                        }
+                  <h4 class="fs-7 mb-0">Detalles de paciente</h4>
+                
+                  <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
+                    <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
+                      <option value="none" selected>No ha seleccionado paciente</option>
+                      @for (domain of patients; track domain.id) {
+                        <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
+                      }
                     </select>
                     <label for="patientId">Paciente</label>
                   </div>
-                </div>
--->
+                  <div class="col-sm-1 col-xm-1 col-md-1">
+                    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal()">
+                      <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                  </div>
+                  <!--SELECT TEST-->
                 <button type="submit" class="btn btn-primary">Guradar</button>
               </form>
             </div>
           </div>
-          <!--
-          <div class="row">
-            <div class="col-lg-12 d-flex align-items-stretch">
-                <div class="card w-100">
-                  <div class="card-body p-4">
-                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                        <div class="row border rounded p-3 mb-4">                        
-                        <div class="row border rounded p-3 mb-4">
-                          <h5 class="text-primary mb-3">🧑‍🧒 Información de paciente</h5>
-                          <div class="container bg-white p-4 rounded shadow-sm">
-                              <form class="row g-3 mb-4">
-                                <div class="col-md-8">
-                                  <input type="text" class="form-control" placeholder="Buscar por nombre o curp..." id="searchInput">
-                                </div>
-                                <div class="col-md-2 d-grid">
-                                  <button type="submit" class="btn btn-primary">Buscar</button>
-                                </div>
-                                <div class="col-md-2 d-grid">
-                                  <button type="submit" class="btn btn-success">Nuevo</button>
-                                </div>
-                              </form>
-                              <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                  <thead class="table-light">
-                                    <tr>
-                                      <th>CURP</th>
-                                      <th>Nombre</th>
-                                      <th>Edad</th>
-                                      <th>Género</th>
-                                      <th>Acciones</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>CABL900209HDFMT00</td>
-                                      <td>Jose Luis Campos Bautista</td>
-                                      <td>35</td>
-                                      <td>Masculino</td>
-                                      <td>
-                                        <button class="btn btn-sm btn-outline-primary">Seleccionar</button>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          <div class="mb-3">
-                            <label for="patientId" class="form-label">Paciente</label>
-                            <select class="form-select" id="patientId" formControlName="patientId">
-                              @for (domain of patients; track domain.id) {
-                                <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
-                              }
-                            </select>
-                          </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Guradar</button>
-                    </form>  
-                    
-                  </div>
-                </div>
-            </div>
-          </div>
-        -->
         </div>
       </div>
   </div>
 </div>
+
 <app-footer></app-footer>
+
+<!-- MODAL -->
+<div class="modal fade modal-xl" tabindex="-1" [ngClass]="{ 'show d-block': showModal }" *ngIf="showModal" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
+    </div>
+  </div>
+</div>

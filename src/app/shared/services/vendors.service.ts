@@ -17,8 +17,11 @@ export class VendorsService {
     instance = new Choices(select, {
       removeItemButton: false,
       placeholder: true,
-      shouldSort: false
+      shouldSort: false,
+      allowHTML: true
     });
+
+    return instance;
   }
 
   initFlatpickr(instance: any, dateRef: ElementRef) {
