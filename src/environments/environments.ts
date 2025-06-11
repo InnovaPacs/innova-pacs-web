@@ -1,5 +1,5 @@
 export const  environment = {
     name: 'development',
     production: false,
-    baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://persist.rocks/innova-pacs-service',
 };
