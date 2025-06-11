@@ -6,5 +6,5 @@ COPY ./ /app/
 RUN npm run build --base-href=/innova-pacs/ --configuration=dev
 
 FROM nginx:alpine
-COPY --from=build-stage /app/dist/innova-pacs/browser /usr/share/nginx/html/innova-pacs
+COPY --from=build-stage /app/dist/innova-pacs/browser /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
