@@ -41,6 +41,7 @@
                 <tr>
                   <th scope="col" class="w-10">Hora</th>
                   <th scope="col" class="w-75">Descripción</th>
+                  <th scope="col" class="w-5">Estatus</th>
                   <th scope="col" class="w-10">Acciones</th>
                 </tr>
               </thead>
@@ -58,18 +59,41 @@
                     </div>
                   </td>
                   <td class="align-middle">
+                    <span class="badge badge-phoenix fs-10"
+                      [ngClass]="{
+                        'badge-phoenix-success': schedule?.appointment?.status === 'CREATED',
+                        'badge-phoenix-warning': schedule?.appointment?.status === 'SCHEDULED',
+                        'badge-phoenix-danger': schedule?.appointment?.status === 'CANCELED',
+                        'badge-phoenix-primary': schedule?.appointment?.status === 'SENT_TO_PACS'
+                      }">
+                      <span class="badge-label">{{ schedule?.appointment?.status }}</span>
+                      <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
+                    </span>
+
+                  </td>
+                  <td class="align-middle">
                     <div class="btn-reveal-trigger position-static">
                       <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="fas fa-ellipsis-h fs-10"></span>
                       </button>
                       <div class="dropdown-menu dropdown-menu-end py-2">
-                        <a class="dropdown-item cursor-pointer"  (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</a>
-                        @if(schedule?.appointment) {
+                        @if(schedule?.appointment?.status === 'CREATED' || schedule?.appointment?.status === 'CANCELED') {
                           <a class="dropdown-item cursor-pointer"  (click)="sendToPacs(schedule.appointment.id)">Enviar a Pacs</a>
-                          <a class="dropdown-item cursor-pointer"  (click)="cancelToPacs(schedule.appointment.id)">Cancelar a Pacs</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item cursor-pointer text-danger" style="cursor: pointer;" (click)="onCancel(schedule.appointment.id)">Cancelar</a>
                         }
+
+                        @if(schedule?.appointment?.status === 'SENT_TO_PACS') {
+                          <a class="dropdown-item cursor-pointer"  (click)="cancelToPacs(schedule.appointment.id)">Cancelar a Pacs</a>
+                        }
+
+                        @if(!schedule?.appointment) {
+                          <a class="dropdown-item cursor-pointer"  (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</a>
+                        }
+                        
+                        <div class="dropdown-divider"></div>
+                        @if(schedule?.appointment) {
+                          <a class="dropdown-item cursor-pointer text-danger" style="cursor: pointer;" (click)="onCancel(schedule.appointment.id)">Eliminar</a>
+                        }
+                        
                       </div>
                     </div>
                   </td>

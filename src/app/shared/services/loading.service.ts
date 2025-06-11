@@ -15,7 +15,10 @@ export class LoadingService {
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
+      background: '#1e1e2f',   // Fondo oscuro
+      color: '#f1f1f1',         // Texto claro
+      iconColor: '#facc15'
     });
   }
 
@@ -27,7 +30,10 @@ export class LoadingService {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: message,
+        text: message,  
+        background: '#1e1e2f',   // Fondo oscuro
+        color: '#f1f1f1',         // Texto claro
+        iconColor: '#facc15'
       });
     }
 }
