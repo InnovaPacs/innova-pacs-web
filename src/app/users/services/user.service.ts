@@ -67,4 +67,12 @@ export class UserService {
       headers
     });
   }
+
+  update(user: UpdateUser, id: string):Observable<User> {
+    const headers = this.authService.getHeaders();
+    const url = `${this.baseUrl}/api/users/${id}`;
+    return this.http.put<User>(url, user, {
+      headers
+    });
+  }
 }

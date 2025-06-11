@@ -7,6 +7,7 @@ export interface User {
     status: string;
     roles: Role[];
     role: string;
+    photo: string;
 }
 
 export interface UpdateUser {
@@ -15,4 +16,5 @@ export interface UpdateUser {
     role: string;
     status: string;
     password: string;
+    photo: string;
 }

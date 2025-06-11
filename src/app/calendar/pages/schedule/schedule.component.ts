@@ -14,6 +14,7 @@ import { VendorsService } from '../../../shared/services/vendors.service';
   styleUrl: './schedule.component.css'
 })
 export class ScheduleComponent implements OnInit {
+  public title: string = 'Detalle de consultas medicas';
   @ViewChild('examTypeSelectRef', { static: false }) examTypeSelectRef!: ElementRef;
   examTypeChoicesInstance: any;
 
@@ -87,6 +88,34 @@ export class ScheduleComponent implements OnInit {
         }
       });
     }
+  }
+
+  sendToPacs(appointmentId: string) {
+    this.service.sendToPacs(appointmentId).subscribe(() => {
+      Swal.fire({
+            title: "Enviada!",
+            text: "Se envio a pacs.",
+            icon: "success"
+          });
+
+      if(this.date && this.modalitySelected) {
+        this.getSchedule(this.date, this.modalitySelected);
+      }
+    });
+  }
+
+  cancelToPacs(appointmentId: string) {
+    this.service.cancelToPacs(appointmentId).subscribe(() => {
+      Swal.fire({
+            title: "Enviada!",
+            text: "Se cancelo en pacs.",
+            icon: "success"
+          });
+          
+      if(this.date && this.modalitySelected) {
+        this.getSchedule(this.date, this.modalitySelected);
+      }
+    });
   }
 
   onCancel(scheduleId: string): void {

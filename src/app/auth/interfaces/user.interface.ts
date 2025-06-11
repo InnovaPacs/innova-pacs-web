@@ -4,4 +4,5 @@ export interface User {
     username:     string;
     isActive: boolean;
     roles:    string[];
+    photo: string;
 }

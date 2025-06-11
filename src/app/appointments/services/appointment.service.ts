@@ -141,4 +141,22 @@ export class AppointmentService {
       }
     );
   }
+
+  sendToPacs(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/send-to-pacs`;
+    const headers = this.authService.getHeaders();
+    
+    return this.http.post<void>(url,{}, {
+      headers
+    });
+  }
+
+  cancelToPacs(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel-to-pacs`;
+    const headers = this.authService.getHeaders();
+    
+    return this.http.post<void>(url,{}, {
+      headers
+    });
+  }
 }

@@ -37,8 +37,7 @@
             "styles": [
               "./src/assets/theme/vendors/flatpickr/flatpickr.min.css",
               "./src/assets/theme/vendors/choices/choices.min.css",
-              "./src/assets/theme/assets/css/theme.min.css",
-              "./src/assets/theme/assets/css/user.css"
+              "./src/assets/theme/assets/css/theme.min.css"
             ],
             "scripts": [
               "./src/assets/theme/vendors/choices/choices.min.js",

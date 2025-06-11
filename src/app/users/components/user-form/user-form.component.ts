@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpdateUser, User } from '../../interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
+import { FileService } from '../../../shared/services/file.service';
 
 @Component({
   selector: 'app-user-form',
@@ -12,13 +13,15 @@ import { AuthService } from '../../../auth/services/auth.service';
   styleUrl: './user-form.component.css'
 })
 export class UserFormComponent implements OnInit {
+  private selectedFile!: File;
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private router = inject(Router);
   private authService = inject(AuthService);
-  
-  id!: string;
+  public title: string = 'Perfil';
+  public id!: string;
+  private fileService = inject(FileService);
 
   public userForm: FormGroup = this.fb.group({
     username: [null],
@@ -59,7 +62,7 @@ export class UserFormComponent implements OnInit {
   }
 
   getUserFormValue(): UpdateUser {
-    const { password, username, role, status, email} = this.userForm.value;
+    const { password, username, role, status, email, photo} = this.userForm.value;
 
     return {
       username,
@@ -67,25 +70,64 @@ export class UserFormComponent implements OnInit {
       status,
       email,
       password,
+      photo
     };
   }
 
   onSubmit() {
-    const user = this.getUserFormValue();
+    if (this.userForm.invalid) {
+      console.warn('Form is invalid');
+      return;
+    }
+    
+    const data = this.getUserFormValue();
 
     if(this.id) {
-      this.userService.updateUserById(this.id, user).subscribe();
-      this.authService.logOut();
+      this.handleUpdate(data);
+    } else {
+      this.handleCreate(data);
     }
-
-    if(!this.id) {
-      this.userService.saveUser(user).subscribe();
-    }
-
-    this.router.navigate(['/auth/login']);
   }
 
   private disableControl(controlName: string) {
     this.userForm.get(controlName)?.disable();
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    
+    if (file) {
+      this.selectedFile = file; 
+    }
+  }
+
+  handleUpdate(update: UpdateUser): void {
+    if(this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.userService.update(update, this.id);
+        })
+      ).subscribe((result) => {
+          this.authService.setUpdatedPhoto(result.photo);
+          this.router.navigate(['/patients/main']);
+        }
+      );
+    } else {
+      this.userService.update(update, this.id).subscribe(reposne => {
+        this.router.navigate(['/patients/main']);
+      });
+    }
+  }
+  
+  handleCreate(update: UpdateUser): void {
+    this.fileService.save(this.selectedFile).pipe(
+      switchMap((response) => {
+        update.photo = response.id;
+        return this.userService.saveUser(update);
+      })
+    ).subscribe((result: User) => {
+      this.router.navigate(['/patients/main']);
+    });
   }
 }

@@ -18,7 +18,7 @@ export class DoctorFormComponent {
   private service = inject(DoctorService);
   private router = inject(Router);
   private fileService = inject(FileService);
-  title: string = 'Registrar médico';
+  public title: string = 'Registrar médico';
   public id!: string;
 
   @Input() 

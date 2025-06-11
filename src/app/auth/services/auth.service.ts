@@ -3,13 +3,14 @@ import { Observable, map, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { User, AuthStatus, LoginResponse } from '../interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { cu } from '@fullcalendar/core/internal-common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly baseUrl = environment.baseUrl;
-  private _currentUser = signal<User | null>(null);
+  private _currentUser = signal<User | null | undefined>(null);
   private _authStatus = signal<AuthStatus>(AuthStatus.checking);
   private _medicalOfficeSelected = signal<boolean>(false);
   private _currentMedicalOfficeId = signal<string | null>(null);
@@ -40,6 +41,16 @@ export class AuthService {
     this._authStatus.set(AuthStatus.authenticated);
     sessionStorage.setItem('token', token);
     return true;
+  }
+
+  public setUpdatedPhoto(photo: string): void {
+    this._currentUser.update(current => {
+      if(current) {
+        return {... current, photo};
+      }
+
+      return current;
+    });
   }
 
   logOut() {

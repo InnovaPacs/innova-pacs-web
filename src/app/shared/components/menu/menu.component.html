@@ -8,7 +8,11 @@
           <div class="nav-item-wrapper">
             <a class="nav-link dropdown-indicator label-1" href="#nv-appointmetns" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-appointmetns">
               <div class="d-flex align-items-center">
-                <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span class="nav-link-text">Citas Médicas</span>
+                <div class="dropdown-indicator-icon-wrapper">
+                  <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                </div>
+                <span class="nav-link-icon"><i class="fa-solid fa-calendar-days" width="16px" height="16px"></i></span>
+                <span class="nav-link-text">Citas Médicas</span>
               </div>
             </a>
             <div class="parent-wrapper label-1">
@@ -40,7 +44,11 @@
         <li class="nav-item">
           <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-configurations" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-configurations">
               <div class="d-flex align-items-center">
-                <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span><span class="nav-link-text">Configuraciones</span>
+                <div class="dropdown-indicator-icon-wrapper">
+                  <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                </div>
+                <span class="nav-link-icon"><i class="fa-solid fa-gear" width="16px" height="16px"></i></span>
+                <span class="nav-link-text">Configuraciones</span>
               </div>
             </a>
             <div class="parent-wrapper label-1">
@@ -69,8 +77,8 @@
       <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
       <a class="navbar-brand me-1 me-sm-3" href="/">
         <div class="d-flex align-items-center">
-          <div class="d-flex align-items-center"><img src="assets/img/icons/logo.png" alt="InnovaPacs" width="27" />
-            <h5 class="logo-text ms-2 d-none d-sm-block">InnovaPacs</h5>
+          <div class="d-flex align-items-center"><img src="../../../../assets/theme/assets/img/logov3.png" alt="MedIQ" width="27" />
+            <h5 class="logo-text ms-2 d-none d-sm-block">Med</h5>
           </div>
         </div>
       </a>
@@ -78,7 +86,7 @@
     <ul class="navbar-nav navbar-nav-icons flex-row">
       <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
           <div class="avatar avatar-l ">
-            <img class="rounded-circle " src="assets/img/team/40x40/57.webp" alt="" />
+            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt="" />
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
@@ -86,9 +94,9 @@
             <div class="card-body p-0">
               <div class="text-center pt-4 pb-3">
                 <div class="avatar avatar-xl ">
-                  <img class="rounded-circle " src="assets/img/team/72x72/57.webp" alt="" />
+                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt=""/>
                 </div>
-                <h6 class="mt-2 text-body-emphasis">Jose Luis Campos Bautista</h6>
+                <h6 class="mt-2 text-body-emphasis">{{user?.username}}</h6>
               </div>
             </div>
             <div class="overflow-auto scrollbar" style="height: 4rem;">
