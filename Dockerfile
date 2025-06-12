@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json /app/
 RUN npm install
 COPY ./ /app/
-RUN npm run build --base-href=/med-iq/ --configuration=dev
+RUN npm run build:dev
 
 FROM nginx:alpine
 COPY --from=build-stage /app/dist/med-iq/browser /usr/share/nginx/html
