@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, map, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environments';
-import { User, AuthStatus, LoginResponse } from '../interfaces';
+import { User, AuthStatus, LoginResponse, SignUp } from '../interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { cu } from '@fullcalendar/core/internal-common';
 
@@ -23,6 +23,11 @@ export class AuthService {
   
   constructor() { }
 
+  signUp(user: SignUp) {
+    const url = `${this.baseUrl}/api/auth/sign-in`;
+    return this.http.post(url, user);
+  }
+
   login(username: string, password: string):Observable<boolean> {
     const url = `${this.baseUrl}/api/auth/login`;
     const body = { username, password };
@@ -33,7 +38,7 @@ export class AuthService {
       catchError((error) => {
         return throwError(() => new Error(error));
       })
-    )
+    );
   }
 
   private setAuthentication(user: User, token: string, tokenType: string): boolean {

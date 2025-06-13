@@ -36,4 +36,15 @@ export class LoadingService {
         iconColor: '#facc15'
       });
     }
+
+     showSuccessMessage(message: string):void {
+      Swal.fire({
+        icon: "success",
+        title: "¡Operación exitosa!",
+        text: message,  
+        background: '#1e1e2f',   // Fondo oscuro
+        color: '#f1f1f1',         // Texto claro
+        iconColor: '#facc15'
+      });
+    }
 }

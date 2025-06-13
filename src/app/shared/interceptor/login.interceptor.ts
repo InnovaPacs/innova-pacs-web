@@ -18,11 +18,23 @@ export class LoadingInterceptor implements HttpInterceptor {
       catchError((error) => {
         this.hasError = true; 
 
+        if (error?.error?.message === 'USERNAME_IS_ALREADY_TAKE' || error?.error?.message === 'EMAIL_IS_ALREADY_TAKE') {
+          this.loadingService.showErrorMessage('Nombre de usuario ó email ya estan registrados');
+          return EMPTY;
+        }
+
+        if (error?.error?.message === 'Bad credentials') {
+          this.loadingService.showErrorMessage('Error en la autenticación');
+          return EMPTY;
+        }
+
         if (error?.error?.message === 'MEDICAL_OFFICE_NOT_FOUND') {
           this.router.navigate(['/medical-offices/register']);
           this.loadingService.showErrorMessage('Antes de continuar, registra los datos de tu consultorio');
           return EMPTY;
         }
+
+        
 
         this.loadingService.showErrorMessage('A ocurrido un error: ' + (error?.error?.message || 'Unknown error'));
         return throwError(() => error);

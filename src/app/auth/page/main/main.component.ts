@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-main',
@@ -13,6 +14,7 @@ export class MainComponent {
   public fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private loadingService = inject(LoadingService);
 
   public loginForm = this.fb.group({
     username: ['Bautista', [Validators.required]],
@@ -26,7 +28,7 @@ export class MainComponent {
       {
         next: () => this.router.navigateByUrl('/patients/main'),
         error: (error) => {
-          Swal.fire('Error', error, 'error');
+          this.loadingService.showErrorMessage(error.message);
         }
       }
     );

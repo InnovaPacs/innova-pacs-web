@@ -94,9 +94,9 @@
                         @if(!schedule?.appointment) {
                           <a class="dropdown-item cursor-pointer"  (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</a>
                         }
-                        
-                        <div class="dropdown-divider"></div>
+
                         @if(schedule?.appointment) {
+                          <div class="dropdown-divider"></div>
                           <a class="dropdown-item cursor-pointer text-danger" style="cursor: pointer;" (click)="onCancel(schedule.appointment.id)">Eliminar</a>
                         }
                         

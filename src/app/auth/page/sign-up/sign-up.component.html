@@ -11,30 +11,37 @@
                   <img src="./assets/theme/assets/img/mediq.png" width="200" alt="">
                 </div>
                 
-                <h3 class="text-center pb-4">Login</h3>
+                <h3 class="text-center pb-4">Crear cuenta</h3>
 
-                <form autocomplete="off"
-                    [formGroup]="loginForm"
-                    (ngSubmit)="login()">
+                <form autocomplete="off" [formGroup]="signUpForm" (ngSubmit)="signUp()">
                   <div class="mb-3">
-                    <label for="exampleInputUserName" class="form-label">Nombre de usuarios</label>
-                    <input type="text" class="form-control" id="exampleInputUserName" aria-describedby="emailHelp"
+                    <label for="inputUserName" class="form-label">Nombre de usuarios</label>
+                    <input type="text" class="form-control" id="inputUserName"
                       placeholder="Correo electrónico"
                       formControlName="username">
                   </div>
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email"
+                      placeholder="Correo electrónico"
+                      formControlName="email">
+                  </div>
+
                   <div class="mb-4">
                     <label for="password" class="form-label">Contracseña</label>
                     <input type="password" class="form-control" id="password"
                       placeholder="Ingrese su contraseña"
                       formControlName="password">
                   </div>
-                  <button 
+
+                  <button
                     class="btn btn-primary px-5 w-100 text-nowrap"
                     type="submit" 
-                    [disabled]="loginForm.invalid">Ingresar</button>
+                    [disabled]="signUpForm.invalid">Crear cuenta</button>
                 </form>
 
-                <div class="text-center pt-4"><a class="fs-9 fw-bold" [routerLink]="['/auth/sign-up']" >Crea una cuneta en MedIQ</a></div>
+                <div class="text-center pt-4"><a class="fs-9 fw-bold" [routerLink]="['/auth/login']" >Ingresar a MedIQ</a></div>
               </div>
             </div>
           </div>
