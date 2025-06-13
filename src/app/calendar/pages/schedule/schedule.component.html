@@ -8,7 +8,13 @@
           </div>
             
             <hr class="my-4">
-            
+            @if (schedules.length == 0) {
+              <div class="alert alert-outline-primary d-flex align-items-center" style="width: 100%;" role="alert">
+                <span class="fas fa-info-circle text-primary fs-5 me-3"></span>
+                <p class="mb-0 flex-1">¡Aún no has filtrado datos!</p>
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            }
             <form class="row" [formGroup]="form">
               <div class="mb-3 col-xm-12 col-md-6">
                 <div class="flatpickr-input-container">

@@ -21,6 +21,7 @@ export class MedicalOfficeFormComponent {
   
   private selectedFile!: File;
   private id!: string;
+  public title: string = 'Registrar consultorio';
 
   public medicalOfficeForm: FormGroup = this.fb.group({
     name: [null, Validators.required],

@@ -31,7 +31,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/doctors">
+                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/doctors/main">
                     <div class="d-flex align-items-center"><span class="nav-link-text">Médicos</span>
                     </div>
                   </a>
@@ -57,6 +57,11 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/pacs-configurations">
                     <div class="d-flex align-items-center"><span class="nav-link-text">Pacs</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item cursor-pointer"><a class="nav-link" routerLinkActive="active" (click)="goToMedicalOffice()">
+                    <div class="d-flex align-items-center"><span class="nav-link-text">Consultorio</span>
                     </div>
                   </a>
                 </li>
@@ -86,7 +91,7 @@
     <ul class="navbar-nav navbar-nav-icons flex-row">
       <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
           <div class="avatar avatar-l ">
-            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt="" />
+            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" alt="" />
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
@@ -94,7 +99,7 @@
             <div class="card-body p-0">
               <div class="text-center pt-4 pb-3">
                 <div class="avatar avatar-xl ">
-                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt=""/>
+                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" alt=""/>
                 </div>
                 <h6 class="mt-2 text-body-emphasis">{{user?.username}}</h6>
               </div>
@@ -105,7 +110,11 @@
               </ul>
             </div>
             <div class="card-footer p-0 border-top border-translucent">
-              <div class="px-3 my-3"> <a class="btn btn-phoenix-secondary d-flex flex-center w-100" style="cursor: pointer" (click)="logOut()"> <span class="me-2" data-feather="log-out"> </span>Salir</a></div>
+              <div class="px-3 my-3">
+                <a class="btn btn-phoenix-secondary d-flex flex-center w-100" style="cursor: pointer" (click)="logOut()">
+                  <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </a>
+              </div>
             </div>
           </div>
         </div>

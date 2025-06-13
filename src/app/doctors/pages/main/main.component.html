@@ -10,12 +10,19 @@
                 </div>
                 <hr class="my-4">
                 <div class="table-responsive" data-simplebar>
+                  @if (domains.length == 0) {
+                    <div class="alert alert-outline-primary d-flex align-items-center" style="width: 100%;" role="alert">
+                      <span class="fas fa-info-circle text-primary fs-5 me-3"></span>
+                      <p class="mb-0 flex-1">¡No hay médicos registrados!</p>
+                      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  }
                   <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1">
                     <div class="table-responsive scrollbar ms-n1 ps-1">
                       <table class="table table-sm fs-9 mb-0">
                         <thead>
                           <tr>
-                            <th class="sort align-middle" scope="col">DOCTOR</th>
+                            <th class="sort align-middle" scope="col">MÉDICO</th>
                             <th class="sort align-middle" scope="col">TELEFONO</th>
                             <th class="sort align-middle pe-3" scope="col">ESPECIALIDAD</th>
                             <th class="sort align-middle" scope="col">EMAIL</th>

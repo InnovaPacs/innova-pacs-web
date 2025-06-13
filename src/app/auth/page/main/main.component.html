@@ -10,18 +10,17 @@
                 <div class="text-nowrap logo-img text-center d-block py-3 w-100">
                   <img src="./assets/theme/assets/img/mediq.png" width="280" alt="">
                 </div>
-                <p class="text-center">Tu pacs de confianza</p>
                 <form autocomplete="off"
                     [formGroup]="loginForm"
                     (ngSubmit)="login()">
                   <div class="mb-3">
-                    <label for="exampleInputUserName" class="form-label">Username</label>
+                    <label for="exampleInputUserName" class="form-label">Nombre de usuarios</label>
                     <input type="text" class="form-control" id="exampleInputUserName" aria-describedby="emailHelp"
                       placeholder="Correo electrónico"
                       formControlName="username">
                   </div>
                   <div class="mb-4">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">Contracseña</label>
                     <input type="password" class="form-control" id="password"
                       placeholder="Ingrese su contraseña"
                       formControlName="password">

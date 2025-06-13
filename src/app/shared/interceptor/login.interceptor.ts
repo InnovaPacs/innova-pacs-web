@@ -1,10 +1,12 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, catchError, finalize, tap, throwError } from "rxjs";
+import { inject, Injectable } from "@angular/core";
+import { EMPTY, Observable, catchError, finalize, tap, throwError } from "rxjs";
 import { LoadingService } from "../services/loading.service";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
+  private router = inject(Router);
   private hasError = false;
   constructor(private loadingService: LoadingService) { }
 
@@ -15,8 +17,14 @@ export class LoadingInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error) => {
         this.hasError = true; 
-        console.log(error);
-        this.loadingService.showErrorMessage('An error occurred: ' + (error?.error?.message || 'Unknown error'));
+
+        if (error?.error?.message === 'MEDICAL_OFFICE_NOT_FOUND') {
+          this.router.navigate(['/medical-offices/register']);
+          this.loadingService.showErrorMessage('Antes de continuar, registra los datos de tu consultorio');
+          return EMPTY;
+        }
+
+        this.loadingService.showErrorMessage('A ocurrido un error: ' + (error?.error?.message || 'Unknown error'));
         return throwError(() => error);
       }),
       tap(() => {

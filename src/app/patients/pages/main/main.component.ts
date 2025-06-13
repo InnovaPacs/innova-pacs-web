@@ -4,7 +4,6 @@ import { Patient } from '../../interfaces/patient.interface';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
 import { AuthService } from '../../../auth/services/auth.service';
-import { el } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-main',
@@ -14,7 +13,7 @@ import { el } from '@fullcalendar/core/internal-common';
 export class PatientMainComponent {
   private service = inject(PatientService);
   private medicalOfficeService = inject(MedicalOfficeService);
-  private authService = inject(AuthService)
+  private authService = inject(AuthService);
   static counter = 0;
 
   domains: Patient[] = [];
@@ -27,25 +26,24 @@ export class PatientMainComponent {
     items: []
   }
 
-  constructor() { 
-    PatientMainComponent.counter++;
-    console.log(`🧱 MainComponent Constructor (instances: ${PatientMainComponent.counter})`);
+  constructor() {
   }
 
-  ngOnInit(): void {
-    console.log('📦 MainComponent ngOnInit');
-    if(this.authService.getMedicalOfficeStatus()) {
-      console.log('this.authService.getMedicalOfficeStatus()');
-      this.getAllData(0);
-    } else {
-      this.medicalOfficeService.getLastByUserId(null).subscribe((medicalOffice) => {
-      console.log("medicalOffice ", medicalOffice);
-      this.authService.selectMedicalOffice(medicalOffice.id);
-      console.log('Else this.authService.getMedicalOfficeStatus()');
-      this.getAllData(0);
+ngOnInit(): void {
+  if (this.authService.getMedicalOfficeStatus()) {
+    this.getAllData(0);
+  } else {
+    this.medicalOfficeService.getLastByUserId(null).subscribe({
+      next: (medicalOffice) => {
+        if (medicalOffice && medicalOffice.id) {
+          this.authService.selectMedicalOffice(medicalOffice.id);
+          this.getAllData(0);
+        }
+      }
     });
-    }
   }
+}
+
 
   getItems(totalPages: number):Item[] {
     let items = [];
@@ -66,7 +64,6 @@ export class PatientMainComponent {
   }
 
   private getAllData(page: number) {
-    console.log("GET ALLL")
     this.service.getAll(page).subscribe((response) => {
       this.domains = response.content;
       
@@ -78,10 +75,5 @@ export class PatientMainComponent {
         items: this.getItems(response.totalPages)
       }
     });
-  }
-
-  ngOnDestroy() {
-    PatientMainComponent.counter--;
-    console.log('🧹 MainComponent ngOnDestroy');
   }
 }

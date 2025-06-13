@@ -17,6 +17,13 @@
               <hr class="my-4">
               
               <div class="table-responsive" data-simplebar>
+                @if (domains.length == 0) {
+                  <div class="alert alert-outline-warning d-flex align-items-center" style="width: 100%;" role="alert">
+                    <span class="fas fa-info-circle text-warning fs-5 me-3"></span>
+                    <p class="mb-0 flex-1">¡Aún no tienes datos!</p>
+                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                }
                 <table
                   class="table table-borderless align-middle text-nowrap"
                 >
