@@ -28,9 +28,21 @@
                           </div>
                           
                           <div class="mb-3 col-xm-12 col-md-6">
-                              <label for="port" class="form-label">Puerto</label>
+                              <label for="port" class="form-label">Puerto HL7
+                                <i class="fa-solid fa-circle-question" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Puerto que se utiliza para el envio de estudios al worklist">  
+                                </i> 
+                              </label>
                               <input type="text" class="form-control" id="port" placeholder="Ingresa Puerto"
-                                formControlName="port">
+                                formControlName="hl7port">
+                          </div>
+
+                          <div class="mb-3 col-xm-12 col-md-6">
+                              <label for="port" class="form-label">Puerto Dicom
+                                <i class="fa-solid fa-circle-question" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Puerto que se utiliza para hacer la sincronización de estudios">  
+                                </i> 
+                              </label>
+                              <input type="text" class="form-control" id="port" placeholder="Ingresa Puerto"
+                                formControlName="dicomPort">
                           </div>
 
                           <div class="mb-3 col-xm-12 col-md-6">

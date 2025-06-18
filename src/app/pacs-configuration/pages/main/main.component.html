@@ -27,7 +27,8 @@
                           <tr>
                             <th class="sort align-middle" scope="col">ITITLE</th>
                             <th class="sort align-middle" scope="col">IP</th>
-                            <th class="sort align-middle pe-3" scope="col">PUERTO</th>
+                            <th class="sort align-middle pe-3" scope="col">PUERTO HL7</th>
+                            <th class="sort align-middle pe-3" scope="col">PUERTO DICOM</th>
                             <th class="sort align-middle" scope="col">ESTATUS</th>
                             <th class="sort align-middle" scope="col">ACCIONES</th>
 
@@ -42,12 +43,13 @@
                               </a>
                             </td>
                             <td class="email align-middle white-space-nowrap">{{ domain.ipAddress }}</td>
-                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.port }}</td>
+                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.hl7port }}</td>
+                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.dicomPort }}</td>
                             <td class="city align-middle white-space-nowrap text-body">
                               @if (domain.isActive) {
-                                <p class="fs-3 fw-normal mb-0"><i class="ti ti-check fs-7 text-success"></i></p>
+                                <i class="fa-solid fa-circle-check"></i>
                               } @else {
-                                <p class="fs-3 fw-normal mb-0"><i class="ti ti-x fs-7 text-warning"></i></p>
+                                <i class="fa-solid fa-circle-xmark"></i>
                               }
                             </td>
                             <td>

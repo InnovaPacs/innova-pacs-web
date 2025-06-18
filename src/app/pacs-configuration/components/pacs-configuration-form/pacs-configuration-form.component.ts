@@ -22,7 +22,8 @@ export class PacsConfigurationFormComponent {
   public form: FormGroup = this.fb.group({
     title: [null, Validators.required],
     ipAddress: [null, Validators.required],
-    port: [null, Validators.required],
+    hl7port: [null, Validators.required],
+    dicomPort: [null, Validators.required],
     isActive: [null, Validators.required]
   });
 
@@ -49,15 +50,16 @@ export class PacsConfigurationFormComponent {
       id: response.id,
       title: response.title,
       ipAddress: response.ipAddress,
-      port: response.port,
+      hl7port: response.hl7port,
+      dicomPort: response.dicomPort,
       isActive: response.isActive
     });
   }
 
   getFormValue(): UpdatePacsConfiguration {
-    const { title, ipAddress, port, isActive } = this.form.value;
+    const { title, ipAddress, hl7port, dicomPort, isActive } = this.form.value;
 
-    return { title, ipAddress, port, isActive };
+    return { title, ipAddress, hl7port, dicomPort, isActive };
   }
 
   onSubmit() {
