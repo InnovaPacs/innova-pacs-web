@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
-import { RadiolodyExam } from '../../interfaces/radiology-exam.interface';
-import { RadiologyExamService } from '../../services/radiology-exam.service';
+import { Study } from '../../interfaces/study.interface';
+import { StudyService } from '../../services/study.service';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, EMPTY, map } from 'rxjs';
 
@@ -11,9 +11,9 @@ import { catchError, EMPTY, map } from 'rxjs';
   styleUrl: './main.component.css'
 })
 export class MainComponent {
-  private service = inject(RadiologyExamService);
+  private service = inject(StudyService);
   private route = inject(ActivatedRoute);
-  domains: RadiolodyExam[] = [];
+  domains: Study[] = [];
   public appointmentId!: string;
 
   pagination: Pagination = {
@@ -24,9 +24,7 @@ export class MainComponent {
     items: []
   }
 
-  constructor() { 
-    console.log('MainRadiologyExamComponent');
-  }
+  constructor() { }
 
   ngOnInit(): void {
     this.route.queryParamMap.pipe(

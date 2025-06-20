@@ -2,20 +2,20 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
-import { RadiolodyExam, RadiologyExamDto } from '../../interfaces/radiology-exam.interface';
-import { RadiologyExamService } from '../../services/radiology-exam.service';
-import { RadiolodyExamType } from '../../interfaces/radiology-exam-type.interface';
-import { RadiolodyExamStudy } from '../../interfaces/radiology-exam-study.interface';
+import { Study, StudyDto } from '../../interfaces/study.interface';
+import { StudyService } from '../../services/study.service';
+import { Modality } from '../../interfaces/modality.interface';
+import { ModalityType } from '../../interfaces/modality-type.interface';
 
 @Component({
-  selector: 'app-radiology-exam-form',
-  templateUrl: './radiology-exam-form.component.html',
-  styleUrl: './radiology-exam-form.component.css'
+  selector: 'app-study-form',
+  templateUrl: './study-form.component.html',
+  styleUrl: './study-form.component.css'
 })
-export class RadiologyExamFormComponent {
+export class StudyFormComponent {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
-  private service = inject(RadiologyExamService);
+  private service = inject(StudyService);
   private router = inject(Router);
   
   public id!: string;
@@ -23,25 +23,25 @@ export class RadiologyExamFormComponent {
 
   public form: FormGroup = this.fb.group({
     id: [null],
-    radiologyExamTypeId: [null],
+    modalityId: [null],
     examDate: [null],
     status: [null],
     result: [null],
     patientId: [null],
     medicalOfficeId: [null],
     appointmentId: [null],
-    radiologyExamStudyId: [null]
+    modalityTypeId: [null]
   });
 
-  public radiologyExamTypes: RadiolodyExamType[] =  [];
-  public radiologyExamStudy: RadiolodyExamStudy[] =  [];
+  public modalities: Modality[] =  [];
+  public modalityTypes: ModalityType[] =  [];
 
   ngOnInit(): void {
     this.getData();
-    this.getRadiologyExamData();
+    this.getModalitiesData();
   }
 
-  patchForm(response: RadiolodyExam) {
+  patchForm(response: Study) {
     this.form.patchValue({
       id: response.id,
       examDate: response.examDate,
@@ -52,24 +52,24 @@ export class RadiologyExamFormComponent {
       appointmentId: response.appointment.id,
     });
 
-    if(response!.radiologyExamType) {
+    if(response!.modality) {
       this.form.patchValue({
-        radiologyExamTypeId: response.radiologyExamType.id
+        modalityId: response.modality.id
       });
     }
 
-    if(response!.radiologyExamStudy) {
+    if(response!.modalityType) {
       this.form.patchValue({
-        radiologyExamStudyId: response.radiologyExamStudy.id
+        modalityTypeId: response.modalityType.id
       });
     }
   }
 
-  getFormValue(): RadiologyExamDto {
-    const { id, radiologyExamTypeId, examDate, status, result, patientId, medicalOfficeId, appointmentId, radiologyExamStudyId } = this.form.value;
+  getFormValue(): StudyDto {
+    const { id, modalityId, examDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId } = this.form.value;
 
     return {
-      id, radiologyExamTypeId, examDate, status, result, patientId, medicalOfficeId, appointmentId, radiologyExamStudyId
+      id, modalityId, examDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId
     };
   }
 
@@ -79,20 +79,20 @@ export class RadiologyExamFormComponent {
     
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
-        this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: this.appointmentId } });
+        this.router.navigate(['/studies/main'], { queryParams: { appointmentId: this.appointmentId } });
       });
     }
 
     if(!this.id) {
       this.service.save(data).subscribe(response => {
-        this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: this.appointmentId } });
+        this.router.navigate(['/studies/main'], { queryParams: { appointmentId: this.appointmentId } });
       });
     }
   }
 
-  getRadiologyExamData(): void {
-    this.service.getAllRadiologyExamType().subscribe((data) => {
-      this.radiologyExamTypes = data;
+  getModalitiesData(): void {
+    this.service.getAllModalieties().subscribe((data) => {
+      this.modalities = data;
     });
   }
 
@@ -126,10 +126,10 @@ export class RadiologyExamFormComponent {
     });
   }
 
-  onSelectRadiologyExamType(selectRadiologyExamTypeId: any) {
-    const selectedId = selectRadiologyExamTypeId.target.value;    
-    this.service.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
-      this.radiologyExamStudy = data;
+  onSelectModality(selectModalityId: any) {
+    const selectedId = selectModalityId.target.value;    
+    this.service.getAllModalitiesType(selectedId).subscribe((data) => {
+      this.modalityTypes = data;
     });
   }
 }

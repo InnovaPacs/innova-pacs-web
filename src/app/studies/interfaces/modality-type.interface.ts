@@ -1,4 +1,4 @@
-export interface RadiolodyExamStudy {
+export interface ModalityType {
 	id: string;
 	name: string;
 	description: string;

@@ -1,8 +1,8 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
-import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
-import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
+import { Modality } from '../../../studies/interfaces/modality.interface';
+import { StudyService } from '../../../studies/services/study.service';
 import { Schedule } from '../../../appointments/interfaces/appointment-schedule.interface';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -23,8 +23,8 @@ export class ScheduleComponent implements OnInit {
 
   private service = inject(AppointmentService);
   private router = inject(Router);
-  private radiologyExamService = inject(RadiologyExamService);
-  public radiolodyExamTypes: RadiolodyExamType[] = [];
+  private studyService = inject(StudyService);
+  public modalities: Modality[] = [];
   public schedules: Schedule[] = [];
   private date: string | null | undefined;
   private modalitySelected: string | null | undefined;
@@ -34,17 +34,17 @@ export class ScheduleComponent implements OnInit {
 
   public form: FormGroup = this.fb.group({
     appointmentDate: [null],
-    radiologyExamTypeId: [null]
+    modalityId: [null]
   });
   
   ngOnInit(): void {
-    this.getRadiologyExams();
+    this.getModalities();
     this.getQueryParams();
   }
 
-  private getRadiologyExams() {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
-      this.radiolodyExamTypes = response;
+  private getModalities() {
+    this.studyService.getAllModalieties().subscribe(response => {
+      this.modalities = response;
       setTimeout(() => {
         this.vendorsService.initChoices(this.examTypeChoicesInstance, this.examTypeSelectRef);
         this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
@@ -77,7 +77,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   onTimeSelected(hour: string, minute: string): void {
-    const radiolodyExamType = this.radiolodyExamTypes.find(ret => ret.id === this.modalitySelected);
+    const radiolodyExamType = this.modalities.find(ret => ret.id === this.modalitySelected);
     if(radiolodyExamType) {
       this.router.navigate(['/appointments/register'], {
         queryParams: { 
@@ -143,7 +143,7 @@ export class ScheduleComponent implements OnInit {
       if(this.date && this.modalitySelected) {
         this.form.patchValue({
           appointmentDate: this.date,
-          radiologyExamTypeId: this.modalitySelected
+          modalityId: this.modalitySelected
         });
         
         this.getSchedule(this.date, this.modalitySelected);

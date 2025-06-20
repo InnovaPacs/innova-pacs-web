@@ -10,8 +10,8 @@ import { AppointmentFullData } from '../../../appointments/interfaces/appointmen
 import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
-import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
-import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
+import { StudyService } from '../../../studies/services/study.service';
+import { Modality } from '../../../studies/interfaces/modality.interface';
 
 @Component({
   selector: 'app-main',
@@ -21,10 +21,10 @@ import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-
 export class MainComponent implements OnInit {
   private service = inject(AppointmentService);
   private router = inject(Router);
-  private radiologyExamService = inject(RadiologyExamService);
+  private studyService = inject(StudyService);
   private currentMonth: number = 0;
   private currentYear: number = 0;
-  public radiolodyExamTypes:RadiolodyExamType[] = [];
+  public radiolodyExamTypes:Modality[] = [];
   
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, bootstrapPlugin, timeGridPlugin, listPlugin],
@@ -64,7 +64,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
+    this.studyService.getAllModalieties().subscribe(response => {
       this.radiolodyExamTypes = response;
     });
   }
@@ -172,8 +172,8 @@ export class MainComponent implements OnInit {
     }
   }
 
-  getAllData(month: number, year: number, radiologyExamType: string|null): void {
-    this.service.getFullData(month, year, radiologyExamType)
+  getAllData(month: number, year: number, modality: string|null): void {
+    this.service.getFullData(month, year, modality)
     .pipe(
       map((resposne: AppointmentFullData[]) => {
         return resposne.map((app: AppointmentFullData) => {
@@ -194,13 +194,12 @@ export class MainComponent implements OnInit {
   }
 
   addStudy(eventId: string) {
-    console.log('eventId ',eventId);
-    this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: eventId } });
+    this.router.navigate(['/studies/main'], { queryParams: { appointmentId: eventId } });
   }
 
   onSelectChange(event: Event) {
     const selectedId = (event.target as HTMLSelectElement).value;
-    console.log('Selected radiology exam type ID:', selectedId);
+    console.log('Selected study exam type ID:', selectedId);
     this.getAllData(this.currentMonth, this.currentYear, selectedId);
   }
 

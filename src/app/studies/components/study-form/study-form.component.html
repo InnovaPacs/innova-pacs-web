@@ -12,18 +12,18 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="radiologyExamTypeId" class="form-label">Tipo</label>
-                        <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
-                            @for (domain of radiologyExamTypes; track domain.id) {
+                        <label for="modalityId" class="form-label">Tipo</label>
+                        <select class="form-select" id="modalityId" formControlName="modalityId" (change)="onSelectModality($event)">
+                            @for (domain of modalities; track domain.id) {
                                 <option [value]="domain.id">{{ domain.name }}</option>
                             }
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="radiologyExamStudyId" class="form-label">Estudio</label>
-                        <select class="form-select" id="radiologyExamStudyId" formControlName="radiologyExamStudyId">
-                            @for (domain of radiologyExamStudy; track domain.id) {
+                        <label for="modalityTypeId" class="form-label">Estudio</label>
+                        <select class="form-select" id="modalityTypeId" formControlName="modalityTypeId">
+                            @for (domain of modalityTypes; track domain.id) {
                                 <option [value]="domain.id">{{ domain.name }}</option>
                             }
                         </select>

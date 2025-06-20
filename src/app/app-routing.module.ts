@@ -45,9 +45,9 @@ const routes: Routes = [
     loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule)
   },
   {
-    path: 'radiology-exams',
+    path: 'studies',
     canActivate: [isAuthenticatedGuard],
-    loadChildren: () => import('./radiology-exam/radiology-exam.module').then(m => m.RadiologyExamModule)
+    loadChildren: () => import('./studies/study.module').then(m => m.StudyModule)
   },
   {
     path: 'pacs-configurations',

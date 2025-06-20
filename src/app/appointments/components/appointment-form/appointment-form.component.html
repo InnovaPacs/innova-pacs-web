@@ -46,20 +46,20 @@
 
                   <div class="col-xm-4 col-md-3">
                     <div class="form-floating">
-                      <select class="form-select" id="radiologyExamTypeId" formControlName="radiologyExamTypeId" (change)="onSelectRadiologyExamType($event)">
-                          @for (domain of radiologyExamTypes; track domain.id) {
+                      <select class="form-select" id="modalityId" formControlName="modalityId" (change)="onSelectModality($event)">
+                          @for (domain of modalitys; track domain.id) {
                               <option [value]="domain.id">{{ domain.name }}</option>
                           }
                       </select>
-                      <label for="radiologyExamTypeId">Tipo</label>
+                      <label for="modalityId">Modalidad</label>
                     </div>
                   </div>
 
                   <div class="form-floating form-floating-advance-select col-xm-12">
-                    <label class="ps-4" for="radiologyExamStudyId">Estudio</label>
-                    <select class="form-select" *ngIf="radiologyExamStudy.length > 0" #radiologyExamStudyRef (change)="onSelectRadiologyExamTypeStudy($event)" formControlName="radiologyExamStudyId" id="radiologyExamStudyId">
-                      <option value="none" selected>No ha seleccionado una modalidad</option>
-                      @for (domain of radiologyExamStudy; track domain.id) {
+                    <label class="ps-4" for="modalityTypeId">Estudio</label>
+                    <select class="form-select" *ngIf="modalityType.length > 0" #modalityTypeIdRef (change)="onSelectModalityType($event)" formControlName="modalityTypeId" id="modalityTypeId">
+                      <option value="none" selected>No ha seleccionado un estudio</option>
+                      @for (domain of modalityType; track domain.id) {
                         <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
                       }
                     </select>

@@ -1,41 +1,41 @@
 import { Appointment } from "../../appointments/interfaces/appointment.interface";
 import { MedicalOffice } from "../../medical-office/interfaces/medical-office.interface";
 import { Patient } from "../../patients/interfaces/patient.interface";
-import { RadiolodyExamStudy } from "./radiology-exam-study.interface";
-import { RadiolodyExamType } from "./radiology-exam-type.interface";
+import { ModalityType } from "./modality-type.interface";
+import { Modality } from "./modality.interface";
 
-export interface RadiolodyExam {
+export interface Study {
 	id: string;
-	radiologyExamType: RadiolodyExamType;
+	modality: Modality;
 	examDate: string;
 	status: string;
 	result: string;
 	patient: Patient;
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
-	radiologyExamStudy: RadiolodyExamStudy;
+	modalityType: ModalityType;
 }
 
-export interface UpdateRadiolodyExam {
+export interface UpdateStudy {
 	id: string;
-	radiologyExamTypeId: string;
+	modalityId: string;
 	examDate: string;
 	status: string;
 	result: string;
 	patient: Patient;
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
-	radiologyExamStudyId: string;
+	modalityTypeId: string;
 }
 
-export interface RadiologyExamDto {
+export interface StudyDto {
 	id: string;
-	radiologyExamTypeId: string;
+	modalityId: string;
 	examDate: string;
 	status: string;
 	result: string;
 	patientId: string;
 	medicalOfficeId: string;
 	appointmentId: string;
-	radiologyExamStudyId: string;
+	modalityTypeId: string;
 }

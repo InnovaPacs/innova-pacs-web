@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environments';
 import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
 import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
-import { RadiolodyExamPage } from '../../radiology-exam/interfaces/radiology-exam-page.interface';
+import { StudyPage } from '../../studies/interfaces/study-page.interface';
 import { Schedule } from '../interfaces/appointment-schedule.interface';
 
 @Injectable({
@@ -62,6 +62,8 @@ export class AppointmentService {
   }
 
   save(bodyRequest: AppointmentDto):Observable<Appointment> {
+    console.log("bodyRequest ", bodyRequest);
+
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/appointments`;
     return this.http.post<Appointment>(url, bodyRequest, {
@@ -69,9 +71,9 @@ export class AppointmentService {
     });
   }
 
-  getFullData(month: number, year: number, radiologyExamType: string|null):Observable<AppointmentFullData[]> {
+  getFullData(month: number, year: number, modality: string|null):Observable<AppointmentFullData[]> {
     const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`
-    + (radiologyExamType && radiologyExamType !== 'none' ? `&radiologyExamType=${radiologyExamType}` : '');
+    + (modality && modality !== 'none' ? `&modality=${modality}` : '');
     const headers = this.authService.getHeaders();
 
     return this.http.get<AppointmentFullData[]>(url,
@@ -103,8 +105,8 @@ export class AppointmentService {
     );
   }
 
-  getRadiologyExamsByAppointmentId(page: number, appointmentId: string):Observable<RadiolodyExamPage> {
-    const url = `${this.baseUrl}/api/appointments/${appointmentId}/radiologyExams?page=${page}`;
+  getStudiesByAppointmentId(page: number, appointmentId: string):Observable<StudyPage> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
 
     return this.http.get(url,  
@@ -124,11 +126,11 @@ export class AppointmentService {
     );
   }
 
-  getAllSchedule(date: string, radiologyExamType: string|null):Observable<Schedule[]> {
+  getAllSchedule(date: string, modality: string|null):Observable<Schedule[]> {
     let params = new HttpParams().set('date', date);
 
-    if (radiologyExamType) {
-      params = params.set('radiologyExamType', radiologyExamType);
+    if (modality) {
+      params = params.set('modalityId', modality);
     }
     
     const url = `${this.baseUrl}/api/appointments/schedule`;

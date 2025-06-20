@@ -10,9 +10,9 @@ import { MedicalOffice } from '../../../medical-office/interfaces/medical-office
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
-import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
-import { RadiolodyExamStudy } from '../../../radiology-exam/interfaces/radiology-exam-study.interface';
-import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
+import { Modality } from '../../../studies/interfaces/modality.interface';
+import { ModalityType } from '../../../studies/interfaces/modality-type.interface';
+import { StudyService } from '../../../studies/services/study.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { VendorsService } from '../../../shared/services/vendors.service';
 
@@ -29,7 +29,7 @@ export class AppointmentFormComponent {
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
   private medicalOfficeService = inject(MedicalOfficeService);
-  private radiologyExamService = inject(RadiologyExamService);
+  private studyService = inject(StudyService);
   private auth = inject(AuthService)
   public title: string = 'Registrar cita médica';
 
@@ -37,15 +37,15 @@ export class AppointmentFormComponent {
   public doctors: Doctor[] = [];
   public medicalOffices: MedicalOffice[] = [];
 
-  public radiologyExamTypes: RadiolodyExamType[] =  [];
-  public radiologyExamStudy: RadiolodyExamStudy[] =  [];
+  public modalitys: Modality[] =  [];
+  public modalityType: ModalityType[] =  [];
 
-  private radiologyExamTypeId?: string|null;
+  private modalityId?: string|null;
   private appointmentDate?: string|null;
   
   public id!: string;
-  @ViewChild('radiologyExamStudyRef') radiologyExamStudyRef!: ElementRef;
-  public radiologyExamStudyInstance: any;
+  @ViewChild('modalityTypeIdRef') modalityTypeIdRef!: ElementRef;
+  public modalityTypeInstance: any;
   @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
   public doctorRequestedInstance: any;
   @ViewChild('radiologistRef') radiologistRef!: ElementRef;
@@ -65,8 +65,8 @@ export class AppointmentFormComponent {
     doctorRequestedId: [null],
     radiologistId: [null],
     medicalOfficeId: [null],
-    radiologyExamTypeId: [null],
-    radiologyExamStudyId: [null],
+    modalityId: [null],
+    modalityTypeId: [null],
     appointmentStartHour: [null],
     appointmentEndHour: [null],
     notes: [null]
@@ -90,8 +90,8 @@ export class AppointmentFormComponent {
       medicalOfficeId: response.medicalOffice.id,
       appointmentStartHour: response.appointmentStartHour,
       appointmentEndHour: response.appointmentEndHour,
-      radiologyExamType: response.radiologyExamType.id,
-      radiologyExamStudy: response.radiologyExamStudy.id,
+      modality: response.modality.id,
+      modalityTypeId: response.modalityType.id,
     });
   }
 
@@ -105,8 +105,8 @@ export class AppointmentFormComponent {
       medicalOfficeId,
       appointmentStartHour,
       appointmentEndHour,
-      radiologyExamTypeId,
-      radiologyExamStudyId } = this.form.getRawValue();
+      modalityId,
+      modalityTypeId } = this.form.getRawValue();
 
     return {
       id,
@@ -117,13 +117,15 @@ export class AppointmentFormComponent {
       medicalOfficeId,
       appointmentStartHour,
       appointmentEndHour,
-      radiologyExamTypeId,
-      radiologyExamStudyId
+      modalityId,
+      modalityTypeId
     };
   }
 
   onSubmit() {
     const data = this.getFormValue();
+    console.log("Data ", data);
+
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
         this.router.navigate(['/calendar/main']);
@@ -134,7 +136,7 @@ export class AppointmentFormComponent {
       this.service.save(data).subscribe(response => {
         this.router.navigate(['/calendar/schedule'], {
           queryParams: {
-            modality: this.radiologyExamTypeId,
+            modality: this.modalityId,
             appointmentDate:  this.appointmentDate
           }
         });
@@ -142,18 +144,18 @@ export class AppointmentFormComponent {
     }
   }
 
-  getRadiologyExamData(): void {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe((data) => {
-      this.radiologyExamTypes = data;
+  getModalityData(): void {
+    this.studyService.getAllModalieties().subscribe((data) => {
+      this.modalitys = data;
     });
   }
 
-  onSelectRadiologyExamType(selectRadiologyExamTypeId: any) {
-    const selectedId = selectRadiologyExamTypeId?.target?.value ? selectRadiologyExamTypeId.target.value : selectRadiologyExamTypeId;
-    this.radiologyExamService.getAllRadiologyExamStudy(selectedId).subscribe((data) => {
-      this.radiologyExamStudy = data;
+  onSelectModality(selectModalityTypeId: any) {
+    const selectedId = selectModalityTypeId?.target?.value ? selectModalityTypeId.target.value : selectModalityTypeId;
+    this.studyService.getAllModalitiesType(selectedId).subscribe((data) => {
+      this.modalityType = data;
       setTimeout(() => {
-        this.vendorsService.initChoices(this.radiologyExamStudyInstance, this.radiologyExamStudyRef);
+        this.vendorsService.initChoices(this.modalityTypeInstance, this.modalityTypeIdRef);
       }, 0);
     });
   }
@@ -172,7 +174,7 @@ export class AppointmentFormComponent {
     const modality = data.get('modality');
 
     if(modality) {
-      this.onSelectRadiologyExamType(modality);
+      this.onSelectModality(modality);
       return modality;
     }
 
@@ -217,7 +219,7 @@ export class AppointmentFormComponent {
   }
 
   private getMainData(): void {
-    this.getAllRadiologyExam();
+    this.getAllModalities();
     this.getAllDoctors();
     this.getAllPatients();
     this.getAllMedicalOffices();
@@ -229,9 +231,9 @@ export class AppointmentFormComponent {
     });
   }
 
-  private getAllRadiologyExam() {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe((data) => {
-      this.radiologyExamTypes = data;
+  private getAllModalities() {
+    this.studyService.getAllModalieties().subscribe((data) => {
+      this.modalitys = data;
     });
   }
 
@@ -275,19 +277,19 @@ export class AppointmentFormComponent {
       this.form.patchValue({
         appointmentStartHour: this.getInitHour(data),
         appointmentEndHour: this.getEndHour(data),
-        radiologyExamTypeId: this.getModality(data),
+        modalityId: this.getModality(data),
         appointmentDate: this.getAppointmentDate(data),
         medicalOfficeId: this.getMedicalOffice(data),
       })
 
-      this.radiologyExamTypeId = this.getModality(data);
+      this.modalityId = this.getModality(data);
       this.appointmentDate = this.getAppointmentDate(data);
     });
 
     this.disableControl('appointmentStartHour');
     this.disableControl('appointmentEndHour');
     this.disableControl('appointmentDate');
-    this.disableControl('radiologyExamTypeId');
+    this.disableControl('modalityId');
     this.disableControl('medicalOfficeId');
   }
 
@@ -295,9 +297,10 @@ export class AppointmentFormComponent {
     return this.auth.currentMedicalOfficeId();;
   }
 
-  onSelectRadiologyExamTypeStudy(selectRadiologyExamTypeStudy: any) {
-    const selectedId = selectRadiologyExamTypeStudy?.target?.value ? selectRadiologyExamTypeStudy.target.value : selectRadiologyExamTypeStudy;
-    const studySelected = this.radiologyExamStudy.find(rds => rds.id === selectedId);
+  onSelectModalityType(selectModalityType: any) {
+    console.log("modalityTypeId ", selectModalityType);
+    const selectedId = selectModalityType?.target?.value ? selectModalityType.target.value : selectModalityType;
+    const studySelected = this.modalityType.find(rds => rds.id === selectedId);
     this.form.patchValue({
       notes: studySelected!.instructions.replace(/\\n/g, '\n')
     });

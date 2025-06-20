@@ -1,8 +1,8 @@
 import { Doctor } from "../../doctors/interfaces/doctor.interface";
 import { MedicalOffice } from "../../medical-office/interfaces/medical-office.interface";
 import { Patient } from "../../patients/interfaces/patient.interface";
-import { RadiolodyExamStudy } from "../../radiology-exam/interfaces/radiology-exam-study.interface";
-import { RadiolodyExamType } from "../../radiology-exam/interfaces/radiology-exam-type.interface";
+import { ModalityType } from "../../studies/interfaces/modality-type.interface";
+import { Modality } from "../../studies/interfaces/modality.interface";
 
 export interface AppointmentDto {
     id: string;
@@ -13,8 +13,8 @@ export interface AppointmentDto {
     medicalOfficeId: string;
     appointmentStartHour: string;
     appointmentEndHour: string;
-    radiologyExamTypeId: string;
-    radiologyExamStudyId: string;
+    modalityId: string;
+    modalityTypeId: string;
 }
 
 export interface Appointment {
@@ -27,9 +27,9 @@ export interface Appointment {
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
-    radiologyExamTypeColor: string;
-    radiologyExamType: RadiolodyExamType;
-    radiologyExamStudy: RadiolodyExamStudy;
+    modalityColor: string;
+    modality: Modality;
+    modalityType: ModalityType;
 }
 
 export interface AppointmentFullData {

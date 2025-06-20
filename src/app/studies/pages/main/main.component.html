@@ -10,7 +10,7 @@
                 >
                   <h5 class="mb-0 fw-bold">Detalle de estudios medicos</h5>
     
-                  <button class="btn btn-primary" [routerLink]="['/radiology-exams/register']" [queryParams]="{ appointmentId: appointmentId }">Registrar estudio</button>
+                  <button class="btn btn-primary" [routerLink]="['/studies/register']" [queryParams]="{ appointmentId: appointmentId }">Registrar estudio</button>
   
                 </div>
   
@@ -44,9 +44,9 @@
                       
                               <div>
                                 <h6 class="mb-1 fw-bolder">
-                                  {{ domain?.radiologyExamType?.name ? domain.radiologyExamType.name : 'No Exam Type Available' }}
+                                  {{ domain?.modality?.name ? domain.modality.name : 'No Exam Type Available' }}
                                 </h6>
-                                <p class="fs-3 mb-0">{{ domain?.radiologyExamStudy?.name ? domain.radiologyExamStudy.name : '-'}}</p>
+                                <p class="fs-3 mb-0">{{ domain?.modalityType?.name ? domain.modalityType.name : '-'}}</p>
                               </div>
                             </div>
                           </td>
@@ -72,7 +72,7 @@
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                  <a class="dropdown-item" [routerLink]="['/radiology-exams/', domain.id]" [queryParams]="{ appointmentId: appointmentId }">Editar</a>
+                                  <a class="dropdown-item" [routerLink]="['/studies/', domain.id]" [queryParams]="{ appointmentId: appointmentId }">Editar</a>
                                 </li>
                               </ul>
                             </div>
