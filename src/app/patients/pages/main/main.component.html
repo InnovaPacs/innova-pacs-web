@@ -37,7 +37,7 @@
                     <tr class="hover-actions-trigger btn-reveal-trigger position-static">
                       <td class="customer align-middle white-space-nowrap">
                         <a class="d-flex align-items-center text-body text-hover-1000" style="cursor: pointer;">
-                          <div class="avatar avatar-m"><img class="rounded-circle" [src]="domain.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + domain.photo : 'assets/images/profile/unknown.jpg'"  
+                          <div class="avatar avatar-m"><img class="rounded-circle" [src]="domain?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + domain?.photo : './assets/theme/assets/img/user.png'" alt=""  
                               [alt]="domain.photo"/>
                           </div>
                           <h6 class="mb-0 ms-3 fw-semibold" [routerLink]="['/patients/', domain.id]">{{ domain.firstName }} {{ domain.lastName }}</h6>
