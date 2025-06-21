@@ -9,12 +9,12 @@ export interface AppointmentDto {
     appointmentDate: Date;
     patientId: string;
     doctorRequestedId: string;
-    radiologistId: string;
+    //radiologistId: string;
     medicalOfficeId: string;
     appointmentStartHour: string;
     appointmentEndHour: string;
-    modalityId: string;
-    modalityTypeId: string;
+    //modalityId: string;
+    //modalityTypeId: string;
 }
 
 export interface Appointment {
@@ -23,13 +23,13 @@ export interface Appointment {
     status: string;
     patient: Patient;
     doctorRequested: Doctor;
-    radiologist: Doctor;
+    //radiologist: Doctor;
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;
-    modalityColor: string;
-    modality: Modality;
-    modalityType: ModalityType;
+    //modalityColor: string;
+    //modality: Modality;
+    //modalityType: ModalityType;
 }
 
 export interface AppointmentFullData {
@@ -52,7 +52,7 @@ export interface UpdatedAppointment {
     status: string;
     patient: Patient;
     doctorRequested: Doctor;
-    radiologistId: Doctor;
+    //radiologistId: Doctor;
     medicalOffice: MedicalOffice;
     appointmentStartHour: string;
     appointmentEndHour: string;

@@ -67,10 +67,10 @@
                   <td class="align-middle">
                     <span class="badge badge-phoenix fs-10"
                       [ngClass]="{
-                        'badge-phoenix-success': schedule?.appointment?.status === 'CREATED',
-                        'badge-phoenix-warning': schedule?.appointment?.status === 'SCHEDULED',
-                        'badge-phoenix-danger': schedule?.appointment?.status === 'CANCELED',
-                        'badge-phoenix-primary': schedule?.appointment?.status === 'SENT_TO_PACS'
+                        'badge-phoenix-success': schedule?.appointment?.status === 'FINISHED',
+                        'badge-phoenix-primary': schedule?.appointment?.status === 'SCHEDULED',
+                        'badge-phoenix-danger': schedule?.appointment?.status === 'CANCELLED',
+                        'badge-phoenix-info': schedule?.appointment?.status === 'CONFIRMED',
                       }">
                       <span class="badge-label">{{ schedule?.appointment?.status }}</span>
                       <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
@@ -83,12 +83,16 @@
                         <span class="fas fa-ellipsis-h fs-10"></span>
                       </button>
                       <div class="dropdown-menu dropdown-menu-end py-2">
-                        @if(schedule?.appointment?.status === 'CREATED' || schedule?.appointment?.status === 'CANCELED') {
-                          <a class="dropdown-item cursor-pointer"  (click)="sendToPacs(schedule.appointment.id)">Enviar a Pacs</a>
+                        @if(schedule?.appointment?.status === 'FINISHED' || schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CANCELLED') {
+                          <a class="dropdown-item cursor-pointer"  (click)="confirmed(schedule.appointment.id)">Confirmar</a>
+                        }
+                        
+                        @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CANCELLED' || schedule?.appointment?.status === 'CONFIRMED') {
+                          <a class="dropdown-item cursor-pointer"  (click)="cancel(schedule.appointment.id)">Finalizar</a>
                         }
 
-                        @if(schedule?.appointment?.status === 'SENT_TO_PACS') {
-                          <a class="dropdown-item cursor-pointer"  (click)="cancelToPacs(schedule.appointment.id)">Cancelar a Pacs</a>
+                        @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED' || schedule?.appointment?.status === 'FINISHED') {
+                          <a class="dropdown-item cursor-pointer"  (click)="finished(schedule.appointment.id)">Cancelar</a>
                         }
 
                         @if(!schedule?.appointment) {

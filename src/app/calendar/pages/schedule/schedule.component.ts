@@ -90,28 +90,24 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  sendToPacs(appointmentId: string) {
-    this.service.sendToPacs(appointmentId).subscribe(() => {
-      Swal.fire({
-            title: "Enviada!",
-            text: "Se envio a pacs.",
-            icon: "success"
-          });
-
+  cancel(appointmentId: string) {
+    this.service.cancel(appointmentId).subscribe(() => {
       if(this.date && this.modalitySelected) {
         this.getSchedule(this.date, this.modalitySelected);
       }
     });
   }
 
-  cancelToPacs(appointmentId: string) {
-    this.service.cancelToPacs(appointmentId).subscribe(() => {
-      Swal.fire({
-            title: "Enviada!",
-            text: "Se cancelo en pacs.",
-            icon: "success"
-          });
-          
+    confirmed(appointmentId: string) {
+    this.service.confirmed(appointmentId).subscribe(() => {
+      if(this.date && this.modalitySelected) {
+        this.getSchedule(this.date, this.modalitySelected);
+      }
+    });
+  }
+
+  finished(appointmentId: string) {
+    this.service.finished(appointmentId).subscribe(() => {          
       if(this.date && this.modalitySelected) {
         this.getSchedule(this.date, this.modalitySelected);
       }

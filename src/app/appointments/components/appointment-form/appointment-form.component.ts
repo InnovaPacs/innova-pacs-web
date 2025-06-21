@@ -1,20 +1,17 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { MedicalOffice } from '../../../medical-office/interfaces/medical-office.interface';
+import { AppointmentService } from '../../services/appointment.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
-import { AppointmentService } from '../../services/appointment.service';
 import { Appointment, AppointmentDto } from '../../interfaces/appointment.interface';
 import { Patient } from '../../../patients/interfaces/patient.interface';
 import { Doctor } from '../../../doctors/interfaces/doctor.interface';
-import { MedicalOffice } from '../../../medical-office/interfaces/medical-office.interface';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
-import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
-import { Modality } from '../../../studies/interfaces/modality.interface';
-import { ModalityType } from '../../../studies/interfaces/modality-type.interface';
-import { StudyService } from '../../../studies/services/study.service';
-import { AuthService } from '../../../auth/services/auth.service';
+import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
 import { VendorsService } from '../../../shared/services/vendors.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -22,109 +19,116 @@ import { VendorsService } from '../../../shared/services/vendors.service';
   styleUrl: './appointment-form.component.css'
 })
 export class AppointmentFormComponent {
-  private fb = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
   private service = inject(AppointmentService);
-  private router = inject(Router);
+  private medicalOfficeService = inject(MedicalOfficeService);
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
-  private medicalOfficeService = inject(MedicalOfficeService);
-  private studyService = inject(StudyService);
   private auth = inject(AuthService)
-  public title: string = 'Registrar cita médica';
+
+  public showModal = false;
+  public modalType!: string;
 
   public patients: Patient[] = [];
   public doctors: Doctor[] = [];
   public medicalOffices: MedicalOffice[] = [];
+  public id!: string;
 
-  public modalitys: Modality[] =  [];
-  public modalityType: ModalityType[] =  [];
-
+  
   private modalityId?: string|null;
   private appointmentDate?: string|null;
   
-  public id!: string;
-  @ViewChild('modalityTypeIdRef') modalityTypeIdRef!: ElementRef;
-  public modalityTypeInstance: any;
-  @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
-  public doctorRequestedInstance: any;
-  @ViewChild('radiologistRef') radiologistRef!: ElementRef;
-  public radiologistInstance: any;
-  @ViewChild('patientRef', { static: false }) patientRef!: ElementRef<HTMLSelectElement>;
-  public patientInstance: any;
-
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
   private vendorsService = inject(VendorsService);
-  public showModal = false;
-  public origing: string = 'appointment';
-  public modalType!: string;
-
+  
 
   public form: FormGroup = this.fb.group({
     appointmentDate: [null],
-    patientId: [null],
-    doctorRequestedId: [null],
-    radiologistId: [null],
-    medicalOfficeId: [null],
-    modalityId: [null],
-    modalityTypeId: [null],
     appointmentStartHour: [null],
     appointmentEndHour: [null],
-    notes: [null]
+    patientId: [null],
+    doctorRequestedId: [null],
+    medicalOfficeId: [null]
   });
 
-  constructor(private cdr: ChangeDetectorRef) {}
-  
+  @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
+  public doctorRequestedInstance: any;
+  @ViewChild('patientRef', { static: false }) patientRef!: ElementRef<HTMLSelectElement>;
+  public patientInstance: any;
+
   ngOnInit(): void {
     this.getMainData();
     this.getPathParams();
     this.getQueryParams();
   }
 
-  patchForm(response: Appointment) {
-    this.form.patchValue({
-      id: response.id,
-      appointmentDate: response.appointmentDate,
-      patientId: response.patient.id,
-      doctorRequestedId: response.doctorRequested.id,
-      radiologistId: response.radiologist.id,
-      medicalOfficeId: response.medicalOffice.id,
-      appointmentStartHour: response.appointmentStartHour,
-      appointmentEndHour: response.appointmentEndHour,
-      modality: response.modality.id,
-      modalityTypeId: response.modalityType.id,
+  private getQueryParams() {
+    this.route.queryParamMap.subscribe(data => {
+      this.form.patchValue({
+        appointmentStartHour: this.getInitHour(data),
+        appointmentEndHour: this.getEndHour(data),
+        appointmentDate: this.getAppointmentDate(data),
+        medicalOfficeId: this.getMedicalOffice(data),
+      })
+
+      this.appointmentDate = this.getAppointmentDate(data);
+    });
+
+    this.disableControl('appointmentStartHour');
+    this.disableControl('appointmentEndHour');
+    this.disableControl('appointmentDate');
+    this.disableControl('medicalOfficeId');
+  }
+
+  private getPathParams(): void {
+    this.route.paramMap.pipe(
+      map(params => params.get('id')),
+      filter(id => !!id),
+      switchMap(id => {
+        this.id = id!;
+        return this.service.getById(this.id);
+      }),
+      catchError(error => {
+        return EMPTY;
+      })
+    ).subscribe(response => {
+      this.patchForm(response);
     });
   }
 
-  getFormValue(): AppointmentDto {
-    const { 
-      id,
-      appointmentDate,
-      patientId,
-      doctorRequestedId,
-      radiologistId,
-      medicalOfficeId,
-      appointmentStartHour,
-      appointmentEndHour,
-      modalityId,
-      modalityTypeId } = this.form.getRawValue();
+  private getMainData(): void {
+    this.getAllDoctors();
+    this.getAllPatients();
+    this.getAllMedicalOffices();
+  }
 
-    return {
-      id,
-      appointmentDate,
-      patientId,
-      doctorRequestedId,
-      radiologistId,
-      medicalOfficeId,
-      appointmentStartHour,
-      appointmentEndHour,
-      modalityId,
-      modalityTypeId
-    };
+  private getAllMedicalOffices() {
+    this.medicalOfficeService.getFullData().subscribe(response => {
+      this.medicalOffices = response;
+    });
+  }
+
+  private getAllDoctors() {
+    this.doctorService.getFullData().subscribe(repsosne => {
+      this.doctors = repsosne;
+      setTimeout(() => {
+        this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+      }, 0);
+    });
+  }
+
+  private getAllPatients() {
+    this.patientService.getFullData().subscribe(response => {
+      this.patients = response;
+      setTimeout(() => {
+        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+      }, 0);
+    });
   }
 
   onSubmit() {
     const data = this.getFormValue();
-    console.log("Data ", data);
 
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
@@ -134,51 +138,57 @@ export class AppointmentFormComponent {
 
     if(!this.id) {
       this.service.save(data).subscribe(response => {
+        /*
         this.router.navigate(['/calendar/schedule'], {
           queryParams: {
             modality: this.modalityId,
             appointmentDate:  this.appointmentDate
           }
-        });
+        });*/
       });
     }
   }
 
-  getModalityData(): void {
-    this.studyService.getAllModalieties().subscribe((data) => {
-      this.modalitys = data;
+  getFormValue(): AppointmentDto {
+    const { 
+      id,
+      appointmentDate,
+      appointmentStartHour,
+      appointmentEndHour,
+      patientId,
+      doctorRequestedId,
+      medicalOfficeId } = this.form.getRawValue();
+
+    return {
+      id,
+      appointmentDate,
+      appointmentStartHour,
+      appointmentEndHour,
+      patientId,
+      doctorRequestedId,
+      medicalOfficeId
+    };
+  }
+
+  public openModal(modalType: string) {
+    this.showModal = true;
+    this.modalType = modalType;
+  }
+
+  private disableControl(controlName: string) {
+    this.form.get(controlName)?.disable();
+  }
+
+  patchForm(response: Appointment) {
+    this.form.patchValue({
+      id: response.id,
+      appointmentDate: response.appointmentDate,
+      appointmentStartHour: response.appointmentStartHour,
+      appointmentEndHour: response.appointmentEndHour,
+      patientId: response.patient.id,
+      doctorRequestedId: response.doctorRequested.id,
+      medicalOfficeId: response.medicalOffice.id
     });
-  }
-
-  onSelectModality(selectModalityTypeId: any) {
-    const selectedId = selectModalityTypeId?.target?.value ? selectModalityTypeId.target.value : selectModalityTypeId;
-    this.studyService.getAllModalitiesType(selectedId).subscribe((data) => {
-      this.modalityType = data;
-      setTimeout(() => {
-        this.vendorsService.initChoices(this.modalityTypeInstance, this.modalityTypeIdRef);
-      }, 0);
-    });
-  }
-
-  private getAppointmentDate(data: ParamMap):string| null {
-    const date = data.get('appointmentDate');
-
-    if(date) {
-      return date;
-    }
-
-    return null;
-  }
-
-  private getModality(data: ParamMap):string| null {
-    const modality = data.get('modality');
-
-    if(modality) {
-      this.onSelectModality(modality);
-      return modality;
-    }
-
-    return null;
   }
 
   private getInitHour(data: ParamMap):string | null {
@@ -214,138 +224,17 @@ export class AppointmentFormComponent {
     return null;
   }
 
-  private disableControl(controlName: string) {
-    this.form.get(controlName)?.disable();
-  }
+  private getAppointmentDate(data: ParamMap):string| null {
+    const date = data.get('appointmentDate');
 
-  private getMainData(): void {
-    this.getAllModalities();
-    this.getAllDoctors();
-    this.getAllPatients();
-    this.getAllMedicalOffices();
-  }
+    if(date) {
+      return date;
+    }
 
-  private getAllMedicalOffices() {
-    this.medicalOfficeService.getFullData().subscribe(response => {
-      this.medicalOffices = response;
-    });
-  }
-
-  private getAllModalities() {
-    this.studyService.getAllModalieties().subscribe((data) => {
-      this.modalitys = data;
-    });
-  }
-
-  private getAllDoctors() {
-    this.doctorService.getFullData().subscribe(repsosne => {
-      this.doctors = repsosne;
-      setTimeout(() => {
-        this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
-        this.radiologistInstance = this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
-      }, 0);
-    });
-  }
-
-  private getAllPatients() {
-    this.patientService.getFullData().subscribe(response => {
-      this.patients = response;
-      setTimeout(() => {
-        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-      }, 0);
-    });
-  }
-
-  private getPathParams(): void {
-    this.route.paramMap.pipe(
-      map(params => params.get('id')),
-      filter(id => !!id),
-      switchMap(id => {
-        this.id = id!;
-        return this.service.getById(this.id);
-      }),
-      catchError(error => {
-        return EMPTY;
-      })
-    ).subscribe(response => {
-      this.patchForm(response);
-    });
-  }
-
-  private getQueryParams() {
-    this.route.queryParamMap.subscribe(data => {
-      this.form.patchValue({
-        appointmentStartHour: this.getInitHour(data),
-        appointmentEndHour: this.getEndHour(data),
-        modalityId: this.getModality(data),
-        appointmentDate: this.getAppointmentDate(data),
-        medicalOfficeId: this.getMedicalOffice(data),
-      })
-
-      this.modalityId = this.getModality(data);
-      this.appointmentDate = this.getAppointmentDate(data);
-    });
-
-    this.disableControl('appointmentStartHour');
-    this.disableControl('appointmentEndHour');
-    this.disableControl('appointmentDate');
-    this.disableControl('modalityId');
-    this.disableControl('medicalOfficeId');
+    return null;
   }
 
   private getMedicalOffice(data: ParamMap):string| null {
     return this.auth.currentMedicalOfficeId();;
-  }
-
-  onSelectModalityType(selectModalityType: any) {
-    console.log("modalityTypeId ", selectModalityType);
-    const selectedId = selectModalityType?.target?.value ? selectModalityType.target.value : selectModalityType;
-    const studySelected = this.modalityType.find(rds => rds.id === selectedId);
-    this.form.patchValue({
-      notes: studySelected!.instructions.replace(/\\n/g, '\n')
-    });
-  }
-
-  public openModal(modalType: string) {
-    this.showModal = true;
-    this.modalType = modalType;
-  }
-
-  public closeModal() {
-    this.showModal = false;
-  }
-
-  public handleNewPatient(patient: Patient) {
-    this.patients = [...this.patients, patient];
-
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-        this.doctorRequestedInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-        this.vendorsService.setChoices(this.doctorRequestedInstance, patient.id, `${patient.firstName} ${patient.lastName}`);
-        this.form.patchValue({ patientId: patient.id });
-        this.closeModal();
-      }, 0);
-    });
-  }
-
-  public handleNewDoctor(doctor: Doctor) {
-    this.doctors = [...this.doctors, doctor];
-
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if(this.modalType === 'radiologist') {
-          this.radiologistInstance = this.vendorsService.initChoices(this.radiologistInstance, this.radiologistRef);
-          this.vendorsService.setChoices(this.radiologistInstance, doctor.id, `${doctor.name}`);
-          this.form.patchValue({ radiologistId: doctor.id });
-          this.closeModal();
-        } else {
-          this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
-          this.vendorsService.setChoices(this.doctorRequestedInstance, doctor.id, `${doctor.name}`);
-          this.form.patchValue({ doctorRequestedId: doctor.id });
-          this.closeModal();
-        }
-      }, 0);
-    });
   }
 }

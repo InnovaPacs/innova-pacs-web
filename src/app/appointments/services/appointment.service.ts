@@ -144,8 +144,8 @@ export class AppointmentService {
     );
   }
 
-  sendToPacs(appointmentId: string): Observable<void> {
-    const url = `${this.baseUrl}/api/appointments/${appointmentId}/send-to-pacs`;
+  finished(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/finished`;
     const headers = this.authService.getHeaders();
     
     return this.http.post<void>(url,{}, {
@@ -153,8 +153,17 @@ export class AppointmentService {
     });
   }
 
-  cancelToPacs(appointmentId: string): Observable<void> {
-    const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel-to-pacs`;
+  cancel(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel`;
+    const headers = this.authService.getHeaders();
+    
+    return this.http.post<void>(url,{}, {
+      headers
+    });
+  }
+
+    confirmed(appointmentId: string): Observable<void> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/confirmed`;
     const headers = this.authService.getHeaders();
     
     return this.http.post<void>(url,{}, {
