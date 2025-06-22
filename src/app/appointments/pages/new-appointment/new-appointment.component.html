@@ -1,0 +1,30 @@
+<div class="row g-3 mb-5">
+    <div class="col-xl-6 col-xxl-6">
+        <div class="card h-xxl-100">
+            <div class="card-header pb-3">
+                <div class="row justify-content-between g-3">
+                    <div class="col-auto">
+                        <h3 class="text-body-highlight">Cita</h3>
+                        <p class="mb-0">Registar cita médica</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <app-appointment-form (appointmentCreated)="handleNewAppointment($event)"></app-appointment-form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-xxl-6">
+        <div class="card ">
+            <div class="card-header pb-3 d-sm-flex d-xl-block d-xxl-flex justify-content-between align-items-start">
+                <div>
+                    <h3 class="text-body-highlight">Estudios</h3>
+                    <p class="mb-0">Registar estudios</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <app-study-form [appointmentId]="appointmentId"></app-study-form>
+            </div>
+        </div>
+    </div>
+</div>

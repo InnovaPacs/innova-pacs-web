@@ -40,4 +40,8 @@ export class VendorsService {
     }
     instance = flatpickr(dateRef.nativeElement);
   }
+
+  private disableControl(form: any, controlName: string) {
+    form.get(controlName)?.disable();
+  }
 }

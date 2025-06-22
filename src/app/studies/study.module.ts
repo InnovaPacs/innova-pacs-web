@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { MainComponent } from './pages/main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StudyFormComponent as StudyFormComponent } from './components/study-form/study-form.component';
+import { DoctorsModule } from '../doctors/doctors.module';
+import { PatientsModule } from '../patients/patients.module';
 
 
 @NgModule({
@@ -19,7 +21,12 @@ import { StudyFormComponent as StudyFormComponent } from './components/study-for
     CommonModule,
     StudyRoutingModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    DoctorsModule,
+    PatientsModule
+  ],
+  exports: [
+    StudyFormComponent
   ]
 })
 export class StudyModule { }

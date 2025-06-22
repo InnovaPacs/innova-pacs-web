@@ -79,7 +79,7 @@ export class ScheduleComponent implements OnInit {
   onTimeSelected(hour: string, minute: string): void {
     const radiolodyExamType = this.modalities.find(ret => ret.id === this.modalitySelected);
     if(radiolodyExamType) {
-      this.router.navigate(['/appointments/register'], {
+      this.router.navigate(['/appointments/new'], {
         queryParams: { 
           hour: hour, minute: minute, 
           duration: radiolodyExamType['duration'], 
@@ -98,16 +98,18 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-    confirmed(appointmentId: string) {
-    this.service.confirmed(appointmentId).subscribe(() => {
+  finished(appointmentId: string) {
+    this.service.finished(appointmentId).subscribe(() => {
+          
       if(this.date && this.modalitySelected) {
         this.getSchedule(this.date, this.modalitySelected);
       }
     });
   }
 
-  finished(appointmentId: string) {
-    this.service.finished(appointmentId).subscribe(() => {          
+    confirmed(appointmentId: string) {
+    this.service.confirmed(appointmentId).subscribe(() => {
+          
       if(this.date && this.modalitySelected) {
         this.getSchedule(this.date, this.modalitySelected);
       }

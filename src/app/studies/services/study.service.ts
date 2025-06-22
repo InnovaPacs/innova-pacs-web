@@ -101,4 +101,15 @@ export class StudyService {
       }
     );
   }
+
+  getAllStudies(appointmentId: string):Observable<Study[]> {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<Study[]>(url,  
+      {
+        headers
+      }
+    );
+  }
 }

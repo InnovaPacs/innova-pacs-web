@@ -9,13 +9,16 @@ import { AppointmentFormComponent } from './components/appointment-form/appointm
 import { ReactiveFormsModule } from '@angular/forms';
 import { PatientsModule } from '../patients/patients.module';
 import { DoctorsModule } from "../doctors/doctors.module";
+import { NewAppointmentComponent } from './pages/new-appointment/new-appointment.component';
+import { StudyModule } from '../studies/study.module';
 
 
 @NgModule({
   declarations: [
     AppointmentsLayoutComponent,
     MainComponent,
-    AppointmentFormComponent
+    AppointmentFormComponent,
+    NewAppointmentComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -23,7 +26,8 @@ import { DoctorsModule } from "../doctors/doctors.module";
     AppointmentsRoutingModule,
     SharedModule,
     DoctorsModule,
-    PatientsModule
+    PatientsModule,
+    StudyModule
   ]
 })
 export class AppointmentsModule { }

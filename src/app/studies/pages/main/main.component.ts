@@ -13,7 +13,7 @@ import { catchError, EMPTY, map } from 'rxjs';
 export class MainComponent {
   private service = inject(StudyService);
   private route = inject(ActivatedRoute);
-  domains: Study[] = [];
+  public domains: Study[] = [];
   public appointmentId!: string;
 
   pagination: Pagination = {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
 import { MedicalOffice } from '../../../medical-office/interfaces/medical-office.interface';
 import { AppointmentService } from '../../services/appointment.service';
@@ -23,7 +23,10 @@ export class AppointmentFormComponent {
   private medicalOfficeService = inject(MedicalOfficeService);
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
-  private auth = inject(AuthService)
+  private auth = inject(AuthService);
+  
+  @Output()
+  public appointmentCreated = new EventEmitter<string>();
 
   public showModal = false;
   public modalType!: string;
@@ -33,11 +36,9 @@ export class AppointmentFormComponent {
   public medicalOffices: MedicalOffice[] = [];
   public id!: string;
 
-  
-  private modalityId?: string|null;
   private appointmentDate?: string|null;
   
-  private router = inject(Router);
+  public origing: string = 'appointment';
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private vendorsService = inject(VendorsService);
@@ -132,19 +133,13 @@ export class AppointmentFormComponent {
 
     if(this.id) {
       this.service.update(this.id, data).subscribe(reposne => {
-        this.router.navigate(['/calendar/main']);
+        //this.router.navigate(['/calendar/main']);
       });
     }
 
     if(!this.id) {
       this.service.save(data).subscribe(response => {
-        /*
-        this.router.navigate(['/calendar/schedule'], {
-          queryParams: {
-            modality: this.modalityId,
-            appointmentDate:  this.appointmentDate
-          }
-        });*/
+        this.appointmentCreated.emit(response.id);
       });
     }
   }
@@ -236,5 +231,37 @@ export class AppointmentFormComponent {
 
   private getMedicalOffice(data: ParamMap):string| null {
     return this.auth.currentMedicalOfficeId();;
+  }
+
+  public closeModal() {
+    this.showModal = false;
+  }
+
+  public handleNewDoctor(doctor: Doctor) {
+    this.doctors = [...this.doctors, doctor];
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if(this.modalType === 'radiologist') {
+          this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+          this.vendorsService.setChoices(this.doctorRequestedInstance, doctor.id, `${doctor.name}`);
+          this.form.patchValue({ radiologistId: doctor.id });
+          this.closeModal();
+        }
+      }, 0);
+    });
+  }
+
+  public handleNewPatient(patient: Patient) {
+    this.patients = [...this.patients, patient];
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+        this.vendorsService.setChoices(this.patientInstance, patient.id, `${patient.firstName} ${patient.lastName}`);
+        this.form.patchValue({ patientId: patient.id });
+        this.closeModal();
+      }, 0);
+    });
   }
 }

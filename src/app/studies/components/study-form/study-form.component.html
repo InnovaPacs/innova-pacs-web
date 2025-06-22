@@ -1,42 +1,123 @@
-<div class="container-fluid">
-    <!--  Row 1 -->
-    <div class="row">
-        <div class="col-lg-12 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                    <div class="mb-3">
-                        <label for="examDate" class="form-label">Fecha de estudio</label>
-                        <input type="date" class="form-control" id="examDate" placeholder="Ingresa fecha de estudio"
-                          formControlName="examDate">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="modalityId" class="form-label">Tipo</label>
-                        <select class="form-select" id="modalityId" formControlName="modalityId" (change)="onSelectModality($event)">
-                            @for (domain of modalities; track domain.id) {
-                                <option [value]="domain.id">{{ domain.name }}</option>
-                            }
-                        </select>
-                    </div>
+<form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+    
+    <div class="form-floating form-floating-advance-select col-md-6">
+        <label class="ps-4" for="modalityId">Modalida</label>
+        <select class="form-select" *ngIf="modalities.length > 0" #modalityIdRef formControlName="modalityId" id="modalityId" (change)="onSelectModality($event)">
+        <option value="none" selected>No ha seleccionado modalidad</option>
+            @for (domain of modalities; track domain.id) {
+                <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
+            }
+        </select>
+    </div>
 
-                    <div class="mb-3">
-                        <label for="modalityTypeId" class="form-label">Estudio</label>
-                        <select class="form-select" id="modalityTypeId" formControlName="modalityTypeId">
-                            @for (domain of modalityTypes; track domain.id) {
-                                <option [value]="domain.id">{{ domain.name }}</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="result" class="form-label">Resultado</label>
-                        <input type="text" class="form-control" id="result" placeholder="Resultado"
-                          formControlName="result">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guradar</button>
-                </form>  
-              </div>
-            </div>
+    <div class="form-floating form-floating-advance-select col-md-6">
+        <label class="ps-4" for="modalityTypeId">Estudio</label>
+        <select class="form-select" *ngIf="modalityTypes.length > 0" #modalityTypeIdRef formControlName="modalityTypeId" id="modalityTypeId">
+        <option value="none" selected>No ha seleccionado un estudio</option>
+            @for (domain of modalityTypes; track domain.id) {
+                <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
+        <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
+            <option value="none" selected>No ha seleccionado paciente</option>
+            @for (domain of patients; track domain.id) {
+            <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
+            }
+        </select>
+        <label for="patientId">Paciente</label>
+    </div>
+    <div class="col-sm-1 col-xm-1 col-md-1">
+        <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('patients')">
+            <i class="fa-solid fa-hospital-user"></i>
+        </button>
+    </div>
+
+    <div class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select ">
+        <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
+        <select class="form-select" *ngIf="doctors.length > 0" #radiologistRef formControlName="radiologistId" id="radiologistId">
+        <option value="none" selected>No ha seleccionado radiologo</option>
+        @for (domain of doctors; track domain.id) {
+            <option [value]="domain.id"> {{ domain.name }}</option>
+        }
+        </select>
+    </div>
+    <div class="col-sm-1 col-xm-1 col-md-1">
+        <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('radiologist')">
+        <i class="fa-solid fa-user-doctor"></i>
+        </button>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="appointmentId ===null">Guradar estudio</button>
+</form>
+
+
+<div class="modal fade modal-xl" tabindex="-1" [ngClass]="{ 'show d-block': showModal }" *ngIf="showModal" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+        
+        @if (modalType === 'doctors' || modalType === 'radiologist') {
+          <app-doctor-form [origin]="origing" (doctorCreated)="handleNewDoctor($event)"></app-doctor-form>
+        }
+
+        @if (modalType === 'patients') {
+          <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
+        }
+    </div>
+  </div>
+</div>
+
+
+<div class="card ">
+    <div class="card-header pb-3 d-sm-flex d-xl-block d-xxl-flex justify-content-between align-items-start">
+        <div>
+            <h3 class="text-body-highlight">Estudios registrados</h3>
+            <p class="mb-0">Lista de estdios</p>
         </div>
+    </div>
+    <div class="card-body">
+        <table class="table fs-10 mb-0">
+            <thead>
+                <tr>
+                <th class="sort ps-0 align-middle" data-sort="country" style="min-width: 100px">COUNTRY NAME</th>
+                <th class="sort align-middle" data-sort="users" style="min-width: 115px">USERS</th>
+                <th class="sort text-end align-middle" data-sort="status">STATUS</th>
+                </tr>
+            </thead>
+            <tbody class="list" id="table-country-wise-visitors">
+                <tr>
+                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/india-2.png" alt="" width="40" />
+                    <p class="mb-0 ps-3 fw-bold fs-9">India</p>
+                    </a></td>
+                <td class="py-2 align-middle users">
+                    <h6>92,896<span class="text-body-tertiary fw-semibold ms-2">(41.6%)</span></h6>
+                </td>
+                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-info"><span class="fa-solid fa-plus me-1"></span>15.21%</span></td>
+                </tr>
+                <tr>
+                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/china-2.png" alt="" width="40" />
+                    <p class="mb-0 ps-3 fw-bold fs-9">China</p>
+                    </a></td>
+                <td class="py-2 align-middle users">
+                    <h6>50,496<span class="text-body-tertiary fw-semibold ms-2">(32.8%)</span></h6>
+                </td>
+                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-warning"><span class="fa-solid fa-plus me-1"></span>05.21%</span></td>
+                </tr>
+                <tr>
+                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/usa-2.png" alt="" width="40" />
+                    <p class="mb-0 ps-3 fw-bold fs-9">USA</p>
+                    </a></td>
+                <td class="py-2 align-middle users">
+                    <h6>45,679<span class="text-body-tertiary fw-semibold ms-2">(24.3%)</span></h6>
+                </td>
+                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-primary"><span class="fa-solid fa-plus me-1"></span>22.12%</span></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

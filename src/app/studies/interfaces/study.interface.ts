@@ -1,4 +1,5 @@
 import { Appointment } from "../../appointments/interfaces/appointment.interface";
+import { Doctor } from "../../doctors/interfaces/doctor.interface";
 import { MedicalOffice } from "../../medical-office/interfaces/medical-office.interface";
 import { Patient } from "../../patients/interfaces/patient.interface";
 import { ModalityType } from "./modality-type.interface";
@@ -14,6 +15,7 @@ export interface Study {
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
 	modalityType: ModalityType;
+	radiologist: Doctor
 }
 
 export interface UpdateStudy {
@@ -26,6 +28,7 @@ export interface UpdateStudy {
 	medicalOffice: MedicalOffice;
 	appointment: Appointment;
 	modalityTypeId: string;
+	radiologistId: string;
 }
 
 export interface StudyDto {
@@ -38,4 +41,5 @@ export interface StudyDto {
 	medicalOfficeId: string;
 	appointmentId: string;
 	modalityTypeId: string;
+	radiologistId: string;
 }

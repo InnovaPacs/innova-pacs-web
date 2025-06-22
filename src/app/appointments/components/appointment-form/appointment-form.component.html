@@ -64,3 +64,21 @@
 
   <button type="submit" class="btn btn-primary">Guradar cita médica</button>                
 </form>
+
+
+<div class="modal fade modal-xl" tabindex="-1" [ngClass]="{ 'show d-block': showModal }" *ngIf="showModal" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+        @if (modalType === 'doctors') {
+          <app-doctor-form [origin]="origing" (doctorCreated)="handleNewDoctor($event)"></app-doctor-form>
+        }
+
+        @if (modalType === 'patients') {
+          <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
+        }
+    </div>
+  </div>
+</div>

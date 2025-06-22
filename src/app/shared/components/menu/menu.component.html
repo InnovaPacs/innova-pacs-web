@@ -19,6 +19,13 @@
               <ul class="nav collapse parent" routerLinkActive="show" data-bs-parent="#navbarVerticalCollapse" id="nv-appointmetns">
                 <li class="collapsed-nav-item-title d-none"><span class="fas fa-bell text-danger fs-3"></span>Citas Médicas
                 </li>
+
+                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/studies/register">
+                    <div class="d-flex align-items-center"><span class="nav-link-text">Estudios médicos</span>
+                    </div>
+                  </a>
+                </li>
+
                 <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/calendar/schedule">
                     <div class="d-flex align-items-center"><span class="nav-link-text">Agenda</span>
                     </div>
@@ -91,7 +98,7 @@
     <ul class="navbar-nav navbar-nav-icons flex-row">
       <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
           <div class="avatar avatar-l ">
-            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" alt="" />
+            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" [alt]="user?.photo" />
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
@@ -99,7 +106,7 @@
             <div class="card-body p-0">
               <div class="text-center pt-4 pb-3">
                 <div class="avatar avatar-xl ">
-                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" alt=""/>
+                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : './assets/theme/assets/img/user.png'" [alt]="user?.photo"/>
                 </div>
                 <h6 class="mt-2 text-body-emphasis">{{user?.username}}</h6>
               </div>
