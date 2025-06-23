@@ -35,9 +35,7 @@ export interface AppointmentFullData {
 	medicalOfficeName: string;
 	appointmentStartHour: string;
 	appointmentEndHour: string;
-	examTypeName: string;
-	examTypeColor: string;
-	examTypeDescription: string;
+	modalities: Modality[];
 }
 
 export interface UpdatedAppointment {

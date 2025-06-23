@@ -57,8 +57,12 @@
                   <td [ngStyle]="{'border-left': '4px solid ' + (schedule.color), 'padding-left': '8px'}">
                     <div class="fs-9">
                       @if(schedule?.appointment) {
-                          Modalida: {{ schedule?.appointment?.examTypeName }}<br>
-                          Doctor: [{{ schedule?.appointment?.doctorName }}] <br>
+                          Modalida:
+                            @for (item of schedule?.appointment?.modalities; track $index) {
+                              <span [ngStyle]="{ color: item.color }">[{{ item.name }}]</span>
+                            }
+                          <br>
+                          Doctor: {{ schedule?.appointment?.doctorName }} <br>
                           Consultorio: {{ schedule?.appointment?.medicalOfficeName }} <br>
                           Paciente: {{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.patientLastName }}
                         }

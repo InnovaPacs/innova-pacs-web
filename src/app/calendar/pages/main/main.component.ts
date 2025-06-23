@@ -114,11 +114,11 @@ export class MainComponent implements OnInit {
         </tr>
         <tr>
           <th>Tipo de Examen:</th>
-          <td> <span style="color: ${appointment.examTypeColor};">${appointment.examTypeName ? appointment.examTypeName: ''}</td>
+          <td> <span style="color: ${appointment};">${appointment ? appointment: ''}</td>
         </tr>
         <tr>
           <th>Descripción del Examen:</th>
-          <td>${appointment.examTypeDescription ? appointment.examTypeDescription : ''}</td>
+          <td>${appointment ? appointment : ''}</td>
         </tr>
       </table>
     </div>
@@ -180,10 +180,10 @@ export class MainComponent implements OnInit {
           this.appointments.push(app);
           return {
             id: app.id,
-            title: `[${app.examTypeName ? app.examTypeName : ''}] ${app.patientFirstName} [${app.medicalOfficeName}]`,
+            title: `[${app ? app : ''}] ${app.patientFirstName} [${app.medicalOfficeName}]`,
             start: `${app.appointmentDate}T${app.appointmentStartHour}`,
             end: `${app.appointmentDate}T"${app.appointmentEndHour}"`,
-            color: `${app.examTypeColor ? app.examTypeColor : 'red'}`
+            color: `${app ? app : 'red'}`
           }
         });
       })
