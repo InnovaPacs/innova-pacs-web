@@ -67,10 +67,10 @@
                   <td class="align-middle">
                     <span class="badge badge-phoenix fs-10"
                       [ngClass]="{
-                        'badge-phoenix-success': schedule?.appointment?.status === 'FINISHED',
-                        'badge-phoenix-primary': schedule?.appointment?.status === 'SCHEDULED',
+                        'badge-phoenix-primary': schedule?.appointment?.status === 'FINISHED',
+                        'badge-phoenix-success': schedule?.appointment?.status === 'SCHEDULED',
                         'badge-phoenix-danger': schedule?.appointment?.status === 'CANCELLED',
-                        'badge-phoenix-phoenix': schedule?.appointment?.status === 'CONFIRMED',
+                        'badge-phoenix-info': schedule?.appointment?.status === 'CONFIRMED',
                       }">
                       <span class="badge-label">{{ schedule?.appointment?.status }}</span>
                       <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
@@ -100,6 +100,7 @@
                         }
 
                         @if(schedule?.appointment) {
+                          <a class="dropdown-item"  [routerLink]="['/appointments/new', schedule?.appointment?.id]">Editar</a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item cursor-pointer text-danger" style="cursor: pointer;" (click)="onCancel(schedule.appointment.id)">Eliminar</a>
                         }

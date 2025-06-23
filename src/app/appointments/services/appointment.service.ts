@@ -162,8 +162,17 @@ export class AppointmentService {
     });
   }
 
-    confirmed(appointmentId: string): Observable<void> {
+  confirmed(appointmentId: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/confirmed`;
+    const headers = this.authService.getHeaders();
+    
+    return this.http.post<void>(url,{}, {
+      headers
+    });
+  }
+
+  updateStudyStatus(appointmentId: string, status: string) {
+    const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies/status/${status}`;
     const headers = this.authService.getHeaders();
     
     return this.http.post<void>(url,{}, {

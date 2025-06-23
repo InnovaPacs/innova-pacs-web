@@ -12,6 +12,7 @@ const routes: Routes = [
       { path: 'main', component: MainComponent },
       { path: 'register', component: AppointmentFormComponent },
       { path: 'new', component: NewAppointmentComponent },
+      { path: 'new/:id', component: NewAppointmentComponent },
       { path: ':id', component: AppointmentFormComponent },
       { path: '**', redirectTo: 'main' },
     ]

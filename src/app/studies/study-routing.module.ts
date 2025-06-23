@@ -10,7 +10,7 @@ const routes: Routes = [
     children: [
       { path: 'main', component: MainComponent },
       { path: 'register', component: StudyFormComponent },
-      { path: ':id', component: StudyFormComponent },
+      { path: ':studyId', component: StudyFormComponent },
       { path: '**', redirectTo: 'main' },
     ]
   }

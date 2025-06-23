@@ -20,6 +20,7 @@
         </select>
     </div>
 
+    <!--
     <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
         <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
             <option value="none" selected>No ha seleccionado paciente</option>
@@ -34,7 +35,8 @@
             <i class="fa-solid fa-hospital-user"></i>
         </button>
     </div>
-
+    -->
+    
     <div class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select ">
         <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
         <select class="form-select" *ngIf="doctors.length > 0" #radiologistRef formControlName="radiologistId" id="radiologistId">
@@ -44,6 +46,7 @@
         }
         </select>
     </div>
+
     <div class="col-sm-1 col-xm-1 col-md-1">
         <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('radiologist')">
         <i class="fa-solid fa-user-doctor"></i>
@@ -73,51 +76,54 @@
 </div>
 
 
-<div class="card ">
-    <div class="card-header pb-3 d-sm-flex d-xl-block d-xxl-flex justify-content-between align-items-start">
-        <div>
-            <h3 class="text-body-highlight">Estudios registrados</h3>
-            <p class="mb-0">Lista de estdios</p>
+
+<div class="card-header pb-3 d-sm-flex d-xl-block d-xxl-flex justify-content-between align-items-start">
+    <div>
+        <h3 class="text-body-highlight">Estudios registrados</h3>
+        <p class="mb-0">Lista de estdios</p>
+    </div>
+    @if (studies.length > 0) {
+        <div class="dropdown">
+            <button class="btn btn-sm btn-phoenix-secondary bg-body-emphasis bg-body-hover action-btn" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h" data-fa-transform="shrink-2"></span></button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <a class="dropdown-item cursor-pointer" (click)="updateStatus('SCHEDULED')">Schedule</a>
+                <a class="dropdown-item cursor-pointer" (click)="updateStatus('CANCELLED')" >Cancel</a>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <table class="table fs-10 mb-0">
-            <thead>
+    }
+</div>
+<div class="card-body">
+    <table class="table fs-10 mb-0">
+        <thead>
+            <tr>
+            <th class="sort ps-0 align-middle" data-sort="country" style="min-width: 100px">MODALIDAD</th>
+            <th class="sort align-middle" data-sort="users" style="min-width: 115px">DESCRIPCIÓN</th>
+            <th class="sort text-end align-middle" data-sort="status">STATUS</th>
+            </tr>
+        </thead>
+        <tbody class="list" id="table-country-wise-visitors">
+            @for (domain of studies; track domain.id) {
                 <tr>
-                <th class="sort ps-0 align-middle" data-sort="country" style="min-width: 100px">COUNTRY NAME</th>
-                <th class="sort align-middle" data-sort="users" style="min-width: 115px">USERS</th>
-                <th class="sort text-end align-middle" data-sort="status">STATUS</th>
+                    <td class="py-2 white-space-nowrap ps-0 country">
+                        <p class="mb-0 ps-3 fw-bold fs-9">{{ domain.modality.name }}</p>
+                    </td>
+                    <td class="py-2 align-middle users">
+                        <h6>{{ domain.modality.description }}</h6>
+                    </td>
+                    <td class="py-2 align-middle text-end status">
+                        <span class="badge badge-phoenix fs-10"
+                            [ngClass]="{
+                                'badge-phoenix-primary': domain?.status === 'CREATED',
+                                'badge-phoenix-success': domain?.status === 'SCHEDULED',
+                                'badge-phoenix-info': domain?.status === 'COMPLETED',
+                                'badge-phoenix-danger': domain?.status === 'CANCELLED',
+                            }">
+                            <span class="badge-label">{{ domain?.status }}</span>
+                            <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
+                        </span>
+                    </td>
                 </tr>
-            </thead>
-            <tbody class="list" id="table-country-wise-visitors">
-                <tr>
-                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/india-2.png" alt="" width="40" />
-                    <p class="mb-0 ps-3 fw-bold fs-9">India</p>
-                    </a></td>
-                <td class="py-2 align-middle users">
-                    <h6>92,896<span class="text-body-tertiary fw-semibold ms-2">(41.6%)</span></h6>
-                </td>
-                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-info"><span class="fa-solid fa-plus me-1"></span>15.21%</span></td>
-                </tr>
-                <tr>
-                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/china-2.png" alt="" width="40" />
-                    <p class="mb-0 ps-3 fw-bold fs-9">China</p>
-                    </a></td>
-                <td class="py-2 align-middle users">
-                    <h6>50,496<span class="text-body-tertiary fw-semibold ms-2">(32.8%)</span></h6>
-                </td>
-                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-warning"><span class="fa-solid fa-plus me-1"></span>05.21%</span></td>
-                </tr>
-                <tr>
-                <td class="py-2 white-space-nowrap ps-0 country"><a class="d-flex align-items-center text-primary py-md-1 py-xxl-0" href="#!"><img src="../assets/img/country/usa-2.png" alt="" width="40" />
-                    <p class="mb-0 ps-3 fw-bold fs-9">USA</p>
-                    </a></td>
-                <td class="py-2 align-middle users">
-                    <h6>45,679<span class="text-body-tertiary fw-semibold ms-2">(24.3%)</span></h6>
-                </td>
-                <td class="py-2 align-middle text-end status"><span class="badge badge-phoenix fs-10 badge-phoenix-primary"><span class="fa-solid fa-plus me-1"></span>22.12%</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
 </div>

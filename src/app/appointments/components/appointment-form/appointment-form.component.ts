@@ -35,7 +35,6 @@ export class AppointmentFormComponent {
   public doctors: Doctor[] = [];
   public medicalOffices: MedicalOffice[] = [];
   public id!: string;
-
   private appointmentDate?: string|null;
   
   public origing: string = 'appointment';
@@ -60,8 +59,8 @@ export class AppointmentFormComponent {
 
   ngOnInit(): void {
     this.getMainData();
-    this.getPathParams();
     this.getQueryParams();
+    this.getPathParams();
   }
 
   private getQueryParams() {
@@ -94,7 +93,14 @@ export class AppointmentFormComponent {
         return EMPTY;
       })
     ).subscribe(response => {
-      this.patchForm(response);
+      setTimeout(() => {
+        this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
+        this.vendorsService.setChoices(this.doctorRequestedInstance, response.doctorRequested.id, `${response.doctorRequested.name}`);
+        this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
+        this.vendorsService.setChoices(this.patientInstance, response.patient.id, `${response.patient.firstName} ${response.patient.lastName}`);
+        this.patchForm(response);
+        this.appointmentCreated.emit(response.id);
+      }, 1000);
     });
   }
 
@@ -115,7 +121,7 @@ export class AppointmentFormComponent {
       this.doctors = repsosne;
       setTimeout(() => {
         this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
-      }, 0);
+      }, 100);
     });
   }
 
@@ -124,7 +130,7 @@ export class AppointmentFormComponent {
       this.patients = response;
       setTimeout(() => {
         this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-      }, 0);
+      }, 100);
     });
   }
 
@@ -248,7 +254,7 @@ export class AppointmentFormComponent {
           this.form.patchValue({ radiologistId: doctor.id });
           this.closeModal();
         }
-      }, 0);
+      }, 100);
     });
   }
 
@@ -261,7 +267,7 @@ export class AppointmentFormComponent {
         this.vendorsService.setChoices(this.patientInstance, patient.id, `${patient.firstName} ${patient.lastName}`);
         this.form.patchValue({ patientId: patient.id });
         this.closeModal();
-      }, 0);
+      }, 100);
     });
   }
 }

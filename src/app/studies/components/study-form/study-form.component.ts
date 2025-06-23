@@ -11,21 +11,23 @@ import { Doctor } from '../../../doctors/interfaces/doctor.interface';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { Patient } from '../../../patients/interfaces/patient.interface';
 import { PatientService } from '../../../patients/services/patient.service';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
 
 @Component({
   selector: 'app-study-form',
   templateUrl: './study-form.component.html',
   styleUrl: './study-form.component.css'
 })
-export class StudyFormComponent {
+export class StudyFormComponent implements OnChanges{
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private service = inject(StudyService);
   private vendorsService = inject(VendorsService);
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
+  private appointmentService = inject(AppointmentService);
 
-  public id!: string;
+  public studyId!: string;
   @Input() 
   public appointmentId!: string;
 
@@ -106,16 +108,15 @@ export class StudyFormComponent {
     const data = this.getFormValue();
     data.appointmentId = this.appointmentId;
 
-    if(this.id) {
-      this.service.update(this.id, data).subscribe(reposne => {
+    if(this.studyId) {
+      this.service.update(this.studyId, data).subscribe(reposne => {
         //this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: this.appointmentId } });
       });
     }
 
-    if(!this.id) {
+    if(!this.studyId) {
       this.service.save(data).subscribe(response => {
-        this.getAllStudies(response.id);
-        //this.router.navigate(['/studies/main'], { queryParams: { appointmentId: this.appointmentId } });
+        this.getAllStudies(this.appointmentId);
       });
     }
   }
@@ -143,11 +144,11 @@ export class StudyFormComponent {
     });
 
     this.route.paramMap.pipe(
-      map(params => params.get('id')),
-      filter(id => !!id),
-      switchMap(id => {
-        this.id = id!;
-        return this.service.getById(this.id);
+      map(params => params.get('studyId')),
+      filter(studyId => !!studyId),
+      switchMap(studyId => {
+        this.studyId = studyId!;
+        return this.service.getById(this.studyId);
       }),
       catchError(error => {
         console.error('Error al obtener el consultorio:', error);
@@ -179,9 +180,8 @@ export class StudyFormComponent {
 
   private getAllStudies(appointmentId: string) {
     if(appointmentId) {
-      this.service.getAllStudies(this.appointmentId).subscribe(repsosne => {
+      this.service.getAllStudies(appointmentId).subscribe(repsosne => {
       this.studies = repsosne;
-      console.log(this.studies);
     });
     }
   }
@@ -229,6 +229,16 @@ export class StudyFormComponent {
         this.form.patchValue({ patientId: patient.id });
         this.closeModal();
       }, 0);
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getAllStudies(this.appointmentId);
+  }
+
+  updateStatus(status: string) {
+    this.appointmentService.updateStudyStatus(this.appointmentId, status).subscribe(() => {
+      this.getAllStudies(this.appointmentId);
     });
   }
 }
