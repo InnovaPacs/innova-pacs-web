@@ -3,7 +3,7 @@ import { Pagination, Item } from '../../../shared/interfaces/pagination.interfac
 import { Study } from '../../interfaces/study.interface';
 import { StudyService } from '../../services/study.service';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, EMPTY, map } from 'rxjs';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-main',
@@ -12,9 +12,10 @@ import { catchError, EMPTY, map } from 'rxjs';
 })
 export class MainComponent {
   private service = inject(StudyService);
+  private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   public domains: Study[] = [];
-  public appointmentId!: string;
+  public medicalOfficeId!: string | null;
 
   pagination: Pagination = {
     currentPage: 0,
@@ -27,15 +28,8 @@ export class MainComponent {
   constructor() { }
 
   ngOnInit(): void {
-    this.route.queryParamMap.pipe(
-      map(params => params.get('appointmentId')),
-      catchError(error => {
-        return EMPTY;
-      })
-    ).subscribe(appointmentId => {
-      this.appointmentId = appointmentId!;
-      this.getAllData(appointmentId!, 0);
-    });
+    this.medicalOfficeId = this.authService.currentMedicalOfficeId();
+    this.getAllData(this.medicalOfficeId, 0);
   }
 
   getItems(totalPages: number):Item[] {
@@ -53,11 +47,11 @@ export class MainComponent {
   }
 
   navigate(page: number):void {
-    this.getAllData(this.appointmentId!, page);
+    this.getAllData(this.medicalOfficeId!, page);
   }
 
-  private getAllData(appointmentId: string, page: number) {
-    this.service.getAll(appointmentId, page).subscribe((response) => {
+  private getAllData(appointmentId: string | null, page: number) {
+    this.service.getAll(appointmentId!, page).subscribe((response) => {
       this.domains = response.content;
       
       this.pagination = {

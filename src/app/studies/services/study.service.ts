@@ -18,8 +18,8 @@ export class StudyService {
   
   constructor() { }
 
-  getAll(appointmentId: string, page: number):Observable<StudyPage> {
-    const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies?page=${page}`;
+  getAll(medicalOfficeId: string, page: number):Observable<StudyPage> {
+    const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
 
     return this.http.get(url,  

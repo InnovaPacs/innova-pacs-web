@@ -40,7 +40,7 @@
                           <div class="avatar avatar-m"><img class="rounded-circle" [src]="domain?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + domain?.photo : './assets/theme/assets/img/user.png'" alt=""  
                               [alt]="domain.photo"/>
                           </div>
-                          <h6 class="mb-0 ms-3 fw-semibold" [routerLink]="['/patients/', domain.id]">{{ domain.firstName }} {{ domain.lastName }}</h6>
+                          <h6 class="mb-0 ms-3 fw-semibold cursor-pointer" [routerLink]="['/patients/', domain.id]">{{ domain.firstName }} {{ domain.lastName }}</h6>
                         </a>
                       </td>
                       <td class="email align-middle white-space-nowrap">{{ domain.dateOfBirth }}</td>

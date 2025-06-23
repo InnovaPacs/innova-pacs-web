@@ -16,6 +16,13 @@
               </div>
             }
             <form class="row" [formGroup]="form">
+              <div class="form-floating form-floating-advance-select mb-3 col-xm-12 col-md-6">
+                <div class="form-floating">
+                  <input type="text" class="form-control" class="form-control"placeholder="Buscar"/>
+                  <label for="appointmentDate">Buscar</label>
+                </div>
+              </div>
+              
               <div class="mb-3 col-xm-12 col-md-6">
                 <div class="flatpickr-input-container">
                   <div class="form-floating">
@@ -28,16 +35,6 @@
                     <label class="ps-2" for="appointmentDate">Selecciona fecha</label>
                   </div>
                 </div>
-              </div>
-              
-              <div class="form-floating form-floating-advance-select mb-3 col-xm-12 col-md-6">
-                <label class="ps-4" for="modalityId">Modalid</label>
-                <select class="form-select" *ngIf="modalities.length > 0" #examTypeSelectRef (change)="onSelectChange($event)" formControlName="modalityId" id="modalityId">
-                  <option value="none" selected>No ha seleccionado una modalidad</option>
-                  @for (domain of modalities; track domain.id) {
-                    <option [value]="domain.id"> [{{ domain.name }}] {{ domain.description }}</option>
-                  }
-                </select>
               </div>
             </form>
 

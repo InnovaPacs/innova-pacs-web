@@ -126,12 +126,8 @@ export class AppointmentService {
     );
   }
 
-  getAllSchedule(date: string, modality: string|null):Observable<Schedule[]> {
+  getAllSchedule(date: string):Observable<Schedule[]> {
     let params = new HttpParams().set('date', date);
-
-    if (modality) {
-      params = params.set('modalityId', modality);
-    }
     
     const url = `${this.baseUrl}/api/appointments/schedule`;
     const headers = this.authService.getHeaders();

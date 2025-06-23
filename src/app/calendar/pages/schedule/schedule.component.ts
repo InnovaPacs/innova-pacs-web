@@ -15,8 +15,6 @@ import { VendorsService } from '../../../shared/services/vendors.service';
 })
 export class ScheduleComponent implements OnInit {
   public title: string = 'Detalle de consultas medicas';
-  @ViewChild('examTypeSelectRef', { static: false }) examTypeSelectRef!: ElementRef;
-  examTypeChoicesInstance: any;
 
   @ViewChild('appointmentDate', { static: false }) appointmentDate!: ElementRef;
   startDatepickerInstance: any;
@@ -46,7 +44,6 @@ export class ScheduleComponent implements OnInit {
     this.studyService.getAllModalieties().subscribe(response => {
       this.modalities = response;
       setTimeout(() => {
-        this.vendorsService.initChoices(this.examTypeChoicesInstance, this.examTypeSelectRef);
         this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
       }, 0);
     });
@@ -56,7 +53,7 @@ export class ScheduleComponent implements OnInit {
     this.modalitySelected = (event.target as HTMLSelectElement).value;
   
     if(this.date && this.modalitySelected) {
-      this.getSchedule(this.date, this.modalitySelected);
+      this.getSchedule(this.date);
     }
   }
 
@@ -65,35 +62,31 @@ export class ScheduleComponent implements OnInit {
     const selectedDate = input.value; 
     this.date = selectedDate;
 
-    if(this.date && this.modalitySelected) {
-      this.getSchedule(this.date, this.modalitySelected);
+    if(this.date) {
+      this.getSchedule(this.date);
     }
   }
 
-  private getSchedule(date: string, modality: string) {
-    this.service.getAllSchedule(date, modality).subscribe(response => {
+  private getSchedule(date: string) {
+    this.service.getAllSchedule(date).subscribe(response => {
       this.schedules = response;
     });
   }
 
   onTimeSelected(hour: string, minute: string): void {
-    const radiolodyExamType = this.modalities.find(ret => ret.id === this.modalitySelected);
-    if(radiolodyExamType) {
-      this.router.navigate(['/appointments/new'], {
+    this.router.navigate(['/appointments/new'], {
         queryParams: { 
-          hour: hour, minute: minute, 
-          duration: radiolodyExamType['duration'], 
+          hour: hour, minute: minute,
           modality: this.modalitySelected,
           appointmentDate:  this.date
         }
       });
-    }
   }
 
   cancel(appointmentId: string) {
     this.service.cancel(appointmentId).subscribe(() => {
       if(this.date && this.modalitySelected) {
-        this.getSchedule(this.date, this.modalitySelected);
+        this.getSchedule(this.date);
       }
     });
   }
@@ -102,7 +95,7 @@ export class ScheduleComponent implements OnInit {
     this.service.finished(appointmentId).subscribe(() => {
           
       if(this.date && this.modalitySelected) {
-        this.getSchedule(this.date, this.modalitySelected);
+        this.getSchedule(this.date);
       }
     });
   }
@@ -111,7 +104,7 @@ export class ScheduleComponent implements OnInit {
     this.service.confirmed(appointmentId).subscribe(() => {
           
       if(this.date && this.modalitySelected) {
-        this.getSchedule(this.date, this.modalitySelected);
+        this.getSchedule(this.date);
       }
     });
   }
@@ -126,7 +119,7 @@ export class ScheduleComponent implements OnInit {
       if (result.isConfirmed) {
         this.service.deleteById(scheduleId).subscribe(() => {
           if(this.date && this.modalitySelected) {
-            this.getSchedule(this.date, this.modalitySelected);
+            this.getSchedule(this.date);
           }
         });
       }
@@ -144,7 +137,7 @@ export class ScheduleComponent implements OnInit {
           modalityId: this.modalitySelected
         });
         
-        this.getSchedule(this.date, this.modalitySelected);
+        this.getSchedule(this.date);
       }
     });
   }
