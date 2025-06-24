@@ -112,4 +112,15 @@ export class StudyService {
       }
     );
   }
+
+  syncStudies():Observable<void> {
+    const url = `${this.baseUrl}/api/studies/sync`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<void>(url,  
+      {
+        headers
+      }
+    );
+  }
 }

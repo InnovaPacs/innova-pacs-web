@@ -63,4 +63,10 @@ export class MainComponent {
       }
     });
   }
+
+  public syncStudies():void {
+    this.service.syncStudies().subscribe(() => {
+      this.getAllData(this.medicalOfficeId!, 0);
+    });
+  }
 }
