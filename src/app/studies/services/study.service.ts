@@ -117,7 +117,7 @@ export class StudyService {
     const url = `${this.baseUrl}/api/studies/sync`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<void>(url,  
+    return this.http.post<void>(url,{},  
       {
         headers
       }
