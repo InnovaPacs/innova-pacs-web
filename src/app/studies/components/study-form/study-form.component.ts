@@ -74,7 +74,7 @@ export class StudyFormComponent implements OnChanges{
   patchForm(response: Study) {
     this.form.patchValue({
       id: response.id,
-      examDate: response.examDate,
+      studyDate: response.studyDate,
       status: response.status,
       result: response.result,
       patientId: response.patient.id,
@@ -97,10 +97,10 @@ export class StudyFormComponent implements OnChanges{
   }
 
   getFormValue(): StudyDto {
-    const { id, modalityId, examDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId } = this.form.value;
+    const { id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId } = this.form.value;
 
     return {
-      id, modalityId, examDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId
+      id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId
     };
   }
 

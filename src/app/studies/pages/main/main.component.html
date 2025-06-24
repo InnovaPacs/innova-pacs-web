@@ -25,9 +25,9 @@
                     <thead>
                       <tr>
                         <th class="sort align-middle" scope="col">MODALIDAD</th>
-                        <th class="sort align-middle" scope="col">FECHA</th>
-                        <th class="sort align-middle pe-3" scope="col">PACIENTES</th>
+                        <th class="sort align-middle pe-3" scope="col">PACIENTE</th>
                         <th class="sort align-middle" scope="col">ESTATUS</th>
+                        <th class="sort align-middle" scope="col">FECHA</th>
                         <th class="sort align-middle" scope="col">ACCIONES</th>
                       </tr>
                     </thead>
@@ -37,11 +37,22 @@
                           <td class="customer align-middle white-space-nowrap">
                             <span [ngStyle]="{ color: domain?.modality?.color }">[{{ domain?.modality?.name ? domain.modality.name : 'No Exam Type Available' }}]</span>
                           </td>
-                          <td class="email align-middle white-space-nowrap">{{ domain.examDate }}</td>
-                          <td class="mobile_number align-middle white-space-nowrap">{{ domain.status }}</td>
                           <td class="city align-middle white-space-nowrap text-body">
                             <h6 class="mb-0 ms-3 fw-semibold cursor-pointer" [routerLink]="['/patients/', domain.patient.id]">{{ domain.patient.firstName }} {{ domain.patient.lastName }}</h6>
                           </td>
+                          <td class="mobile_number align-middle white-space-nowrap">
+                            <span class="badge badge-phoenix fs-10"
+                                [ngClass]="{
+                                    'badge-phoenix-primary': domain?.status === 'CREATED',
+                                    'badge-phoenix-success': domain?.status === 'SCHEDULED',
+                                    'badge-phoenix-info': domain?.status === 'COMPLETED',
+                                    'badge-phoenix-danger': domain?.status === 'CANCELLED',
+                                }">
+                                <span class="badge-label">{{ domain.status }}</span>
+                                <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
+                            </span>
+                          </td>
+                          <td class="email align-middle white-space-nowrap">{{ domain.studyDate }}</td>
                           <td>
                             <div class="btn-reveal-trigger position-static">
                               <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>

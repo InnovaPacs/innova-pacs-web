@@ -8,7 +8,7 @@ import { Modality } from "./modality.interface";
 export interface Study {
 	id: string;
 	modality: Modality;
-	examDate: string;
+	studyDate: string;
 	status: string;
 	result: string;
 	patient: Patient;
@@ -21,7 +21,7 @@ export interface Study {
 export interface UpdateStudy {
 	id: string;
 	modalityId: string;
-	examDate: string;
+	studyDate: string;
 	status: string;
 	result: string;
 	patient: Patient;
@@ -34,7 +34,7 @@ export interface UpdateStudy {
 export interface StudyDto {
 	id: string;
 	modalityId: string;
-	examDate: string;
+	studyDate: string;
 	status: string;
 	result: string;
 	patientId: string;

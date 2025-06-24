@@ -36,19 +36,8 @@ export class ScheduleComponent implements OnInit {
   });
   
   ngOnInit(): void {
-    this.getModalities();
     this.getQueryParams();
   }
-
-  private getModalities() {
-    this.studyService.getAllModalieties().subscribe(response => {
-      this.modalities = response;
-      setTimeout(() => {
-        this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
-      }, 0);
-    });
-  }
-
   onSelectChange(event: Event) {
     this.modalitySelected = (event.target as HTMLSelectElement).value;
   
@@ -76,7 +65,7 @@ export class ScheduleComponent implements OnInit {
   onTimeSelected(hour: string, minute: string): void {
     this.router.navigate(['/appointments/new'], {
         queryParams: { 
-          hour: hour, minute: minute,
+          hour: hour, minute: minute, duration: 30,
           modality: this.modalitySelected,
           appointmentDate:  this.date
         }
@@ -118,7 +107,7 @@ export class ScheduleComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.service.deleteById(scheduleId).subscribe(() => {
-          if(this.date && this.modalitySelected) {
+          if(this.date) {
             this.getSchedule(this.date);
           }
         });
@@ -140,6 +129,10 @@ export class ScheduleComponent implements OnInit {
         this.getSchedule(this.date);
       }
     });
+
+    setTimeout(() => {
+        this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
+    }, 0);
   }
 
   private getModality(data: ParamMap):string| null {
