@@ -1,5 +1,5 @@
 export const  environment = {
     name: 'development',
     production: false,
-    baseUrl: 'https://persist.rocks/med-iq-service',
+    baseUrl: 'http://localhost:8080',
 };

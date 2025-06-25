@@ -123,4 +123,15 @@ export class StudyService {
       }
     );
   }
+
+  deleteById(id: string):Observable<void> {
+    const url = `${this.baseUrl}/api/studies/${id}`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.delete<void>(url,
+      {
+        headers
+      }
+    );
+  }
 }

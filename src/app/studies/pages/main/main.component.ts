@@ -4,6 +4,9 @@ import { Study } from '../../interfaces/study.interface';
 import { StudyService } from '../../services/study.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { PacsConfigurationService } from '../../../pacs-configuration/service/pacs-configuration.service';
+import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { PacsConfiguration } from '../../../pacs-configuration/interfaces/pacs-configuration.interface';
 
 @Component({
   selector: 'app-main',
@@ -13,9 +16,10 @@ import { AuthService } from '../../../auth/services/auth.service';
 export class MainComponent {
   private service = inject(StudyService);
   private authService = inject(AuthService);
-  private route = inject(ActivatedRoute);
+  private medicalOfficeService = inject(MedicalOfficeService);
   public domains: Study[] = [];
   public medicalOfficeId!: string | null;
+  public pacsConfiguration!: PacsConfiguration;
 
   pagination: Pagination = {
     currentPage: 0,
@@ -30,6 +34,7 @@ export class MainComponent {
   ngOnInit(): void {
     this.medicalOfficeId = this.authService.currentMedicalOfficeId();
     this.getAllData(this.medicalOfficeId, 0);
+    this.getPacsConfiguration();
   }
 
   getItems(totalPages: number):Item[] {
@@ -50,6 +55,12 @@ export class MainComponent {
     this.getAllData(this.medicalOfficeId!, page);
   }
 
+  private getPacsConfiguration() {
+    this.medicalOfficeService.getPacsConfigurationByMedicalOffice(this.medicalOfficeId!).subscribe((result) => {
+      this.pacsConfiguration = result;
+    });
+  }
+
   private getAllData(appointmentId: string | null, page: number) {
     this.service.getAll(appointmentId!, page).subscribe((response) => {
       this.domains = response.content;
@@ -67,6 +78,12 @@ export class MainComponent {
   public syncStudies():void {
     this.service.syncStudies().subscribe(() => {
       this.getAllData(this.medicalOfficeId!, 0);
+    });
+  }
+
+  public deleteStudy(id: string): void {
+    this.service.deleteById(id).subscribe(() => {
+      this.getAllData(this.medicalOfficeId, 0);
     });
   }
 }

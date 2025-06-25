@@ -6,6 +6,7 @@ export interface PacsConfiguration {
     ipAddress: string;
     isActive: boolean;
     medicalOfficeId: string;
+    viewerUrl: string;
 }
 
 export interface UpdatePacsConfiguration {
@@ -14,4 +15,5 @@ export interface UpdatePacsConfiguration {
     dicomPort: string;
     ipAddress: string;
     isActive: boolean;
+    viewerUrl: string;
 }

@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { MedicalOfficePage } from '../interfaces/medical-office-page.interface';
 import { MedicalOffice, UpdateMedicalOffice } from '../interfaces/medical-office.interface';
+import { PacsConfiguration } from '../../pacs-configuration/interfaces/pacs-configuration.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,17 @@ export class MedicalOfficeService {
     const headers = this.authService.getHeaders();
 
     return this.http.get<MedicalOffice>(url,  
+      {
+        headers
+      }
+    );
+  }
+
+  getPacsConfigurationByMedicalOffice(medicalOfficeId: string):Observable<PacsConfiguration> {
+    const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/pacs-configuration`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<PacsConfiguration>(url,
       {
         headers
       }

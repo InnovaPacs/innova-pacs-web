@@ -24,7 +24,8 @@ export class PacsConfigurationFormComponent {
     ipAddress: [null, Validators.required],
     hl7port: [null, Validators.required],
     dicomPort: [null, Validators.required],
-    isActive: [null, Validators.required]
+    isActive: [null, Validators.required],
+    viewerUrl: [null, Validators.required]
   });
 
   ngOnInit(): void {
@@ -57,9 +58,9 @@ export class PacsConfigurationFormComponent {
   }
 
   getFormValue(): UpdatePacsConfiguration {
-    const { title, ipAddress, hl7port, dicomPort, isActive } = this.form.value;
+    const { title, ipAddress, hl7port, dicomPort, isActive, viewerUrl } = this.form.value;
 
-    return { title, ipAddress, hl7port, dicomPort, isActive };
+    return { title, ipAddress, hl7port, dicomPort, isActive, viewerUrl };
   }
 
   onSubmit() {

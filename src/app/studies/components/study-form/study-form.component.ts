@@ -97,10 +97,10 @@ export class StudyFormComponent implements OnChanges{
   }
 
   getFormValue(): StudyDto {
-    const { id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId } = this.form.value;
+    const { id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId, studyInstance, accessionNumber } = this.form.value;
 
     return {
-      id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId
+      id, modalityId, studyDate, status, result, patientId, medicalOfficeId, appointmentId, modalityTypeId, radiologistId, studyInstance, accessionNumber
     };
   }
 

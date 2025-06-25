@@ -16,6 +16,8 @@ export interface Study {
 	appointment: Appointment;
 	modalityType: ModalityType;
 	radiologist: Doctor
+	studyInstance: string;
+	accessionNumber: string;
 }
 
 export interface UpdateStudy {
@@ -29,6 +31,8 @@ export interface UpdateStudy {
 	appointment: Appointment;
 	modalityTypeId: string;
 	radiologistId: string;
+	studyInstance: string;
+	accessionNumber: string;
 }
 
 export interface StudyDto {
@@ -42,4 +46,6 @@ export interface StudyDto {
 	appointmentId: string;
 	modalityTypeId: string;
 	radiologistId: string;
+	studyInstance: string;
+	accessionNumber: string;
 }

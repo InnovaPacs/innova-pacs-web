@@ -5,8 +5,8 @@
         <div class="card-body p-4">
           
           <div class="d-flex mb-4 justify-content-between align-items-center">
-            <h3>Detalle de citas médicas</h3>
-            <button class="btn btn-primary" (click)="syncStudies()">Bajas estudios de PACS</button>
+            <h3>Detalle de estudios</h3>
+            <button class="btn btn-primary" (click)="syncStudies()">Bajar estudios desde {{pacsConfiguration.title}}</button>
           </div>
 
           <hr class="my-4">
@@ -24,6 +24,7 @@
                 <table class="table table-sm fs-9 mb-0">
                     <thead>
                       <tr>
+                        <th class="sort align-middle" scope="col">ACCESSION NUMBER</th>
                         <th class="sort align-middle" scope="col">MODALIDAD</th>
                         <th class="sort align-middle pe-3" scope="col">PACIENTE</th>
                         <th class="sort align-middle" scope="col">ESTATUS</th>
@@ -34,6 +35,9 @@
                     <tbody class="list" id="members-table-body">
                       @for (domain of domains; track domain.id) {
                         <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                          <td class="customer align-middle white-space-nowrap">
+                            {{domain.accessionNumber }}
+                          </td>
                           <td class="customer align-middle white-space-nowrap">
                             <span [ngStyle]="{ color: domain?.modality?.color }">[{{ domain?.modality?.name ? domain.modality.name : 'No Exam Type Available' }}]</span>
                           </td>
@@ -54,12 +58,15 @@
                           </td>
                           <td class="email align-middle white-space-nowrap">{{ domain.studyDate }}</td>
                           <td>
-                            <div class="btn-reveal-trigger position-static">
+                            
+                              <div class="btn-reveal-trigger position-static">
                               <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
                               <div class="dropdown-menu dropdown-menu-end py-2">
-                                <a class="dropdown-item cursor-pointer">Ver estudio</a>
+                                @if (domain.studyInstance) {
+                                  <a class="dropdown-item cursor-pointer" [href]="pacsConfiguration.viewerUrl + domain.studyInstance" target="_blank">Ver estudio</a>
+                                }
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger cursor-pointer">Eliminar</a>
+                                <a class="dropdown-item text-danger" style="cursor: pointer;" (click)="deleteStudy(domain.id)">Eliminar</a>
                               </div>
                             </div>
                           </td>
