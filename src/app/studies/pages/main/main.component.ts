@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
 import { Study } from '../../interfaces/study.interface';
 import { StudyService } from '../../services/study.service';
-import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
-import { PacsConfigurationService } from '../../../pacs-configuration/service/pacs-configuration.service';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
 import { PacsConfiguration } from '../../../pacs-configuration/interfaces/pacs-configuration.interface';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { StudySearch } from '../../interfaces/study-seaarch.interface';
 
 @Component({
   selector: 'app-main',
@@ -29,11 +29,20 @@ export class MainComponent {
     items: []
   }
 
+  private fb = inject(FormBuilder);
+  public searchForm: FormGroup = this.fb.group({
+    accessionNumber: [null],
+    modalities: [null],
+    patientName: [null],
+    status: [null],
+    date: [null]
+  });
+
   constructor() { }
 
   ngOnInit(): void {
     this.medicalOfficeId = this.authService.currentMedicalOfficeId();
-    this.getAllData(this.medicalOfficeId, 0);
+    this.getAllData(this.medicalOfficeId, 0, null);
     this.getPacsConfiguration();
   }
 
@@ -52,7 +61,7 @@ export class MainComponent {
   }
 
   navigate(page: number):void {
-    this.getAllData(this.medicalOfficeId!, page);
+    this.getAllData(this.medicalOfficeId!, page, null);
   }
 
   private getPacsConfiguration() {
@@ -61,8 +70,8 @@ export class MainComponent {
     });
   }
 
-  private getAllData(appointmentId: string | null, page: number) {
-    this.service.getAll(appointmentId!, page).subscribe((response) => {
+  private getAllData(appointmentId: string | null, page: number, search: StudySearch | null) {
+    this.service.getAll(appointmentId!, page, search).subscribe((response) => {
       this.domains = response.content;
       
       this.pagination = {
@@ -77,13 +86,17 @@ export class MainComponent {
 
   public syncStudies():void {
     this.service.syncStudies().subscribe(() => {
-      this.getAllData(this.medicalOfficeId!, 0);
+      this.getAllData(this.medicalOfficeId!, 0, null);
     });
   }
 
   public deleteStudy(id: string): void {
     this.service.deleteById(id).subscribe(() => {
-      this.getAllData(this.medicalOfficeId, 0);
+      this.getAllData(this.medicalOfficeId, 0, null);
     });
+  }
+
+  public onSubmit() {
+    this.getAllData(this.medicalOfficeId, 0, this.searchForm.value);
   }
 }

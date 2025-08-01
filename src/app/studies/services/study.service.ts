@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/services/auth.service';
 import { Study, StudyDto } from '../interfaces/study.interface';
 import { Modality } from '../interfaces/modality.interface';
 import { ModalityType } from '../interfaces/modality-type.interface';
+import { StudySearch } from '../interfaces/study-seaarch.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,11 @@ export class StudyService {
   
   constructor() { }
 
-  getAll(medicalOfficeId: string, page: number):Observable<StudyPage> {
+  getAll(medicalOfficeId: string, page: number, search: StudySearch | null):Observable<StudyPage> {
     const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get(url,  
+    return this.http.get(this.getUrlWithFilters(url, search),
       {
         headers
       }
@@ -133,5 +134,9 @@ export class StudyService {
         headers
       }
     );
+  }
+
+  private getUrlWithFilters(url: string, search: StudySearch | null) {
+    return `${url}&${search?.accessionNumber ? 'accessionNumber=' + search?.accessionNumber: ''}${search?.date ? '&date=' + search?.date: ''}${search?.modalities ? '&modality=' + search?.modalities: ''}${search?.patientName ? '&patientName=' + search?.patientName: ''}${search?.status ? '&status=' + search?.status: ''}`;
   }
 }

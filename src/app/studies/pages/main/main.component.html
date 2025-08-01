@@ -6,19 +6,57 @@
           
           <div class="d-flex mb-4 justify-content-between align-items-center">
             <h3>Detalle de estudios</h3>
-            <button class="btn btn-primary" (click)="syncStudies()">Bajar estudios desde {{pacsConfiguration.title}}</button>
+            @if (pacsConfiguration) {
+              <button class="btn btn-primary" (click)="syncStudies()">Bajar estudios desde {{pacsConfiguration.title}}</button>
+            }
           </div>
 
-          <hr class="my-4">
-        
-          <div class="table-responsive" data-simplebar>
-            @if (domains.length == 0) {
-              <div class="alert alert-outline-primary d-flex align-items-center" style="width: 100%;" role="alert">
-                <span class="fas fa-info-circle text-primary fs-5 me-3"></span>
-                <p class="mb-0 flex-1">¡No hay estudios registrados!</p>
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          <hr class="my-3">
+
+          <form class="mb-4" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-2">
+                <label for="accessionNumber" class="form-label">Accession Number</label>
+                <input type="text" id="accessionNumber" class="form-control" placeholder="Accession Number" formControlName="accessionNumber">
               </div>
-            }
+
+              <div class="col-md-2">
+                <label for="modalities" class="form-label">Modalidad</label>
+                <select id="modalities" class="form-select" formControlName="modalities">
+                  <option value="">Todas las modalidades</option>
+                  <option value="CT">CT</option>
+                  <!-- Agrega más si lo deseas -->
+                </select>
+              </div>
+
+              <div class="col-md-2">
+                <label for="patientName" class="form-label">Paciente</label>
+                <input type="text" id="patientName" class="form-control" placeholder="Nombre del paciente" formControlName="patientName">
+              </div>
+
+              <div class="col-md-2">
+                <label for="status" class="form-label">Estatus</label>
+                <select id="status" class="form-select" formControlName="status">
+                  <option value="">Todos los estatus</option>
+                  <option value="created">Created</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+
+              <div class="col-md-2">
+                <label for="date" class="form-label">Fecha</label>
+                <input type="date" id="date" class="form-control" formControlName="date">
+              </div>
+
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="table-responsive" data-simplebar>
             <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1">
               <div class="table-responsive scrollbar ms-n1 ps-1">
                 <table class="table table-sm fs-9 mb-0">

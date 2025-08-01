@@ -160,7 +160,7 @@ export class StudyFormComponent implements OnChanges{
   }
 
   onSelectModality(selectModalityId: any) {
-    const selectedId = selectModalityId.target.value;    
+    const selectedId = selectModalityId.target.value;
     this.service.getAllModalitiesType(selectedId).subscribe((data) => {
       this.modalityTypes = data;
       setTimeout(() => {

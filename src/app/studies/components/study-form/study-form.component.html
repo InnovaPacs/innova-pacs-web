@@ -19,23 +19,6 @@
             }
         </select>
     </div>
-
-    <!--
-    <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
-        <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
-            <option value="none" selected>No ha seleccionado paciente</option>
-            @for (domain of patients; track domain.id) {
-            <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
-            }
-        </select>
-        <label for="patientId">Paciente</label>
-    </div>
-    <div class="col-sm-1 col-xm-1 col-md-1">
-        <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('patients')">
-            <i class="fa-solid fa-hospital-user"></i>
-        </button>
-    </div>
-    -->
     
     <div class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select ">
         <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
