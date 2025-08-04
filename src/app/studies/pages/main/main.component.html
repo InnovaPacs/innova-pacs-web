@@ -24,8 +24,9 @@
                 <label for="modalities" class="form-label">Modalidad</label>
                 <select id="modalities" class="form-select" formControlName="modalities">
                   <option value="">Todas las modalidades</option>
-                  <option value="CT">CT</option>
-                  <!-- Agrega más si lo deseas -->
+                  @for (modality of modalities; track $index) {
+                    <option [value]=modality.name>{{ modality.name }}</option>
+                  }
                 </select>
               </div>
 

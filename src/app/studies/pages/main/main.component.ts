@@ -7,6 +7,8 @@ import { MedicalOfficeService } from '../../../medical-office/services/medilca-o
 import { PacsConfiguration } from '../../../pacs-configuration/interfaces/pacs-configuration.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StudySearch } from '../../interfaces/study-seaarch.interface';
+import { Modality } from '../../interfaces/modality.interface';
+import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-main',
@@ -20,6 +22,8 @@ export class MainComponent {
   public domains: Study[] = [];
   public medicalOfficeId!: string | null;
   public pacsConfiguration!: PacsConfiguration;
+  private studyService = inject(StudyService);
+  public modalities: Modality[] =  [];
 
   pagination: Pagination = {
     currentPage: 0,
@@ -44,6 +48,7 @@ export class MainComponent {
     this.medicalOfficeId = this.authService.currentMedicalOfficeId();
     this.getAllData(this.medicalOfficeId, 0, null);
     this.getPacsConfiguration();
+    this.getModalitiesData();
   }
 
   getItems(totalPages: number):Item[] {
@@ -98,5 +103,11 @@ export class MainComponent {
 
   public onSubmit() {
     this.getAllData(this.medicalOfficeId, 0, this.searchForm.value);
+  }
+
+   getModalitiesData(): void {
+    this.studyService.getAllModalieties().subscribe((data) => {
+      this.modalities = data;
+    });
   }
 }
