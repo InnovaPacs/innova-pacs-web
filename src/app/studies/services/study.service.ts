@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { StudyPage } from '../interfaces/study-page.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { Study, StudyDto } from '../interfaces/study.interface';
 import { Modality } from '../interfaces/modality.interface';

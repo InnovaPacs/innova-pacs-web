@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { PacsFile } from '../interfaces/file.interface';
 import { AuthService } from '../../auth/services/auth.service';
 import { Observable } from 'rxjs';

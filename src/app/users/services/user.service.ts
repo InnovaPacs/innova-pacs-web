@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { UpdateUser, User } from '../interfaces/user.interface';
 import { UserPage } from '../interfaces/user-page.interface';

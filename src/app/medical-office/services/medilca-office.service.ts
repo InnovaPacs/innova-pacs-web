@@ -2,7 +2,7 @@ import { inject, Injectable, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { MedicalOfficePage } from '../interfaces/medical-office-page.interface';
 import { MedicalOffice, UpdateMedicalOffice } from '../interfaces/medical-office.interface';
 import { PacsConfiguration } from '../../pacs-configuration/interfaces/pacs-configuration.interface';
