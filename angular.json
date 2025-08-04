@@ -73,17 +73,6 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
-              ],
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            },
             "dev": {
               "fileReplacements": [
                 {
@@ -104,11 +93,11 @@
             "production": {
               "buildTarget": "innova-pacs:build:production"
             },
-            "development": {
-              "buildTarget": "innova-pacs:build:development"
+            "dev": {
+              "buildTarget": "innova-pacs:build:dev"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "dev"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
