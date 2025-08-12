@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -16,12 +16,14 @@ export class PatientService {
   
   constructor() { }
 
-  getAll(page: number):Observable<PatientPage> {
-    const url = `${this.baseUrl}/api/patients?page=${page}`;
+  getAll(page: number, mainSearch: string | null):Observable<PatientPage> {
+    const url = `${this.baseUrl}/api/patients`;
     const headers = this.authService.getHeaders();
 
+    const params = this.getParams(page, mainSearch);
     return this.http.get(url,  
       {
+        params,
         headers
       }
     ).pipe(
@@ -80,4 +82,18 @@ export class PatientService {
       }
     );
   }
+
+    private getParams(page:number, search: string | null): HttpParams {
+      let params = new HttpParams()
+      
+      if(search) {
+        params = params.set('mainSearch', search);
+      }
+  
+      if(page >= 0) {
+        params = params.set('page', page);
+      }
+  
+      return params;
+    }
 }

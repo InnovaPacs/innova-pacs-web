@@ -19,6 +19,18 @@
                 <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             }
+
+            <form class="mb-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="row g-3 align-items-end">
+                <div class="col-md-10">
+                  <label for="mainSearch" class="form-label">Buscar</label>
+                  <input type="text" id="mainSearch" class="form-control" placeholder="Nombre del paciente email" formControlName="mainSearch">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                  <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                </div>
+              </div>
+            </form>
             <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1">
               <div class="table-responsive scrollbar ms-n1 ps-1">
                 <table class="table table-sm fs-9 mb-0">

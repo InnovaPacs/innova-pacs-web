@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DoctorService } from '../../services/doctor.service';
 import { Doctor } from '../../interfaces/doctor.interface';
 import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -20,10 +21,17 @@ export class MainComponent {
     items: []
   }
 
+  private fb = inject(FormBuilder);
+
+
+  public form: FormGroup = this.fb.group({
+    mainSearch: [null]
+  });
+
   constructor() { }
 
   ngOnInit(): void {
-    this.getAllData(0);
+    this.getAllData(0, null);
   }
 
   getItems(totalPages: number):Item[] {
@@ -41,12 +49,11 @@ export class MainComponent {
   }
 
   navigate(page: number):void {
-    this.getAllData(page);
+    this.getAllData(page, null);
   }
 
-  private getAllData(page: number) {
-    this.service.getAll(page).subscribe((response) => {
-      console.log('response: ', response.content);
+  private getAllData(page: number, mainSearch: string | null) {
+    this.service.getAll(page, mainSearch).subscribe((response) => {
       this.domains = response.content;
       
       this.pagination = {
@@ -57,5 +64,10 @@ export class MainComponent {
         items: this.getItems(response.totalPages)
       }
     });
+  }
+
+  onSubmit(): void {
+    const mainSearch = this.form.get('mainSearch')?.value;
+    this.getAllData(0, mainSearch);
   }
 }

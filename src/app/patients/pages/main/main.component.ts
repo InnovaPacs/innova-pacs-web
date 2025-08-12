@@ -4,6 +4,7 @@ import { Patient } from '../../interfaces/patient.interface';
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
 import { AuthService } from '../../../auth/services/auth.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -26,18 +27,25 @@ export class PatientMainComponent {
     items: []
   }
 
+  private fb = inject(FormBuilder);
+  
+  
+  public form: FormGroup = this.fb.group({
+    mainSearch: [null]
+  });
+  
   constructor() {
   }
 
 ngOnInit(): void {
   if (this.authService.getMedicalOfficeStatus()) {
-    this.getAllData(0);
+    this.getAllData(0, null);
   } else {
     this.medicalOfficeService.getLastByUserId(null).subscribe({
       next: (medicalOffice) => {
         if (medicalOffice && medicalOffice.id) {
           this.authService.selectMedicalOffice(medicalOffice.id);
-          this.getAllData(0);
+          this.getAllData(0, null);
         }
       }
     });
@@ -60,11 +68,11 @@ ngOnInit(): void {
   }
 
   navigate(page: number):void {
-    this.getAllData(page);
+    this.getAllData(page, null);
   }
 
-  private getAllData(page: number) {
-    this.service.getAll(page).subscribe((response) => {
+  private getAllData(page: number, mainSearch: string | null) {
+    this.service.getAll(page, mainSearch).subscribe((response) => {
       this.domains = response.content;
       
       this.pagination = {
@@ -75,5 +83,11 @@ ngOnInit(): void {
         items: this.getItems(response.totalPages)
       }
     });
+  }
+
+  onSubmit(): void {
+    const mainSearch = this.form.get('mainSearch')?.value;
+    console.log(mainSearch);
+    this.getAllData(0, mainSearch);
   }
 }
