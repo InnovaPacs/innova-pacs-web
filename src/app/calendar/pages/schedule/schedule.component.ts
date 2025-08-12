@@ -19,7 +19,6 @@ export class ScheduleComponent implements OnInit {
   private router = inject(Router);
   public modalities: Modality[] = [];
   public schedules: Schedule[] = [];
-  private date: string | null | undefined;
   private modalitySelected: string | null | undefined;
   private fb = inject(FormBuilder);
 
