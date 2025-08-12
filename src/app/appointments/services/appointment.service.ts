@@ -7,6 +7,7 @@ import { AppointmentPage } from '../interfaces/appointment-page.interface';
 import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
 import { StudyPage } from '../../studies/interfaces/study-page.interface';
 import { Schedule } from '../interfaces/appointment-schedule.interface';
+import { StudySearch } from '../../studies/interfaces/study-seaarch.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -126,9 +127,9 @@ export class AppointmentService {
     );
   }
 
-  getAllSchedule(date: string):Observable<Schedule[]> {
-    let params = new HttpParams().set('date', date);
-    
+  getAllSchedule(search: StudySearch | null):Observable<Schedule[]> {
+    let params = this.getParams(search);
+
     const url = `${this.baseUrl}/api/appointments/schedule`;
     const headers = this.authService.getHeaders();
 
@@ -174,5 +175,27 @@ export class AppointmentService {
     return this.http.post<void>(url,{}, {
       headers
     });
+  }
+
+  private getParams(search: StudySearch | null): HttpParams {
+    let params = new HttpParams()
+    
+    if(search?.date) {
+      params = params.set('date', search.date)
+    }
+
+    if(search?.accessionNumber) {
+      params = params.set('accessionNumber', search.accessionNumber);
+    }
+
+    if(search?.status) {
+      params = params.set('status', search.status);
+    }
+
+    if(search?.patientName) {
+      params = params.set('patientName', search.patientName);
+    }
+
+    return params;
   }
 }

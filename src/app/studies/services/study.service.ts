@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { StudyPage } from '../interfaces/study-page.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
@@ -22,9 +22,11 @@ export class StudyService {
   getAll(medicalOfficeId: string, page: number, search: StudySearch | null):Observable<StudyPage> {
     const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
+    const params = this.getParams(search);
 
-    return this.http.get(this.getUrlWithFilters(url, search),
+    return this.http.get(url,
       {
+        params,
         headers
       }
     ).pipe(
@@ -136,7 +138,29 @@ export class StudyService {
     );
   }
 
-  private getUrlWithFilters(url: string, search: StudySearch | null) {
-    return `${url}&${search?.accessionNumber ? 'accessionNumber=' + search?.accessionNumber: ''}${search?.date ? '&date=' + search?.date: ''}${search?.modalities ? '&modality=' + search?.modalities: ''}${search?.patientName ? '&patientName=' + search?.patientName: ''}${search?.status ? '&status=' + search?.status: ''}`;
-  }
+  private getParams(search: StudySearch | null): HttpParams {
+      let params = new HttpParams()
+      
+      if(search?.date) {
+        params = params.set('date', search.date)
+      }
+  
+      if(search?.accessionNumber) {
+        params = params.set('accessionNumber', search.accessionNumber);
+      }
+  
+      if(search?.status) {
+        params = params.set('status', search.status);
+      }
+  
+      if(search?.patientName) {
+        params = params.set('patientName', search.patientName);
+      }
+
+      if(search?.modalities) {
+        params = params.set('modality', search.modalities);
+      }
+  
+      return params;
+    }
 }

@@ -13,7 +13,12 @@ export class VendorsService {
       instance.destroy();
     }
 
+    if(selectRef === undefined || selectRef === null) {
+      return;
+    }
+
     const select = selectRef.nativeElement;
+    
     instance = new Choices(select, {
       removeItemButton: false,
       placeholder: true,
