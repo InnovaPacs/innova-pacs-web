@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './study-layout.component.css'
 })
 export class StudyLayoutComponent {
-  public title = 'Estudios medicos';
+  public title = 'Estudios médicos';
 }

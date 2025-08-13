@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './appointments-layout.component.css'
 })
 export class AppointmentsLayoutComponent {
-  public title = 'Citas Medicas';
+  public title = 'Citas Médicas';
 }

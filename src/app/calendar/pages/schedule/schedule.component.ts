@@ -13,7 +13,7 @@ import { StudySearch } from '../../../studies/interfaces/study-seaarch.interface
   styleUrl: './schedule.component.css'
 })
 export class ScheduleComponent implements OnInit {
-  public title: string = 'Detalle de consultas medicas';
+  public title: string = 'Detalle de consultas médicas';
 
   private service = inject(AppointmentService);
   private router = inject(Router);
