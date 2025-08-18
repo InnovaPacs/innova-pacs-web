@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { switchMap, tap } from 'rxjs';
 import { StudyService } from '../../../studies/services/study.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -16,6 +16,7 @@ export class MainComponent {
   public fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private loadingService = inject(LoadingService);
   private studyService = inject(StudyService);
 
   public loginForm = this.fb.group({
@@ -26,9 +27,21 @@ export class MainComponent {
   login() {
     const { username, password } = this.loginForm.value;
     
-    this.authService.login(username||'', password||'').pipe(
-      tap(() => this.router.navigateByUrl('/patients/main')),
-      switchMap(() => this.studyService.syncStudies())
-    );
+    this.authService.login(username || '', password || '').pipe(  
+      tap(() => {
+        console.log('Login successful');
+        this.studyService.syncStudies().subscribe(() => {
+          console.log('Studies synchronized successfully');
+        });
+      })
+    ).subscribe({  
+      next: () => {
+        console.log('Login successful patients');
+        this.router.navigateByUrl('/patients/main');
+      },
+      error: (error) => {
+        this.loadingService.showErrorMessage(error.message);
+      }
+    });
   }
 }
