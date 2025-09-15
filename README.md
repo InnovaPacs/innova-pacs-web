@@ -1,27 +1,100 @@
-# InnovaPacs
+# InnovaPACS - Sistema de Información Radiológica (RIS)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
+InnovaPACS es una aplicación web desarrollada con Angular para la gestión de información radiológica y de pacientes. Este sistema (RIS/PACS) permite administrar citas, pacientes, médicos, estudios y configuraciones del sistema PACS.
 
-## Development server
+## Características
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+El proyecto está organizado en los siguientes módulos principales:
 
-## Code scaffolding
+- **Auth**: Gestión de autenticación de usuarios y protección de rutas.
+- **Appointments**: Creación y administración de citas médicas.
+- **Calendar**: Visualización de citas y eventos en un calendario.
+- **Dashboard**: Panel principal con información relevante.
+- **Doctors**: Administración del personal médico.
+- **Medical-Office**: Gestión de consultorios médicos.
+- **PACS-Configuration**: Configuración de servidores y parámetros del sistema PACS.
+- **Patients**: Registro y gestión de la información de los pacientes.
+- **Studies**: Administración y visualización de estudios radiológicos.
+- **Users**: Gestión de usuarios y roles del sistema.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Prerrequisitos
 
-## Build
+Asegúrate de tener instalado Node.js y Angular CLI en tu entorno de desarrollo.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- [Node.js](https://nodejs.org/) (versión 18.x o superior)
+- [Angular CLI](https://github.com/angular/angular-cli) (versión 17.x o superior)
 
-## Running unit tests
+## Instalación
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1.  Clona el repositorio:
+    ```bash
+    git clone <URL-DEL-REPOSITORIO>
+    ```
+2.  Navega al directorio del proyecto:
+    ```bash
+    cd innova-pacs
+    ```
+3.  Instala las dependencias del proyecto:
+    ```bash
+    npm install
+    ```
 
-## Running end-to-end tests
+## Scripts Disponibles
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Este proyecto cuenta con los siguientes scripts definidos en `package.json`:
 
-## Further help
+- **Development server**: Inicia un servidor de desarrollo en `http://localhost:4200/`. La aplicación se recargará automáticamente al detectar cambios en los archivos fuente.
+  ```bash
+  npm start
+  ```
+  o
+  ```bash
+  ng serve
+  ```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Development server (dev environment)**: Inicia el servidor de desarrollo utilizando la configuración del entorno `dev`.
+  ```bash
+  npm run start:dev
+  ```
+
+- **Build**: Compila la aplicación para producción. Los artefactos de la compilación se almacenan en el directorio `dist/`.
+  ```bash
+  npm run build
+  ```
+
+- **Build (dev environment)**: Compila la aplicación utilizando la configuración `deploy` para un entorno de desarrollo/pruebas.
+  ```bash
+  npm run build:dev
+  ```
+
+- **Watch**: Compila la aplicación en modo de observación, reconstruyendo automáticamente ante cualquier cambio.
+  ```bash
+  npm run watch
+  ```
+
+- **Unit Tests**: Ejecuta las pruebas unitarias a través de Karma.
+  ```bash
+  npm run test
+  ```
+
+## Despliegue con Docker
+
+El proyecto incluye un `Dockerfile` y una configuración de `nginx.conf` para facilitar el despliegue en un contenedor Docker.
+
+Para construir la imagen de Docker, ejecuta el siguiente comando en la raíz del proyecto:
+
+```bash
+docker build -t innova-pacs .
+```
+
+Luego, para ejecutar el contenedor:
+
+```bash
+docker run -p 80:80 innova-pacs
+```
+
+La aplicación estará disponible en `http://localhost/`.
+
+## Ayuda Adicional
+
+Para obtener más ayuda sobre Angular CLI, utiliza `ng help` o consulta la [documentación oficial de Angular CLI](https://angular.io/cli).
