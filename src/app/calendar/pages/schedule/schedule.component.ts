@@ -6,6 +6,9 @@ import { Schedule } from '../../../appointments/interfaces/appointment-schedule.
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StudySearch } from '../../../studies/interfaces/study-seaarch.interface';
+import { AuthService } from '../../../auth/services/auth.service';
+import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { AppointmenStatusService } from '../../../shared/services/appointment-status.service';
 
 @Component({
   selector: 'app-schedule',
@@ -21,6 +24,9 @@ export class ScheduleComponent implements OnInit {
   public schedules: Schedule[] = [];
   private modalitySelected: string | null | undefined;
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private medicalOfficeService = inject(MedicalOfficeService);
+  private statusService = inject(AppointmenStatusService);
 
 
   public form: FormGroup = this.fb.group({
@@ -31,7 +37,27 @@ export class ScheduleComponent implements OnInit {
   });
   
   ngOnInit(): void {
-    
+    this.loadMedicalOffice();
+    this.setInitialFilter();
+    this.getSchedule(this.form.value);
+  }
+
+  private loadMedicalOffice(): void {
+    if (!this.authService.getMedicalOfficeStatus()) {
+      this.medicalOfficeService.getLastByUserId(null).subscribe({
+          next: (medicalOffice) => {
+          if (medicalOffice && medicalOffice.id) {
+            this.authService.selectMedicalOffice(medicalOffice.id);
+          }
+        }
+      });
+    }
+  }
+
+  private setInitialFilter(): void {
+    this.form.patchValue({
+      date: this.getToday()
+    })
   }
 
   private getSchedule(search: StudySearch | null = null): void {
@@ -54,27 +80,19 @@ export class ScheduleComponent implements OnInit {
 
   cancel(appointmentId: string) {
     this.service.cancel(appointmentId).subscribe(() => {
-      if(this.form.get('date')?.value) {
-        this.getSchedule(this.form.get('date')?.value);
-      }
+      this.getSchedule(this.form.value);
     });
   }
 
   finished(appointmentId: string) {
     this.service.finished(appointmentId).subscribe(() => {
-          
-      if(this.form.get('date')?.value) {
-        this.getSchedule(this.form.get('date')?.value);
-      }
+      this.getSchedule(this.form.value);
     });
   }
 
   confirmed(appointmentId: string) {
     this.service.confirmed(appointmentId).subscribe(() => {
-      
-      if(this.form.get('date')?.value) {
-        this.getSchedule(this.form.get('date')?.value);
-      }
+      this.getSchedule(this.form.value);
     });
   }
 
@@ -87,9 +105,7 @@ export class ScheduleComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.service.deleteById(scheduleId).subscribe(() => {
-          if(this.form.get('date')?.value) {
-            this.getSchedule(this.form.get('date')?.value);
-          }
+          this.getSchedule(this.form.value);
         });
       }
     });
@@ -106,6 +122,18 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.getSchedule(this.form.value);
+  }
+
+  getStatusName(statusCode: string | undefined): string {
+    return statusCode ? this.statusService.getStatusName(statusCode) : '';
+  }
+
+  private getToday(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
 

@@ -42,15 +42,11 @@ export class MainComponent {
     
     this.authService.login(username || '', password || '').pipe(  
       tap(() => {
-        console.log('Login successful');
-        this.studyService.syncStudies().subscribe(() => {
-          console.log('Studies synchronized successfully');
-        });
+        this.studyService.syncStudies().subscribe();
       })
     ).subscribe({  
       next: () => {
-        console.log('Login successful patients');
-        this.router.navigateByUrl('/patients/main');
+        this.router.navigateByUrl('/calendar/schedule');
       },
       error: (error) => {
         this.loadingService.showErrorMessage(error.message);
