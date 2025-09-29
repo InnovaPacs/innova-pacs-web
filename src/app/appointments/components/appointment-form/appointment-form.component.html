@@ -51,7 +51,7 @@
     <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
       <option value="none" selected>No ha seleccionado paciente</option>
       @for (domain of patients; track domain.id) {
-        <option [value]="domain.id">{{ domain.firstName }} {{ domain.lastName }}</option>
+        <option [value]="domain.id">{{ domain.firstName }} {{ domain.firstName || ''}}</option>
       }
     </select>
     <label for="patientId">Paciente</label>

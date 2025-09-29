@@ -96,8 +96,9 @@ export class AppointmentFormComponent {
       setTimeout(() => {
         this.doctorRequestedInstance = this.vendorsService.initChoices(this.doctorRequestedInstance, this.doctorRequestedRef);
         this.vendorsService.setChoices(this.doctorRequestedInstance, response.doctorRequested.id, `${response.doctorRequested.name}`);
+
         this.patientInstance = this.vendorsService.initChoices(this.patientInstance, this.patientRef);
-        this.vendorsService.setChoices(this.patientInstance, response.patient.id, `${response.patient.firstName} ${response.patient.lastName}`);
+        this.vendorsService.setChoices(this.patientInstance, response.patient.id, `${response.patient.firstName} ${response.patient.lastName || ''}`);
         this.patchForm(response);
         this.appointmentCreated.emit(response.id);
       }, 1000);

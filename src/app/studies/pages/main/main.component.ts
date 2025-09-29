@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { StudySearch } from '../../interfaces/study-seaarch.interface';
 import { Modality } from '../../interfaces/modality.interface';
 import { dA } from '@fullcalendar/core/internal-common';
+import { StudyStatusService } from '../../../shared/services/study-status.service';
 
 @Component({
   selector: 'app-main',
@@ -24,6 +25,7 @@ export class MainComponent {
   public pacsConfiguration!: PacsConfiguration;
   private studyService = inject(StudyService);
   public modalities: Modality[] =  [];
+  public studyStatusService = inject(StudyStatusService);
 
   pagination: Pagination = {
     currentPage: 0,
@@ -106,8 +108,12 @@ export class MainComponent {
   }
 
    getModalitiesData(): void {
-    this.studyService.getAllModalieties().subscribe((data) => {
-      this.modalities = data;
-    });
+     this.studyService.getAllModalieties().subscribe((data) => {
+       this.modalities = data;
+     });
+   }
+
+  getStatusName(statusCode: string | undefined): string {
+    return statusCode ? this.studyStatusService.getStatusName(statusCode) : '';
   }
-}
+ }
