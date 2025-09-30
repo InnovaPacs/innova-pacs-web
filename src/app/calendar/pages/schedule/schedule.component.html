@@ -87,23 +87,37 @@
             <div class="slot-actions d-flex justify-content-end gap-1">
               
               @if(schedule?.appointment?.status === 'SCHEDULED') {
-                <button class="btn btn-primary btn-sm" (click)="confirmed(schedule.appointment.id)">Confirmar</button>
+                <button class="btn btn-primary btn-sm" (click)="confirmed(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Configirma cita">
+                  <i class="fa-solid fa-check-circle" width="16px" height="16px"></i>
+                </button>
               }
               
               @if(schedule?.appointment?.status === 'CONFIRMED') {
-                <button class="btn btn-success btn-sm" (click)="finished(schedule.appointment.id)">Finalizar</button>
+                <button class="btn btn-success btn-sm" (click)="finished(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Finalizar">
+                  <i class="fa-solid fa-check-circle" width="16px" height="16px"></i>
+                </button>
               }
 
               @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED') {
-                <button class="btn btn-warning btn-sm" (click)="cancel(schedule.appointment.id)">Cancelar</button>
+                <button class="btn btn-warning btn-sm" (click)="cancel(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cancelar">
+                  <i class="fa-solid fa-calendar-times" width="16px" height="16px"></i>
+                </button>
               }
 
               @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED' || schedule?.appointment?.status === 'FINISHED' || schedule?.appointment?.status === 'CANCELLED') {
-                <button class="btn btn-danger btn-sm" (click)="onCancel(schedule.appointment.id)">Eliminar</button>
+                <button class="btn btn-danger btn-sm" (click)="onCancel(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
+                  <i class="fa-solid fa-trash" width="16px" height="16px"></i>
+                </button>
               }
 
               @if(!schedule?.appointment) {
-                <button class="btn btn-primary btn-sm" (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</button>
+                <button class="btn btn-primary btn-sm" (click)="onTimeSelected(schedule.hour, schedule.minutes)"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Crear cita">
+                  <i class="fa-solid fa-plus" width="16px" height="16px"></i>
+                </button>
+              } @else {
+                <a class="btn btn-info btn-sm"  [routerLink]="['/appointments/new', schedule?.appointment?.id]" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar cita">
+                  <i class="fa-solid fa-edit" width="16px" height="16px"></i>
+                </a>
               }
             </div>
           </div>
