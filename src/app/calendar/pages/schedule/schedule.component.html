@@ -7,7 +7,8 @@
             <h3>{{title}}</h3>
           </div>
             
-            <hr class="my-4">
+          <hr class="my-4">
+            <!--
             <form class="mb-4" [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row g-3 align-items-end">
                 <div class="col-md-3">
@@ -36,86 +37,78 @@
                 </div>
               </div>
             </form>
+            -->
+          <form class="d-flex flex-wrap align-items-center gap-2 mb-3 justify-content-end" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <input type="date" id="date" class="form-control" formControlName="date" class="form-control form-control-sm" style="width:12rem;">
+            <input type="search" class="form-control form-control-sm" id="patientName" placeholder="Buscar paciente" formControlName="patientName" style="width:16rem;">
+            <!--<button class="btn btn-sm btn-outline-warning"><i class="bi bi-lightning-charge"></i> Urgencia</button>-->
+            <button class="btn btn-sm btn-primary"><i class="bi bi-plus-lg"></i>Buscar</button>
+          </form>
 
-            <hr class="my-4">
-            <table class="table table-dark table-hover">
-              <thead>
-                <tr>
-                  <th scope="col" class="w-20">Fecha</th>
-                  <th scope="col" class="w-10">Hora</th>
-                  <th scope="col" class="w-60">Descripción</th>
-                  <th scope="col" class="w-5">Estatus</th>
-                  <th scope="col" class="w-5">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let schedule of schedules;">
-                  <th scope="row">{{ schedule?.appointment?.appointmentDate}}</th>
-                  <th scope="row">{{ schedule.hour }}:{{schedule.minutes}}</th>
-                  <td [ngStyle]="{'border-left': '4px solid ' + (schedule.color), 'padding-left': '8px'}">
-                    <div class="fs-9">
-                      @if(schedule?.appointment) {
-                          <span style="font-size: large;">Paciente: <b>{{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.patientLastName }}</b> </span><br>
-                          Modalidades:
-                            @for (item of schedule?.appointment?.modalities; track $index) {
-                              <b><span [ngStyle]="{ color: item.color }">[{{ item.name }}]</span></b>
-                            }
-                          <br>
-                          Doctor: <b>{{ schedule?.appointment?.doctorName }}</b> <br>
-                          Consultorio: <b>{{ schedule?.appointment?.medicalOfficeName }}</b> <br>
-                          
-                        }
-                    </div>
-                  </td>
-                  <td class="align-middle">
-                    <span class="badge badge-phoenix fs-10"
-                      [ngClass]="{
-                        'badge-phoenix-primary': schedule?.appointment?.status === 'FINISHED',
-                        'badge-phoenix-success': schedule?.appointment?.status === 'SCHEDULED',
-                        'badge-phoenix-danger': schedule?.appointment?.status === 'CANCELLED',
-                        'badge-phoenix-info': schedule?.appointment?.status === 'CONFIRMED',
-                      }">
-                      <span class="badge-label">{{ getStatusName(schedule?.appointment?.status) }}</span>
-                      <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
-                    </span>
+          <hr class="my-4">
+          <div class="card bg-body border-0 shadow-sm list">
+            <div class="row-head ">
+              <span class="text-end ">Hora</span>
+              <span class="">Paciente / Detalle</span>
+              <span class="text-center ">Estado</span>
+              <span class="text-end ">Acciones</span>
+            </div>
+          </div>
+          <div class="slot" *ngFor="let schedule of schedules;">
+            <div class="slot-time">{{ schedule.hour }}:{{ schedule.minutes }}</div>
+            <div class="slot-body">
+              <div class="d-flex flex-wrap align-items-center gap-2">
+                <span class="slot-title text-truncate">{{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.patientLastName }}</span>
+                <span class="badge text-bg-secondary">
+                  @for (item of schedule?.appointment?.modalities; track $index) {
+                    <b><span [ngStyle]="{ color: item.color }">[{{ item.name }}]</span></b>
+                  }
+                </span>
+              </div>
+              <div class="slot-meta text-truncate">
+                @if (schedule?.appointment?.doctorName) { <span> Dr. </span>  } 
+                {{ schedule?.appointment?.doctorName }} 
+                @if (schedule?.appointment?.medicalOfficeName) { <span> - </span>  }
+                {{ schedule?.appointment?.medicalOfficeName }}
+              </div>
+            </div>
+            <div class="slot-state">
+              <span class="badge badge-phoenix fs-10"
+                [ngClass]="{
+                  'badge-phoenix-success': schedule?.appointment?.status === 'FINISHED',
+                  'badge-phoenix-primary': schedule?.appointment?.status === 'SCHEDULED',
+                  'badge-phoenix-warning': schedule?.appointment?.status === 'CANCELLED',
+                  'badge-phoenix-info': schedule?.appointment?.status === 'CONFIRMED',
+                }">
+                <span class="badge-label">{{ getStatusName(schedule?.appointment?.status) }}</span>
+                <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
+              </span>
+            </div>
+            <div class="slot-actions d-flex justify-content-end gap-1">
+              
+              @if(schedule?.appointment?.status === 'SCHEDULED') {
+                <button class="btn btn-primary btn-sm" (click)="confirmed(schedule.appointment.id)">Confirmar</button>
+              }
+              
+              @if(schedule?.appointment?.status === 'CONFIRMED') {
+                <button class="btn btn-success btn-sm" (click)="finished(schedule.appointment.id)">Finalizar</button>
+              }
 
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-reveal-trigger position-static">
-                      <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fas fa-ellipsis-h fs-10"></span>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-end py-2">
-                        @if(schedule?.appointment?.status === 'FINISHED' || schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CANCELLED') {
-                          <a class="dropdown-item cursor-pointer"  (click)="confirmed(schedule.appointment.id)">Confirmar</a>
-                        }
-                        
-                        @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CANCELLED' || schedule?.appointment?.status === 'CONFIRMED') {
-                          <a class="dropdown-item cursor-pointer"  (click)="finished(schedule.appointment.id)">Finalizar</a>
-                        }
+              @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED') {
+                <button class="btn btn-warning btn-sm" (click)="cancel(schedule.appointment.id)">Cancelar</button>
+              }
 
-                        @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED' || schedule?.appointment?.status === 'FINISHED') {
-                          <a class="dropdown-item cursor-pointer"  (click)="cancel(schedule.appointment.id)">Cancelar</a>
-                        }
+              @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED' || schedule?.appointment?.status === 'FINISHED' || schedule?.appointment?.status === 'CANCELLED') {
+                <button class="btn btn-danger btn-sm" (click)="onCancel(schedule.appointment.id)">Eliminar</button>
+              }
 
-                        @if(!schedule?.appointment) {
-                          <a class="dropdown-item cursor-pointer"  (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</a>
-                        }
-
-                        @if(schedule?.appointment) {
-                          <a class="dropdown-item"  [routerLink]="['/appointments/new', schedule?.appointment?.id]">Editar</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item cursor-pointer text-danger" style="cursor: pointer;" (click)="onCancel(schedule.appointment.id)">Eliminar</a>
-                        }
-                        
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              @if(!schedule?.appointment) {
+                <button class="btn btn-primary btn-sm" (click)="onTimeSelected(schedule.hour, schedule.minutes)">Agregar</button>
+              }
+            </div>
           </div>
         </div>
+      </div>
     </div>
 </div>
 <app-footer></app-footer>

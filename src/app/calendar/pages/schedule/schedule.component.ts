@@ -16,7 +16,7 @@ import { AppointmenStatusService } from '../../../shared/services/appointment-st
   styleUrl: './schedule.component.css'
 })
 export class ScheduleComponent implements OnInit {
-  public title: string = 'Detalle de consultas médicas';
+  public title: string = `Detalle de consultas médicas`;
 
   private service = inject(AppointmentService);
   private router = inject(Router);

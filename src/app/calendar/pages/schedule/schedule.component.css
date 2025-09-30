@@ -77,3 +77,37 @@ td:last-child, th:last-child {
 }
 
 
+/* Layout y densidad */
+.list {border-radius:.5rem; overflow:hidden}
+.row-head, .slot {
+  display:grid;
+  grid-template-columns: 4.5rem 1fr 8.5rem 12rem; /* Hora | Descripción | Estado | Acciones */
+  gap:.75rem; align-items:center;
+}
+.row-head{padding:.5rem .75rem; background:rgba(255,255,255,.03); border-bottom:1px solid var(--bs-border-color);
+  position:sticky; top:0; z-index:5}
+.row-head span{font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--bs-secondary-color)}
+.slot{padding:.65rem .75rem; border-bottom:1px solid var(--bs-border-color)}
+.slot:hover{background:rgba(255,255,255,.03)}
+.slot-time{ text-align:right; color:var(--bs-secondary-color); font-variant-numeric:tabular-nums}
+.slot-body{ min-width:0 }
+.slot-title{ font-weight:600; color: white; text-transform: uppercase;}
+.slot-meta{ color:var(--bs-secondary-color); font-size:.875rem }
+.slot-actions .btn{ padding:.25rem .5rem }
+.slot-state{ text-align:center }
+.badge-state{ font-weight:600 }
+
+/* Indicador lateral simple por estado (opcional) */
+.slot{ --bar: transparent; border-left:4px solid var(--bar) }
+.state-agendada{ background:rgba(59,130,246,.15); color:#60a5fa }
+.state-llego{     background:rgba(16,185,129,.15); color:#10b981 }
+.state-estudio{   background:rgba(245,158,11,.15); color:#f59e0b }
+.state-noshow{    background:rgba(148,163,184,.15); color:#94a3b8 }
+.state-stat{      background:rgba(239,68,68,.15); color:#ef4444 }
+
+/* Bordes de color (opcional) */
+.slot.is-agendada{ --bar:#3b82f6 }
+.slot.is-llego{    --bar:#10b981 }
+.slot.is-estudio{  --bar:#f59e0b }
+.slot.is-noshow{   --bar:#94a3b8 }
+.slot.is-stat{     --bar:#ef4444 }
