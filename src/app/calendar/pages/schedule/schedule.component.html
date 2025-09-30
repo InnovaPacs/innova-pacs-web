@@ -1,14 +1,13 @@
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-body p-4">
-          
-          <div class="d-flex mb-4 justify-content-between align-items-center">
-            <h3>{{title}}</h3>
-          </div>
-            
-          <hr class="my-4">
-            <!--
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="d-flex mb-4 justify-content-between align-items-center">
+          <h3>{{ title }}</h3>
+        </div>
+
+        <hr class="my-4" />
+        <!--
             <form class="mb-4" [formGroup]="form" (ngSubmit)="onSubmit()">
               <div class="row g-3 align-items-end">
                 <div class="col-md-3">
@@ -38,91 +37,214 @@
               </div>
             </form>
             -->
-          <form class="d-flex flex-wrap align-items-center gap-2 mb-3 justify-content-end" [formGroup]="form" (ngSubmit)="onSubmit()">
-            <input type="date" id="date" class="form-control" formControlName="date" class="form-control form-control-sm" style="width:12rem;">
-            <input type="search" class="form-control form-control-sm" id="patientName" placeholder="Buscar paciente" formControlName="patientName" style="width:16rem;">
-            <!--<button class="btn btn-sm btn-outline-warning"><i class="bi bi-lightning-charge"></i> Urgencia</button>-->
-            <button class="btn btn-sm btn-primary"><i class="bi bi-plus-lg"></i>Buscar</button>
-          </form>
+        <!-- Contenedor de la barra (opcional) -->
+        <div class="d-flex mb-3">
+          <!-- ms-auto empuja el form a la derecha -->
+          <form
+            class="d-flex flex-wrap align-items-center gap-2 ms-auto"
+            [formGroup]="form"
+            (ngSubmit)="onSubmit()"
+          >
+            <!-- Estatus -->
+            <select
+              id="status"
+              class="form-select form-select-sm w-auto"
+              formControlName="status"
+            >
+              <option value="">Todos</option>
+              <option value="SCHEDULED">Agendada</option>
+              <option value="CONFIRMED">Confirmada</option>
+              <option value="CANCELLED">Cancelada</option>
+              <option value="FINISHED">Finalizada</option>
+            </select>
 
-          <hr class="my-4">
-          <div class="card bg-body border-0 shadow-sm list">
-            <div class="row-head ">
-              <span class="text-end ">Hora</span>
-              <span class="">Paciente / Detalle</span>
-              <span class="text-center ">Estado</span>
-              <span class="text-end ">Acciones</span>
-            </div>
+            <!-- Fecha -->
+            <input
+              type="date"
+              id="date"
+              class="form-control form-control-sm w-auto"
+              formControlName="date"
+              style="width: 12rem"
+            />
+
+            <!-- Búsqueda -->
+            <input
+              type="search"
+              id="patientName"
+              class="form-control form-control-sm"
+              placeholder="Buscar paciente"
+              formControlName="patientName"
+              style="width: 16rem"
+            />
+
+            <!-- Botón -->
+            <button
+              type="submit"
+              class="btn btn-sm btn-primary d-flex align-items-center gap-1"
+            >
+              <i class="bi bi-search"></i><span>Buscar</span>
+            </button>
+          </form>
+        </div>
+
+        <hr class="my-4" />
+        <div class="card bg-body border-0 shadow-sm list">
+          <div class="row-head">
+            <span class="text-end">Hora</span>
+            <span class="">Paciente / Detalle</span>
+            <span class="text-center">Estado</span>
+            <span class="text-end">Acciones</span>
           </div>
-          <div class="slot" *ngFor="let schedule of schedules;">
-            <div class="slot-time">{{ schedule.hour }}:{{ schedule.minutes }}</div>
-            <div class="slot-body">
-              <div class="d-flex flex-wrap align-items-center gap-2">
-                <span class="slot-title text-truncate">{{ schedule?.appointment?.patientFirstName }} {{ schedule?.appointment?.patientLastName }}</span>
-                <span class="badge text-bg-secondary">
-                  @for (item of schedule?.appointment?.modalities; track $index) {
-                    <b><span [ngStyle]="{ color: item.color }">[{{ item.name }}]</span></b>
-                  }
-                </span>
-              </div>
-              <div class="slot-meta text-truncate">
-                @if (schedule?.appointment?.doctorName) { <span> Dr. </span>  } 
-                {{ schedule?.appointment?.doctorName }} 
-                @if (schedule?.appointment?.medicalOfficeName) { <span> - </span>  }
-                {{ schedule?.appointment?.medicalOfficeName }}
-              </div>
-            </div>
-            <div class="slot-state">
-              <span class="badge badge-phoenix fs-10"
-                [ngClass]="{
-                  'badge-phoenix-success': schedule?.appointment?.status === 'FINISHED',
-                  'badge-phoenix-primary': schedule?.appointment?.status === 'SCHEDULED',
-                  'badge-phoenix-warning': schedule?.appointment?.status === 'CANCELLED',
-                  'badge-phoenix-info': schedule?.appointment?.status === 'CONFIRMED',
-                }">
-                <span class="badge-label">{{ getStatusName(schedule?.appointment?.status) }}</span>
-                <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
+        </div>
+        <div class="slot" *ngFor="let schedule of schedules">
+          <div class="slot-time">
+            {{ schedule.hour }}:{{ schedule.minutes }}
+          </div>
+          <div class="slot-body">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+              <span class="slot-title text-truncate"
+                >{{ schedule?.appointment?.patientFirstName }}
+                {{ schedule?.appointment?.patientLastName }}</span
+              >
+              <span class="badge text-bg-secondary">
+                @for (item of schedule?.appointment?.modalities; track $index) {
+                  <b
+                    ><span [ngStyle]="{ color: item.color }"
+                      >[{{ item.name }}]</span
+                    ></b
+                  >
+                }
               </span>
             </div>
-            <div class="slot-actions d-flex justify-content-end gap-1">
-              
-              @if(schedule?.appointment?.status === 'SCHEDULED') {
-                <button class="btn btn-primary btn-sm" (click)="confirmed(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Configirma cita">
-                  <i class="fa-solid fa-check-circle" width="16px" height="16px"></i>
-                </button>
+            <div class="slot-meta text-truncate">
+              @if (schedule?.appointment?.doctorName) {
+                <span> Dr. </span>
               }
-              
-              @if(schedule?.appointment?.status === 'CONFIRMED') {
-                <button class="btn btn-success btn-sm" (click)="finished(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Finalizar">
-                  <i class="fa-solid fa-check-circle" width="16px" height="16px"></i>
-                </button>
+              {{ schedule?.appointment?.doctorName }}
+              @if (schedule?.appointment?.medicalOfficeName) {
+                <span> - </span>
               }
-
-              @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED') {
-                <button class="btn btn-warning btn-sm" (click)="cancel(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cancelar">
-                  <i class="fa-solid fa-calendar-times" width="16px" height="16px"></i>
-                </button>
-              }
-
-              @if(schedule?.appointment?.status === 'SCHEDULED' || schedule?.appointment?.status === 'CONFIRMED' || schedule?.appointment?.status === 'FINISHED' || schedule?.appointment?.status === 'CANCELLED') {
-                <button class="btn btn-danger btn-sm" (click)="onCancel(schedule.appointment.id)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Eliminar">
-                  <i class="fa-solid fa-trash" width="16px" height="16px"></i>
-                </button>
-              }
-
-              @if(!schedule?.appointment) {
-                <button class="btn btn-primary btn-sm" (click)="onTimeSelected(schedule.hour, schedule.minutes)"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Crear cita">
-                  <i class="fa-solid fa-plus" width="16px" height="16px"></i>
-                </button>
-              } @else {
-                <a class="btn btn-info btn-sm"  [routerLink]="['/appointments/new', schedule?.appointment?.id]" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editar cita">
-                  <i class="fa-solid fa-edit" width="16px" height="16px"></i>
-                </a>
-              }
+              {{ schedule?.appointment?.medicalOfficeName }}
             </div>
+          </div>
+          <div class="slot-state">
+            <span
+              class="badge badge-phoenix fs-10"
+              [ngClass]="{
+                'badge-phoenix-success':
+                  schedule?.appointment?.status === 'FINISHED',
+                'badge-phoenix-primary':
+                  schedule?.appointment?.status === 'SCHEDULED',
+                'badge-phoenix-warning':
+                  schedule?.appointment?.status === 'CANCELLED',
+                'badge-phoenix-info':
+                  schedule?.appointment?.status === 'CONFIRMED',
+              }"
+            >
+              <span class="badge-label">{{
+                getStatusName(schedule?.appointment?.status)
+              }}</span>
+              <span
+                class="ms-1"
+                data-feather="package"
+                style="height: 12.8px; width: 12.8px"
+              ></span>
+            </span>
+          </div>
+          <div class="slot-actions d-flex justify-content-end gap-1">
+            @if (schedule?.appointment?.status === 'SCHEDULED') {
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="confirmed(schedule.appointment.id)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Configirma cita"
+              >
+                <i
+                  class="fa-solid fa-check-circle"
+                  width="16px"
+                  height="16px"
+                ></i>
+              </button>
+            }
+
+            @if (schedule?.appointment?.status === 'CONFIRMED') {
+              <button
+                class="btn btn-success btn-sm"
+                (click)="finished(schedule.appointment.id)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Finalizar"
+              >
+                <i
+                  class="fa-solid fa-check-circle"
+                  width="16px"
+                  height="16px"
+                ></i>
+              </button>
+            }
+
+            @if (
+              schedule?.appointment?.status === 'SCHEDULED' ||
+              schedule?.appointment?.status === 'CONFIRMED'
+            ) {
+              <button
+                class="btn btn-warning btn-sm"
+                (click)="cancel(schedule.appointment.id)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Cancelar"
+              >
+                <i
+                  class="fa-solid fa-calendar-times"
+                  width="16px"
+                  height="16px"
+                ></i>
+              </button>
+            }
+
+            @if (
+              schedule?.appointment?.status === 'SCHEDULED' ||
+              schedule?.appointment?.status === 'CONFIRMED' ||
+              schedule?.appointment?.status === 'FINISHED' ||
+              schedule?.appointment?.status === 'CANCELLED'
+            ) {
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="onCancel(schedule.appointment.id)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Eliminar"
+              >
+                <i class="fa-solid fa-trash" width="16px" height="16px"></i>
+              </button>
+            }
+
+            @if (!schedule?.appointment) {
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="onTimeSelected(schedule.hour, schedule.minutes)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Crear cita"
+              >
+                <i class="fa-solid fa-plus" width="16px" height="16px"></i>
+              </button>
+            } @else {
+              <a
+                class="btn btn-info btn-sm"
+                [routerLink]="['/appointments/new', schedule?.appointment?.id]"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Editar cita"
+              >
+                <i class="fa-solid fa-edit" width="16px" height="16px"></i>
+              </a>
+            }
           </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
 <app-footer></app-footer>
