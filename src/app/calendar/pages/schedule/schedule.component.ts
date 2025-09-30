@@ -13,7 +13,7 @@ import { AppointmenStatusService } from '../../../shared/services/appointment-st
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.css'
+  styleUrl: './schedule.component.css',
 })
 export class ScheduleComponent implements OnInit {
   public title: string = `Detalle de consultas médicas`;
@@ -28,14 +28,13 @@ export class ScheduleComponent implements OnInit {
   private medicalOfficeService = inject(MedicalOfficeService);
   private statusService = inject(AppointmenStatusService);
 
-
   public form: FormGroup = this.fb.group({
     date: [null],
     status: [''],
     accessionNumber: [null],
     patientName: [null],
   });
-  
+
   ngOnInit(): void {
     this.loadMedicalOffice();
     this.setInitialFilter();
@@ -45,23 +44,23 @@ export class ScheduleComponent implements OnInit {
   private loadMedicalOffice(): void {
     if (!this.authService.getMedicalOfficeStatus()) {
       this.medicalOfficeService.getLastByUserId(null).subscribe({
-          next: (medicalOffice) => {
+        next: (medicalOffice) => {
           if (medicalOffice && medicalOffice.id) {
             this.authService.selectMedicalOffice(medicalOffice.id);
           }
-        }
+        },
       });
     }
   }
 
   private setInitialFilter(): void {
     this.form.patchValue({
-      date: this.getToday()
-    })
+      date: this.getToday(),
+    });
   }
 
   private getSchedule(search: StudySearch | null = null): void {
-    this.service.getAllSchedule(search).subscribe(response => {
+    this.service.getAllSchedule(search).subscribe((response) => {
       this.schedules = response;
     });
   }
@@ -70,12 +69,14 @@ export class ScheduleComponent implements OnInit {
     const appointmentDate = this.form.get('date')?.value;
 
     this.router.navigate(['/appointments/new'], {
-        queryParams: { 
-          hour: hour, minute: minute, duration: 30,
-          modality: this.modalitySelected,
-          appointmentDate:  appointmentDate
-        }
-      });
+      queryParams: {
+        hour: hour,
+        minute: minute,
+        duration: 30,
+        modality: this.modalitySelected,
+        appointmentDate: appointmentDate,
+      },
+    });
   }
 
   cancel(appointmentId: string) {
@@ -98,10 +99,10 @@ export class ScheduleComponent implements OnInit {
 
   onCancel(scheduleId: string): void {
     Swal.fire({
-      title: "¿Estas segunro de eliminar?",
-      icon: "warning",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "¡Si, eliminar!"
+      title: '¿Estas segunro de eliminar?',
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: '¡Si, eliminar!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.service.deleteById(scheduleId).subscribe(() => {
@@ -112,11 +113,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if(!this.form.get('date')?.value) {
+    if (!this.form.get('date')?.value) {
       Swal.fire({
         title: 'Error',
         text: 'Por favor, ingrese la fecha para filtrar.',
-        icon: 'error'
+        icon: 'error',
       });
       return;
     }
@@ -136,4 +137,3 @@ export class ScheduleComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 }
-
