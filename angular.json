@@ -95,6 +95,11 @@
               "extractLicenses": false,
               "sourceMap": false,
               "outputHashing": "all"
+            },
+            "local": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -107,6 +112,9 @@
             },
             "dev": {
               "buildTarget": "innova-pacs:build:dev"
+            },
+            "local": {
+              "buildTarget": "innova-pacs:build:local"
             }
           },
           "defaultConfiguration": "dev"

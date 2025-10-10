@@ -12,6 +12,7 @@ import { DoctorService } from '../../../doctors/services/doctor.service';
 import { Patient } from '../../../patients/interfaces/patient.interface';
 import { PatientService } from '../../../patients/services/patient.service';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
+import { StudyStatusService } from '../../../shared/services/study-status.service';
 
 @Component({
   selector: 'app-study-form',
@@ -26,6 +27,7 @@ export class StudyFormComponent implements OnChanges{
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
   private appointmentService = inject(AppointmentService);
+  public studyStatusService = inject(StudyStatusService);
 
   public studyId!: string;
   @Input() 
@@ -240,5 +242,9 @@ export class StudyFormComponent implements OnChanges{
     this.appointmentService.updateStudyStatus(this.appointmentId, status).subscribe(() => {
       this.getAllStudies(this.appointmentId);
     });
+  }
+
+  getStatusName(statusCode: string | undefined): string {
+    return statusCode ? this.studyStatusService.getStatusName(statusCode) : '';
   }
 }

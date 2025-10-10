@@ -39,10 +39,10 @@
                 <label for="status" class="form-label">Estatus</label>
                 <select id="status" class="form-select" formControlName="status">
                   <option value="">Todos los estatus</option>
-                  <option value="created">Created</option>
-                  <option value="scheduled">Scheduled</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option value="created">Finializado</option>
+                  <option value="scheduled">En proceso</option>
+                  <option value="INTERPRETED">Interpretado</option>
+                  <option value="cancelled">Cancelado</option>
                 </select>
               </div>
 
@@ -91,7 +91,7 @@
                                     'badge-phoenix-info': domain?.status === 'COMPLETED',
                                     'badge-phoenix-danger': domain?.status === 'CANCELLED',
                                 }">
-                                <span class="badge-label">{{ domain.status }}</span>
+                                <span class="badge-label">{{ getStatusName(domain.status) }}</span>
                                 <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
                             </span>
                           </td>
@@ -103,8 +103,9 @@
                               <div class="dropdown-menu dropdown-menu-end py-2">
                                 @if (domain.studyInstance) {
                                   <a class="dropdown-item cursor-pointer" [href]="pacsConfiguration.viewerUrl + domain.studyInstance" target="_blank">Ver estudio</a>
+                                  <div class="dropdown-divider"></div>
                                 }
-                                <div class="dropdown-divider"></div>
+                                
                                 <a class="dropdown-item text-danger" style="cursor: pointer;" (click)="deleteStudy(domain.id)">Eliminar</a>
                               </div>
                             </div>

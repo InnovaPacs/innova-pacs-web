@@ -69,8 +69,8 @@
         <div class="dropdown">
             <button class="btn btn-sm btn-phoenix-secondary bg-body-emphasis bg-body-hover action-btn" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h" data-fa-transform="shrink-2"></span></button>
             <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item cursor-pointer" (click)="updateStatus('SCHEDULED')">Schedule</a>
-                <a class="dropdown-item cursor-pointer" (click)="updateStatus('CANCELLED')" >Cancel</a>
+                <a class="dropdown-item cursor-pointer" (click)="updateStatus('SCHEDULED')">En proceso</a>
+                <a class="dropdown-item cursor-pointer" (click)="updateStatus('CANCELLED')" >Cancelar</a>
             </div>
         </div>
     }
@@ -101,7 +101,7 @@
                                 'badge-phoenix-info': domain?.status === 'COMPLETED',
                                 'badge-phoenix-danger': domain?.status === 'CANCELLED',
                             }">
-                            <span class="badge-label">{{ domain?.status }}</span>
+                            <span class="badge-label">{{ getStatusName(domain?.status) }}</span>
                             <span class="ms-1" data-feather="package" style="height:12.8px;width:12.8px;"></span>
                         </span>
                     </td>
