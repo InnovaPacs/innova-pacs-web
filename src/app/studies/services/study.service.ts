@@ -10,157 +10,158 @@ import { ModalityType } from '../interfaces/modality-type.interface';
 import { StudySearch } from '../interfaces/study-seaarch.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StudyService {
   private readonly baseUrl = environment.baseUrl;
   private authService = inject(AuthService);
   private http = inject(HttpClient);
-  
-  constructor() { }
 
-  getAll(medicalOfficeId: string, page: number, search: StudySearch | null):Observable<StudyPage> {
+  constructor() {}
+
+  getAll(
+    medicalOfficeId: string,
+    page: number,
+    search: StudySearch | null
+  ): Observable<StudyPage> {
     const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
     const params = this.getParams(search);
 
-    return this.http.get(url,
-      {
+    return this.http
+      .get(url, {
         params,
-        headers
-      }
-    ).pipe(
-      map((response: any) => {
-        return {
-          content: response.content,
-          totalElements: response.totalElements,
-          size: response.size,
-          number: response.number,
-          totalPages: response.totalPages
-        }
+        headers,
       })
-    );
+      .pipe(
+        map((response: any) => {
+          return {
+            content: response.content,
+            totalElements: response.totalElements,
+            size: response.size,
+            number: response.number,
+            totalPages: response.totalPages,
+          };
+        })
+      );
   }
 
-  getById(id: string):Observable<Study> {
+  getById(id: string): Observable<Study> {
     const url = `${this.baseUrl}/api/studies/${id}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Study>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<Study>(url, {
+      headers,
+    });
   }
 
-  update(id: string, bodyRequest: StudyDto):Observable<Study> {
+  update(id: string, bodyRequest: StudyDto): Observable<Study> {
     const url = `${this.baseUrl}/api/studies/${id}`;
     const headers = this.authService.getHeaders();
-    return this.http.put<Study>(url, bodyRequest,
-      {
-        headers
-      }
-    );
+    return this.http.put<Study>(url, bodyRequest, {
+      headers,
+    });
   }
 
-  save(bodyRequest: StudyDto):Observable<Study> {
+  save(bodyRequest: StudyDto): Observable<Study> {
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/studies`;
 
     return this.http.post<Study>(url, bodyRequest, {
-      headers
+      headers,
     });
   }
 
-  getFullData():Observable<Study[]> {
+  getFullData(): Observable<Study[]> {
     const url = `${this.baseUrl}/api/studies/full-data`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Study[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<Study[]>(url, {
+      headers,
+    });
   }
 
-  getAllModalieties():Observable<Modality[]> {
+  getAllModalieties(): Observable<Modality[]> {
     const url = `${this.baseUrl}/api/modalities`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Modality[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<Modality[]>(url, {
+      headers,
+    });
   }
 
-  getAllModalitiesType(modalityId: string):Observable<ModalityType[]> {
+  getAllModalitiesType(modalityId: string): Observable<ModalityType[]> {
     const url = `${this.baseUrl}/api/modalities/${modalityId}/types`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<ModalityType[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<ModalityType[]>(url, {
+      headers,
+    });
   }
 
-  getAllStudies(appointmentId: string):Observable<Study[]> {
+  getAllStudies(appointmentId: string): Observable<Study[]> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Study[]>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<Study[]>(url, {
+      headers,
+    });
   }
 
-  syncStudies():Observable<void> {
+  syncStudies(): Observable<void> {
     const url = `${this.baseUrl}/api/studies/sync`;
     const headers = this.authService.getHeaders();
 
-    return this.http.post<void>(url,{},  
+    return this.http.post<void>(
+      url,
+      {},
       {
-        headers
+        headers,
       }
     );
   }
 
-  deleteById(id: string):Observable<void> {
+  deleteById(id: string): Observable<void> {
     const url = `${this.baseUrl}/api/studies/${id}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.delete<void>(url,
-      {
-        headers
-      }
-    );
+    return this.http.delete<void>(url, {
+      headers,
+    });
   }
 
   private getParams(search: StudySearch | null): HttpParams {
-      let params = new HttpParams()
-      
-      if(search?.date) {
-        params = params.set('date', search.date)
-      }
-  
-      if(search?.accessionNumber) {
-        params = params.set('accessionNumber', search.accessionNumber);
-      }
-  
-      if(search?.status) {
-        params = params.set('status', search.status);
-      }
-  
-      if(search?.patientName) {
-        params = params.set('patientName', search.patientName);
-      }
+    let params = new HttpParams();
 
-      if(search?.modalities) {
-        params = params.set('modality', search.modalities);
-      }
-  
-      return params;
+    if (search?.date) {
+      params = params.set('date', search.date);
     }
+
+    if (search?.accessionNumber) {
+      params = params.set('accessionNumber', search.accessionNumber);
+    }
+
+    if (search?.status) {
+      params = params.set('status', search.status);
+    }
+
+    if (search?.patientName) {
+      params = params.set('patientName', search.patientName);
+    }
+
+    if (search?.modalities) {
+      params = params.set('modality', search.modalities);
+    }
+
+    return params;
+  }
+
+  saveUrgencyAppointment(appointmentData: any): Observable<any> {
+    const url = `${this.baseUrl}/api/appointments/urgency`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.post<any>(url, appointmentData, {
+      headers,
+    });
+  }
 }

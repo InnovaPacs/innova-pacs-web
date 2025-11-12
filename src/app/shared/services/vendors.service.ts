@@ -1,42 +1,51 @@
-import { Injectable, ElementRef } from "@angular/core";
+import { Injectable, ElementRef } from '@angular/core';
 declare var Choices: any;
 declare var flatpickr: any;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VendorsService {
-    constructor() { }
+  constructor() {}
 
-    initChoices(instance: any, selectRef: ElementRef)  {
-    if (instance) {
+  initChoices(instance: any, selectRef: ElementRef): any {
+    console.log('Initializing Choices instance');
+    if (instance && typeof instance.destroy === 'function') {
+      console.log('Destroying existing Choices instance');
       instance.destroy();
     }
 
-    if(selectRef === undefined || selectRef === null) {
-      return;
+    if (!selectRef || !selectRef.nativeElement) {
+      console.log('Select reference is invalid');
+      return null;
     }
 
     const select = selectRef.nativeElement;
-    
-    instance = new Choices(select, {
+
+    const newInstance = new Choices(select, {
       removeItemButton: false,
       placeholder: true,
       shouldSort: false,
-      allowHTML: true
+      allowHTML: true,
     });
 
-    return instance;
+    console.log('New Choices instance created:', newInstance);
+    return newInstance;
   }
 
   setChoices(instance: any, id: string, label: string) {
-    instance.setChoices([
-      {
-        value: id,
-        label: label,
-        selected: true
-      }
-    ], 'value', 'label', false);
+    instance.setChoices(
+      [
+        {
+          value: id,
+          label: label,
+          selected: true,
+        },
+      ],
+      'value',
+      'label',
+      false
+    );
   }
 
   initFlatpickr(instance: any, dateRef: ElementRef) {

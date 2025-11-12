@@ -4,23 +4,26 @@ import { AppointmentsLayoutComponent } from './layout/appointments-layout/appoin
 import { MainComponent } from './pages/main/main.component';
 import { AppointmentFormComponent } from './components/appointment-form/appointment-form.component';
 import { NewAppointmentComponent } from './pages/new-appointment/new-appointment.component';
+import { NewUrgencyComponent } from './pages/new-urgency/new-urgency.component';
 
 const routes: Routes = [
   {
-    path: '', component: AppointmentsLayoutComponent,
+    path: '',
+    component: AppointmentsLayoutComponent,
     children: [
       { path: 'main', component: MainComponent },
       { path: 'register', component: AppointmentFormComponent },
       { path: 'new', component: NewAppointmentComponent },
       { path: 'new/:id', component: NewAppointmentComponent },
+      { path: 'urgency', component: NewUrgencyComponent },
       { path: ':id', component: AppointmentFormComponent },
       { path: '**', redirectTo: 'main' },
-    ]
-  }
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppointmentsRoutingModule { }
+export class AppointmentsRoutingModule {}

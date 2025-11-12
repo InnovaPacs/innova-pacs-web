@@ -7,36 +7,6 @@
         </div>
 
         <hr class="my-4" />
-        <!--
-            <form class="mb-4" [formGroup]="form" (ngSubmit)="onSubmit()">
-              <div class="row g-3 align-items-end">
-                <div class="col-md-3">
-                  <label for="patientName" class="form-label">Paciente</label>
-                  <input type="text" id="patientName" class="form-control" placeholder="Nombre del paciente" formControlName="patientName">
-                </div>
-
-                <div class="col-md-3">
-                  <label for="status" class="form-label">Estatus</label>
-                  <select id="status" class="form-select" formControlName="status">
-                    <option value="">Todos</option>
-                    <option value="SCHEDULED">Agendada</option>
-                    <option value="CONFIRMED">Confirmada</option>
-                    <option value="CANCELLED">Cancelada</option>
-                    <option value="FINISHED">Finalizada</option>
-                  </select>
-                </div>
-
-                <div class="col-md-3">
-                  <label for="date" class="form-label">Fecha</label>
-                  <input type="date" id="date" class="form-control" formControlName="date">
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-                  <button type="submit" class="btn btn-primary w-100">Buscar</button>
-                </div>
-              </div>
-            </form>
-            -->
         <!-- Contenedor de la barra (opcional) -->
         <div class="d-flex mb-3">
           <!-- ms-auto empuja el form a la derecha -->
@@ -102,8 +72,8 @@
           </div>
           <div class="slot-body">
             <div class="d-flex flex-wrap align-items-center gap-2">
-              <span class="slot-title text-truncate"
-                >{{ schedule?.appointment?.patientFirstName }}
+              <span class="slot-title text-truncate">
+                {{ schedule?.appointment?.patientFirstName }}
                 {{ schedule?.appointment?.patientLastName }}</span
               >
               <span class="badge text-bg-secondary">
@@ -115,6 +85,12 @@
                   >
                 }
               </span>
+              <div
+                *ngIf="schedule?.appointment?.isUrgency"
+                class="badge badge-phoenix fs-10 badge-phoenix-danger"
+              >
+                Urgencia
+              </div>
             </div>
             <div class="slot-meta text-truncate">
               @if (schedule?.appointment?.doctorName) {
@@ -237,7 +213,7 @@
 
               <button
                 class="btn btn-danger btn-sm"
-                (click)="onTimeSelected(schedule.hour, schedule.minutes)"
+                (click)="onTimeSelected(schedule.hour, schedule.minutes, true)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Urgencias"

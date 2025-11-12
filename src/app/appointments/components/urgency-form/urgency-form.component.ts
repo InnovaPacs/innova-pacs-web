@@ -19,21 +19,27 @@ import { Patient } from '../../../patients/interfaces/patient.interface';
 import { Doctor } from '../../../doctors/interfaces/doctor.interface';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
-import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
 import { VendorsService } from '../../../shared/services/vendors.service';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-appointment-form',
-  templateUrl: './appointment-form.component.html',
-  styleUrl: './appointment-form.component.css',
+  selector: 'app-urgency-form',
+  templateUrl: './urgency-form.component.html',
+  styleUrl: './urgency-form.component.css',
 })
-export class AppointmentFormComponent {
+export class UrgencyFormComponent {
   private service = inject(AppointmentService);
   private medicalOfficeService = inject(MedicalOfficeService);
   private doctorService = inject(DoctorService);
   private patientService = inject(PatientService);
   private auth = inject(AuthService);
+  initHour!: string | null;
+  endHour!: string | null;
+  medicalOffice!: string | null;
+  date!: string | null;
+  doctor: Doctor | null = null;
+  patient: Patient | null = null;
+  appointmentId!: string;
 
   @Output()
   public appointmentCreated = new EventEmitter<string>();
@@ -70,11 +76,15 @@ export class AppointmentFormComponent {
   ngOnInit(): void {
     this.getMainData();
     this.getQueryParams();
-    this.getPathParams();
   }
 
   private getQueryParams() {
     this.route.queryParamMap.subscribe((data) => {
+      this.initHour = this.getInitHour(data);
+      this.endHour = this.getEndHour(data);
+      this.date = this.getAppointmentDate(data);
+      this.medicalOffice = this.getMedicalOffice(data);
+
       this.form.patchValue({
         appointmentStartHour: this.getInitHour(data),
         appointmentEndHour: this.getEndHour(data),
@@ -91,48 +101,9 @@ export class AppointmentFormComponent {
     this.disableControl('medicalOfficeId');
   }
 
-  private getPathParams(): void {
-    this.route.paramMap
-      .pipe(
-        map((params) => params.get('id')),
-        filter((id) => !!id),
-        switchMap((id) => {
-          this.id = id!;
-          return this.service.getById(this.id);
-        }),
-        catchError((error) => {
-          return EMPTY;
-        })
-      )
-      .subscribe((response) => {
-        setTimeout(() => {
-          this.doctorRequestedInstance = this.vendorsService.initChoices(
-            this.doctorRequestedInstance,
-            this.doctorRequestedRef
-          );
-          this.vendorsService.setChoices(
-            this.doctorRequestedInstance,
-            response.doctorRequested.id,
-            `${response.doctorRequested.name}`
-          );
-
-          this.patientInstance = this.vendorsService.initChoices(
-            this.patientInstance,
-            this.patientRef
-          );
-          this.vendorsService.setChoices(
-            this.patientInstance,
-            response.patient.id,
-            `${response.patient.firstName} ${response.patient.lastName || ''}`
-          );
-          this.patchForm(response);
-          this.appointmentCreated.emit(response.id);
-        }, 1000);
-      });
-  }
-
   private getMainData(): void {
-    this.getAllDoctors();
+    this.getDoctorByName('DOCTOR EN TURNO (ASIGNAR)');
+    this.getPatientByName('DESCONOCIDO');
     this.getAllPatients();
     this.getAllMedicalOffices();
   }
@@ -140,6 +111,18 @@ export class AppointmentFormComponent {
   private getAllMedicalOffices() {
     this.medicalOfficeService.getFullData().subscribe((response) => {
       this.medicalOffices = response;
+    });
+  }
+
+  private getDoctorByName(name: string) {
+    this.doctorService.getByName(name).subscribe((doctor) => {
+      this.doctor = doctor || null;
+    });
+  }
+
+  private getPatientByName(curp: string) {
+    this.patientService.getByCurp(curp).subscribe((patient) => {
+      this.patient = patient || null;
     });
   }
 
@@ -163,6 +146,19 @@ export class AppointmentFormComponent {
           this.patientInstance,
           this.patientRef
         );
+
+        this.patientInstance = this.vendorsService.initChoices(
+          this.patientInstance,
+          this.patientRef
+        );
+
+        if (this.patient) {
+          this.vendorsService.setChoices(
+            this.patientInstance,
+            this.patient.id,
+            `${this.patient.firstName} ${this.patient.lastName || ''}`
+          );
+        }
       }, 100);
     });
   }

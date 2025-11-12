@@ -1,7 +1,11 @@
 <form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="col-sm-12 col-md-12">
     <div class="form-floating">
-      <select class="form-select" id="medicalOfficeId" formControlName="medicalOfficeId">
+      <select
+        class="form-select"
+        id="medicalOfficeId"
+        formControlName="medicalOfficeId"
+      >
         @for (domain of medicalOffices; track domain.id) {
           <option [value]="domain.id">{{ domain.name }}</option>
         }
@@ -12,73 +16,143 @@
 
   <div class="col-xm-4 col-md-4">
     <div class="form-floating">
-      <input type="date" class="form-control" class="form-control" id="appointmentDate" placeholder="Ingresa fecha de cita" formControlName="appointmentDate"/>
+      <input
+        type="date"
+        class="form-control"
+        class="form-control"
+        id="appointmentDate"
+        placeholder="Ingresa fecha de cita"
+        formControlName="appointmentDate"
+      />
       <label for="appointmentDate">Fecha</label>
     </div>
   </div>
 
   <div class="col-xm-4 col-md-4">
     <div class="form-floating">
-      <input type="time" class="form-control" class="form-control" id="appointmentStartHour" placeholder="Ingresa fecha de cita" formControlName="appointmentStartHour" min="00:00" max="23:59"/>
+      <input
+        type="time"
+        class="form-control"
+        class="form-control"
+        id="appointmentStartHour"
+        placeholder="Ingresa fecha de cita"
+        formControlName="appointmentStartHour"
+        min="00:00"
+        max="23:59"
+      />
       <label for="appointmentStartHour">Hora inicio</label>
     </div>
   </div>
 
   <div class="col-xm-4 col-md-4">
     <div class="form-floating">
-      <input type="time" class="form-control" class="form-control" id="appointmentEndHour" placeholder="Ingresa fecha de cita" formControlName="appointmentEndHour" min="00:00" max="23:59"/>
+      <input
+        type="time"
+        class="form-control"
+        class="form-control"
+        id="appointmentEndHour"
+        placeholder="Ingresa fecha de cita"
+        formControlName="appointmentEndHour"
+        min="00:00"
+        max="23:59"
+      />
       <label for="appointmentEndHour">Horio fin</label>
     </div>
   </div>
 
-  <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
+  <div
+    class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11"
+  >
     <label class="ps-4" for="doctorRequestedId">Médico Solicitante</label>
-    <select class="form-select" *ngIf="doctors.length > 0" #doctorRequestedRef formControlName="doctorRequestedId" id="doctorRequestedId">
+    <select
+      class="form-select"
+      *ngIf="doctors.length > 0"
+      #doctorRequestedRef
+      formControlName="doctorRequestedId"
+      id="doctorRequestedId"
+    >
       <option value="none" selected>No ha seleccionado médico</option>
       @for (domain of doctors; track domain.id) {
-        <option [value]="domain.id"> {{ domain.name }}</option>
+        <option [value]="domain.id">{{ domain.name }}</option>
       }
     </select>
   </div>
   <div class="col-sm-1 col-xm-1 col-md-1">
-    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('doctors')">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('doctors')"
+    >
       <i class="fa-solid fa-user-doctor"></i>
     </button>
   </div>
-  
+
   <h4 class="fs-7 mb-0">Detalles de paciente</h4>
-  <div class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11">
-    <select class="form-select" *ngIf="patients.length > 0" #patientRef formControlName="patientId" id="patientId">
+  <div
+    class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11"
+  >
+    <select
+      class="form-select"
+      *ngIf="patients.length > 0"
+      #patientRef
+      formControlName="patientId"
+      id="patientId"
+    >
       <option value="none" selected>No ha seleccionado paciente</option>
       @for (domain of patients; track domain.id) {
-        <option [value]="domain.id">{{ domain.firstName }} {{ domain.firstName || ''}}</option>
+        <option [value]="domain.id">
+          {{ domain.firstName }} {{ domain.lastName || '' }}
+        </option>
       }
     </select>
     <label for="patientId">Paciente</label>
   </div>
   <div class="col-sm-1 col-xm-1 col-md-1">
-    <button type="button" class="btn btn-success d-flex align-items-center justify-content-center w-100" style="height: 47px; width: 100%;" (click)="openModal('patients')">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('patients')"
+    >
       <i class="fa-solid fa-hospital-user"></i>
     </button>
   </div>
 
-  <button type="submit" class="btn btn-primary">Guradar cita médica</button>                
+  <button type="submit" class="btn btn-primary">Guradar cita médica</button>
 </form>
 
-
-<div class="modal fade modal-xl" tabindex="-1" [ngClass]="{ 'show d-block': showModal }" *ngIf="showModal" style="background: rgba(0,0,0,0.5);">
+<div
+  class="modal fade modal-xl"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': showModal }"
+  *ngIf="showModal"
+  style="background: rgba(0, 0, 0, 0.5)"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
       </div>
-        @if (modalType === 'doctors') {
-          <app-doctor-form [origin]="origing" (doctorCreated)="handleNewDoctor($event)"></app-doctor-form>
-        }
+      @if (modalType === 'doctors') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
 
-        @if (modalType === 'patients') {
-          <app-patient-form [origin]="origing" (patientCreated)="handleNewPatient($event)"></app-patient-form>
-        }
+      @if (modalType === 'patients') {
+        <app-patient-form
+          [origin]="origing"
+          (patientCreated)="handleNewPatient($event)"
+        ></app-patient-form>
+      }
     </div>
   </div>
 </div>

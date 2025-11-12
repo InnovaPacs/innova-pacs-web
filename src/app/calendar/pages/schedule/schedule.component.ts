@@ -65,10 +65,15 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  onTimeSelected(hour: string, minute: string): void {
+  onTimeSelected(
+    hour: string,
+    minute: string,
+    isUrgency: boolean = false
+  ): void {
     const appointmentDate = this.form.get('date')?.value;
+    const ulr = isUrgency ? '/appointments/urgency' : '/appointments/new';
 
-    this.router.navigate(['/appointments/new'], {
+    this.router.navigate([ulr], {
       queryParams: {
         hour: hour,
         minute: minute,
