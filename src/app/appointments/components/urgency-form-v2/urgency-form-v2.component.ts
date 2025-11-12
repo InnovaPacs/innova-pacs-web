@@ -16,7 +16,7 @@ import { Modality } from '../../../studies/interfaces/modality.interface';
 import { StudyService } from '../../../studies/services/study.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Appointment } from '../../interfaces/appointment.interface';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
@@ -33,6 +33,7 @@ export class UrgencyFormV2Component {
   private patientService = inject(PatientService);
   private doctorService = inject(DoctorService);
   private auth = inject(AuthService);
+  private router = inject(Router);
 
   patient: Patient | null = null;
   doctor: Doctor | null = null;
@@ -164,12 +165,11 @@ export class UrgencyFormV2Component {
   }
 
   onSubmit() {
-    console.log('Form Submitted', this.form.value);
     this.studyService
       .saveUrgencyAppointment(this.form.value as Appointment)
       .subscribe({
         next: (response) => {
-          console.log('Appointment saved successfully', response);
+          this.router.navigate(['/calendar/schedule']);
         },
         error: (error) => {
           console.error('Error saving appointment', error);
