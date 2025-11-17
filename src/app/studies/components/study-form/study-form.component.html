@@ -22,17 +22,11 @@
     <label class="ps-4" for="modalityTypeId">Estudio</label>
     <select
       class="form-select"
-      *ngIf="modalityTypes.length > 0"
       #modalityTypeIdRef
       formControlName="modalityTypeId"
       id="modalityTypeId"
     >
       <option value="none" selected>No ha seleccionado un estudio</option>
-      @for (domain of modalityTypes; track domain.id) {
-        <option [value]="domain.id">
-          [{{ domain.name }}] {{ domain.description }}
-        </option>
-      }
     </select>
   </div>
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
+import { map, filter, switchMap, catchError, EMPTY, lastValueFrom } from 'rxjs';
 import { Study, StudyDto } from '../../interfaces/study.interface';
 import { StudyService } from '../../services/study.service';
 import { Modality } from '../../interfaces/modality.interface';
@@ -201,16 +201,27 @@ export class StudyFormComponent implements OnChanges {
       });
   }
 
-  onSelectModality(selectModalityId: any) {
+  async onSelectModality(selectModalityId: any) {
     const selectedId = selectModalityId.target.value;
-    this.service.getAllModalitiesType(selectedId).subscribe((data) => {
-      this.modalityTypes = data;
-      setTimeout(() => {
-        this.vendorsService.initChoices(
-          this.modalityTypeInstance,
-          this.modalityTypeIdRef
-        );
-      }, 0);
+    this.form.get('modalityTypeId')?.setValue(null);
+
+    const data = await lastValueFrom(
+      this.service.getAllModalitiesType(selectedId)
+    );
+
+    this.modalityTypes = data;
+
+    this.modalityTypeInstance = this.vendorsService.initChoices(
+      this.modalityTypeInstance,
+      this.modalityTypeIdRef
+    );
+
+    this.modalityTypes.map((modality) => {
+      this.vendorsService.setChoicesForSelect(
+        this.modalityTypeInstance,
+        modality.id,
+        modality.name
+      );
     });
   }
 

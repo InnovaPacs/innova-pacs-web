@@ -48,6 +48,21 @@ export class VendorsService {
     );
   }
 
+  setChoicesForSelect(instance: any, id: string, label: string) {
+    instance.setChoices(
+      [
+        {
+          value: id,
+          label: label,
+          selected: false,
+        },
+      ],
+      'value',
+      'label',
+      false
+    );
+  }
+
   initFlatpickr(instance: any, dateRef: ElementRef) {
     if (instance) {
       instance.destroy();

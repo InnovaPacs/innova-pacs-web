@@ -154,13 +154,17 @@ export class UrgencyFormV2Component {
 
     this.modalityTypes = data;
 
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        this.modalityTypeInstance = this.vendorsService.initChoices(
-          this.modalityTypeInstance,
-          this.modalityTypeIdRef
-        );
-      }, 0);
+    this.modalityTypeInstance = this.vendorsService.initChoices(
+      this.modalityTypeInstance,
+      this.modalityTypeIdRef
+    );
+
+    this.modalityTypes.map((modality) => {
+      this.vendorsService.setChoicesForSelect(
+        this.modalityTypeInstance,
+        modality.id,
+        modality.name
+      );
     });
   }
 
