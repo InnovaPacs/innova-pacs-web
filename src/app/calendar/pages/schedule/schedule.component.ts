@@ -9,6 +9,7 @@ import { StudySearch } from '../../../studies/interfaces/study-seaarch.interface
 import { AuthService } from '../../../auth/services/auth.service';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
 import { AppointmenStatusService } from '../../../shared/services/appointment-status.service';
+import { StudyService } from '../../../studies/services/study.service';
 
 @Component({
   selector: 'app-schedule',
@@ -17,7 +18,7 @@ import { AppointmenStatusService } from '../../../shared/services/appointment-st
 })
 export class ScheduleComponent implements OnInit {
   public title: string = `Detalle de consultas médicas`;
-
+  private studyService = inject(StudyService);
   private service = inject(AppointmentService);
   private router = inject(Router);
   public modalities: Modality[] = [];
@@ -33,12 +34,14 @@ export class ScheduleComponent implements OnInit {
     status: [''],
     accessionNumber: [null],
     patientName: [null],
+    modalities: [''],
   });
 
   ngOnInit(): void {
     this.loadMedicalOffice();
     this.setInitialFilter();
     this.getSchedule(this.form.value);
+    this.getModalitiesData();
   }
 
   private loadMedicalOffice(): void {
@@ -140,5 +143,11 @@ export class ScheduleComponent implements OnInit {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  getModalitiesData(): void {
+    this.studyService.getAllModalieties().subscribe((data) => {
+      this.modalities = data;
+    });
   }
 }

@@ -4,196 +4,216 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { AppointmentPage } from '../interfaces/appointment-page.interface';
-import { Appointment, AppointmentDto, AppointmentFullData } from '../interfaces/appointment.interface';
+import {
+  Appointment,
+  AppointmentDto,
+  AppointmentFullData,
+} from '../interfaces/appointment.interface';
 import { StudyPage } from '../../studies/interfaces/study-page.interface';
 import { Schedule } from '../interfaces/appointment-schedule.interface';
 import { StudySearch } from '../../studies/interfaces/study-seaarch.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppointmentService {
   private readonly baseUrl = environment.baseUrl;
   private authService = inject(AuthService);
   private http = inject(HttpClient);
-  
-  constructor() { }
 
-  getAll(page: number):Observable<AppointmentPage> {
+  constructor() {}
+
+  getAll(page: number): Observable<AppointmentPage> {
     const url = `${this.baseUrl}/api/appointments?page=${page}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get(url,  
-      {
-        headers
-      }
-    ).pipe(
-      map((response: any) => {
-        return {
-          content: response.content,
-          totalElements: response.totalElements,
-          size: response.size,
-          number: response.number,
-          totalPages: response.totalPages
-        }
+    return this.http
+      .get(url, {
+        headers,
       })
-    );
+      .pipe(
+        map((response: any) => {
+          return {
+            content: response.content,
+            totalElements: response.totalElements,
+            size: response.size,
+            number: response.number,
+            totalPages: response.totalPages,
+          };
+        })
+      );
   }
 
-  getById(medicalOfficeId: string):Observable<Appointment> {
+  getById(medicalOfficeId: string): Observable<Appointment> {
     const url = `${this.baseUrl}/api/appointments/${medicalOfficeId}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Appointment>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<Appointment>(url, {
+      headers,
+    });
   }
 
-  update(id: string, bodyRequest: AppointmentDto):Observable<Appointment> {
+  update(id: string, bodyRequest: AppointmentDto): Observable<Appointment> {
     const url = `${this.baseUrl}/api/appointments/${id}`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.put<Appointment>(url, bodyRequest,
-      {
-        headers
-      }
-    );
+
+    return this.http.put<Appointment>(url, bodyRequest, {
+      headers,
+    });
   }
 
-  save(bodyRequest: AppointmentDto):Observable<Appointment> {
-    console.log("bodyRequest ", bodyRequest);
+  save(bodyRequest: AppointmentDto): Observable<Appointment> {
+    console.log('bodyRequest ', bodyRequest);
 
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/appointments`;
     return this.http.post<Appointment>(url, bodyRequest, {
-      headers
+      headers,
     });
   }
 
-  getFullData(month: number, year: number, modality: string|null):Observable<AppointmentFullData[]> {
-    const url = `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}`
-    + (modality && modality !== 'none' ? `&modality=${modality}` : '');
+  getFullData(
+    month: number,
+    year: number,
+    modality: string | null
+  ): Observable<AppointmentFullData[]> {
+    const url =
+      `${this.baseUrl}/api/appointments/full-data?month=${month === 0 ? 12 : month}&year=${year}` +
+      (modality && modality !== 'none' ? `&modality=${modality}` : '');
     const headers = this.authService.getHeaders();
 
-    return this.http.get<AppointmentFullData[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<AppointmentFullData[]>(url, {
+      headers,
+    });
   }
 
   deleteById(id: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${id}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.delete<void>(url,
-      {
-        headers
-      }
-    );
+    return this.http.delete<void>(url, {
+      headers,
+    });
   }
 
   cancelById(appointmentId: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.delete<void>(url,
-      {
-        headers
-      }
-    );
+
+    return this.http.delete<void>(url, {
+      headers,
+    });
   }
 
-  getStudiesByAppointmentId(page: number, appointmentId: string):Observable<StudyPage> {
+  getStudiesByAppointmentId(
+    page: number,
+    appointmentId: string
+  ): Observable<StudyPage> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies?page=${page}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get(url,  
-      {
-        headers
-      }
-    ).pipe(
-      map((response: any) => {
-        return {
-          content: response.content,
-          totalElements: response.totalElements,
-          size: response.size,
-          number: response.number,
-          totalPages: response.totalPages
-        }
+    return this.http
+      .get(url, {
+        headers,
       })
-    );
+      .pipe(
+        map((response: any) => {
+          return {
+            content: response.content,
+            totalElements: response.totalElements,
+            size: response.size,
+            number: response.number,
+            totalPages: response.totalPages,
+          };
+        })
+      );
   }
 
-  getAllSchedule(search: StudySearch | null):Observable<Schedule[]> {
+  getAllSchedule(search: StudySearch | null): Observable<Schedule[]> {
     let params = this.getParams(search);
 
     const url = `${this.baseUrl}/api/appointments/schedule`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Schedule[]>(url,
-      {
-        params,
-        headers
-      }
-    );
+    return this.http.get<Schedule[]>(url, {
+      params,
+      headers,
+    });
   }
 
   finished(appointmentId: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/finished`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.post<void>(url,{}, {
-      headers
-    });
+
+    return this.http.post<void>(
+      url,
+      {},
+      {
+        headers,
+      }
+    );
   }
 
   cancel(appointmentId: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/cancel`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.post<void>(url,{}, {
-      headers
-    });
+
+    return this.http.post<void>(
+      url,
+      {},
+      {
+        headers,
+      }
+    );
   }
 
   confirmed(appointmentId: string): Observable<void> {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/confirmed`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.post<void>(url,{}, {
-      headers
-    });
+
+    return this.http.post<void>(
+      url,
+      {},
+      {
+        headers,
+      }
+    );
   }
 
   updateStudyStatus(appointmentId: string, status: string) {
     const url = `${this.baseUrl}/api/appointments/${appointmentId}/studies/status/${status}`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.post<void>(url,{}, {
-      headers
-    });
+
+    return this.http.post<void>(
+      url,
+      {},
+      {
+        headers,
+      }
+    );
   }
 
   private getParams(search: StudySearch | null): HttpParams {
-    let params = new HttpParams()
-    
-    if(search?.date) {
-      params = params.set('date', search.date)
+    let params = new HttpParams();
+
+    if (search?.date) {
+      params = params.set('date', search.date);
     }
 
-    if(search?.accessionNumber) {
+    if (search?.accessionNumber) {
       params = params.set('accessionNumber', search.accessionNumber);
     }
 
-    if(search?.status) {
+    if (search?.status) {
       params = params.set('status', search.status);
     }
 
-    if(search?.patientName) {
+    if (search?.patientName) {
       params = params.set('patientName', search.patientName);
+    }
+
+    if (search?.modalities) {
+      params = params.set('modalities', search.modalities);
     }
 
     return params;

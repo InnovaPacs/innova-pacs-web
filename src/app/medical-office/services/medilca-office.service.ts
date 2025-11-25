@@ -4,124 +4,128 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MedicalOfficePage } from '../interfaces/medical-office-page.interface';
-import { MedicalOffice, UpdateMedicalOffice } from '../interfaces/medical-office.interface';
+import {
+  MedicalOffice,
+  UpdateMedicalOffice,
+} from '../interfaces/medical-office.interface';
 import { PacsConfiguration } from '../../pacs-configuration/interfaces/pacs-configuration.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MedicalOfficeService {
   private readonly baseUrl = environment.baseUrl;
   private authService = inject(AuthService);
   private http = inject(HttpClient);
-  
-  constructor() { }
 
-  getAllByUserId(userId: string | null, page: number):Observable<MedicalOfficePage> {
+  constructor() {}
 
-    if(userId === null) {
+  getAllByUserId(
+    userId: string | null,
+    page: number
+  ): Observable<MedicalOfficePage> {
+    if (userId === null) {
       userId = this.authService.currentUser()!.id;
     }
-    
+
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices?page=${page}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get(url,  
-      {
-        headers
-      }
-    ).pipe(
-      map((response: any) => {
-        return {
-          content: response.content,
-          totalElements: response.totalElements,
-          size: response.size,
-          number: response.number,
-          totalPages: response.totalPages
-        }
+    return this.http
+      .get(url, {
+        headers,
       })
-    );
+      .pipe(
+        map((response: any) => {
+          return {
+            content: response.content,
+            totalElements: response.totalElements,
+            size: response.size,
+            number: response.number,
+            totalPages: response.totalPages,
+          };
+        })
+      );
   }
 
-  getById(userId: string | null, medicalOfficeId: string):Observable<MedicalOffice> {
-    
-    if(userId === null) {
+  getById(
+    userId: string | null,
+    medicalOfficeId: string
+  ): Observable<MedicalOffice> {
+    if (userId === null) {
       userId = this.authService.currentUser()!.id;
     }
 
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<MedicalOffice>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<MedicalOffice>(url, {
+      headers,
+    });
   }
 
-  updateUserById(userId: string | null, medicalOfficeId: string, medicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
-
-    if(userId === null) {
+  updateUserById(
+    userId: string | null,
+    medicalOfficeId: string,
+    medicalOffice: UpdateMedicalOffice
+  ): Observable<MedicalOffice> {
+    if (userId === null) {
       userId = this.authService.currentUser()!.id;
     }
 
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices/${medicalOfficeId}`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.put<MedicalOffice>(url, medicalOffice,
-      {
-        headers
-      }
-    );
+
+    return this.http.put<MedicalOffice>(url, medicalOffice, {
+      headers,
+    });
   }
 
-  saveMedicalOffice(userId: string | null, updateMedicalOffice: UpdateMedicalOffice):Observable<MedicalOffice> {
-    if(userId === null) {
+  saveMedicalOffice(
+    userId: string | null,
+    updateMedicalOffice: UpdateMedicalOffice
+  ): Observable<MedicalOffice> {
+    if (userId === null) {
       userId = this.authService.currentUser()!.id;
     }
 
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/users/${userId}/medical-offices`;
     return this.http.post<MedicalOffice>(url, updateMedicalOffice, {
-      headers
+      headers,
     });
   }
 
-  getFullData():Observable<MedicalOffice[]> {
+  getFullData(): Observable<MedicalOffice[]> {
     const url = `${this.baseUrl}/api/medical-offices/full-data`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<MedicalOffice[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<MedicalOffice[]>(url, {
+      headers,
+    });
   }
 
-    getLastByUserId(userId: string | null):Observable<MedicalOffice> {
-
-    if(userId === null) {
+  getLastByUserId(userId: string | null): Observable<MedicalOffice> {
+    if (userId === null) {
       userId = this.authService.currentUser()!.id;
     }
-    
+
     const url = `${this.baseUrl}/api/users/${userId}/medical-office`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<MedicalOffice>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<MedicalOffice>(url, {
+      headers,
+    });
   }
 
-  getPacsConfigurationByMedicalOffice(medicalOfficeId: string):Observable<PacsConfiguration> {
+  getPacsConfigurationByMedicalOffice(
+    medicalOfficeId: string
+  ): Observable<PacsConfiguration> {
     const url = `${this.baseUrl}/api/medical-offices/${medicalOfficeId}/pacs-configuration`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<PacsConfiguration>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<PacsConfiguration>(url, {
+      headers,
+    });
   }
 }

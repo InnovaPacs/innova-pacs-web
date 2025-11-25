@@ -15,13 +15,26 @@
             [formGroup]="form"
             (ngSubmit)="onSubmit()"
           >
+            <select
+              id="modalities"
+              class="form-select form-select-sm w-auto"
+              formControlName="modalities"
+            >
+              <option value="" selected>Todos las modalidades</option>
+              @for (domain of modalities; track domain.id) {
+                <option [value]="domain.id">
+                  [{{ domain.name }}] {{ domain.description }}
+                </option>
+              }
+            </select>
+
             <!-- Estatus -->
             <select
               id="status"
               class="form-select form-select-sm w-auto"
               formControlName="status"
             >
-              <option value="">Todos</option>
+              <option value="" selected>Todos los estatus</option>
               <option value="SCHEDULED">Agendada</option>
               <option value="CONFIRMED">Confirmada</option>
               <option value="CANCELLED">Cancelada</option>

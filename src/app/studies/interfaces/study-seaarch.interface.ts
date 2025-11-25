@@ -1,7 +1,7 @@
 export interface StudySearch {
-    accessionNumber: string,
-    modalities: string,
-    patientName: string,
-    status: string,
-    date: string
+  accessionNumber: string;
+  modalities: string;
+  patientName: string;
+  status: string;
+  date: string;
 }

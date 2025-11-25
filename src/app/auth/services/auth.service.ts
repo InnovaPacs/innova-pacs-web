@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { cu } from '@fullcalendar/core/internal-common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly baseUrl = environment.baseUrl;
@@ -20,28 +20,33 @@ export class AuthService {
   public currentMedicalOfficeId = computed(this._currentMedicalOfficeId);
 
   private http = inject(HttpClient);
-  
-  constructor() { }
+
+  constructor() {}
 
   signUp(user: SignUp) {
     const url = `${this.baseUrl}/api/auth/sign-in`;
     return this.http.post(url, user);
   }
 
-  login(username: string, password: string):Observable<boolean> {
+  login(username: string, password: string): Observable<boolean> {
     const url = `${this.baseUrl}/api/auth/login`;
     const body = { username, password };
 
-    return this.http.post<LoginResponse>(url, body)
-    .pipe(
-      map(({ user, accessToken, tokenType}) => this.setAuthentication(user, accessToken, tokenType)),
+    return this.http.post<LoginResponse>(url, body).pipe(
+      map(({ user, accessToken, tokenType }) =>
+        this.setAuthentication(user, accessToken, tokenType)
+      ),
       catchError((error) => {
         return throwError(() => new Error(error));
       })
     );
   }
 
-  private setAuthentication(user: User, token: string, tokenType: string): boolean {
+  private setAuthentication(
+    user: User,
+    token: string,
+    tokenType: string
+  ): boolean {
     this._currentUser.set(user);
     this._authStatus.set(AuthStatus.authenticated);
     sessionStorage.setItem('token', token);
@@ -49,9 +54,9 @@ export class AuthService {
   }
 
   public setUpdatedPhoto(photo: string): void {
-    this._currentUser.update(current => {
-      if(current) {
-        return {... current, photo};
+    this._currentUser.update((current) => {
+      if (current) {
+        return { ...current, photo };
       }
 
       return current;
@@ -61,14 +66,16 @@ export class AuthService {
   logOut() {
     this._currentUser.set(null);
     this._authStatus.set(AuthStatus.notAuthenticated);
-    this._medicalOfficeSelected.set(false)
+    this._medicalOfficeSelected.set(false);
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('medical-office-id-selected');
   }
-  
+
   getToken(): HttpHeaders {
-    return new HttpHeaders()
-    .set('Authorization', `Bearer ${sessionStorage.getItem('token')}`);
+    return new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${sessionStorage.getItem('token')}`
+    );
   }
 
   selectMedicalOffice(medicalOfficeId: string) {

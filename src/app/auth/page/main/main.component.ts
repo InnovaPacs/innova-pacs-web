@@ -10,7 +10,7 @@ import { StudyService } from '../../../studies/services/study.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+  styleUrl: './main.component.css',
 })
 export class MainComponent {
   public fb = inject(FormBuilder);
@@ -21,36 +21,37 @@ export class MainComponent {
 
   public loginForm = this.fb.group({
     username: ['Bautista', [Validators.required]],
-    password: ['camposbj1990', [Validators.required, Validators.minLength(6)]]
+    password: ['camposbj1990', [Validators.required, Validators.minLength(6)]],
   });
 
   login() {
     const { username, password } = this.loginForm.value;
-    
-    this.authService.login(username||'', password||'').subscribe(
-      {
-        next: () => this.router.navigateByUrl('/patients/main'),
-        error: (error) => {
-          this.loadingService.showErrorMessage(error.message);
-        }
-      }
-    );
-  }
 
-    loginV2() {
-    const { username, password } = this.loginForm.value;
-    
-    this.authService.login(username || '', password || '').pipe(  
-      tap(() => {
-        this.studyService.syncStudies().subscribe();
-      })
-    ).subscribe({  
-      next: () => {
-        this.router.navigateByUrl('/calendar/schedule');
-      },
+    this.authService.login(username || '', password || '').subscribe({
+      next: () => this.router.navigateByUrl('/patients/main'),
       error: (error) => {
         this.loadingService.showErrorMessage(error.message);
-      }
+      },
     });
+  }
+
+  loginV2() {
+    const { username, password } = this.loginForm.value;
+
+    this.authService
+      .login(username || '', password || '')
+      .pipe(
+        tap(() => {
+          this.studyService.syncStudies().subscribe();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl('/studies/main');
+        },
+        error: (error) => {
+          this.loadingService.showErrorMessage(error.message);
+        },
+      });
   }
 }
