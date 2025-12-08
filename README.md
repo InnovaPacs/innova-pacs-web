@@ -44,30 +44,37 @@ Asegúrate de tener instalado Node.js y Angular CLI en tu entorno de desarrollo.
 Este proyecto cuenta con los siguientes scripts definidos en `package.json`:
 
 - **Development server**: Inicia un servidor de desarrollo en `http://localhost:4200/`. La aplicación se recargará automáticamente al detectar cambios en los archivos fuente.
+
   ```bash
   npm start
   ```
+
   o
+
   ```bash
   ng serve
   ```
 
 - **Development server (dev environment)**: Inicia el servidor de desarrollo utilizando la configuración del entorno `dev`.
+
   ```bash
   npm run start:dev
   ```
 
 - **Build**: Compila la aplicación para producción. Los artefactos de la compilación se almacenan en el directorio `dist/`.
+
   ```bash
   npm run build
   ```
 
 - **Build (dev environment)**: Compila la aplicación utilizando la configuración `deploy` para un entorno de desarrollo/pruebas.
+
   ```bash
   npm run build:dev
   ```
 
 - **Watch**: Compila la aplicación en modo de observación, reconstruyendo automáticamente ante cualquier cambio.
+
   ```bash
   npm run watch
   ```
