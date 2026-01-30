@@ -13,6 +13,7 @@ import { StudySearch } from '../../interfaces/study-seaarch.interface';
 import { Modality } from '../../interfaces/modality.interface';
 import { StudyStatusService } from '../../../shared/services/study-status.service';
 import { firstValueFrom } from 'rxjs';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-main',
@@ -29,6 +30,7 @@ export class MainComponent {
   private studyService = inject(StudyService);
   public modalities: Modality[] = [];
   public studyStatusService = inject(StudyStatusService);
+  public loadingService = inject(LoadingService);
 
   pagination: Pagination = {
     currentPage: 0,
@@ -137,5 +139,11 @@ export class MainComponent {
     }
 
     this.medicalOfficeId = this.authService.currentMedicalOfficeId();
+  }
+
+  public sendStudy(id: string): void {
+    this.service.sendById(id).subscribe(() => {
+      this.loadingService.showSuccessMessage('Estudio enviado correctamente.');
+    });
   }
 }

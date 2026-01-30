@@ -95,6 +95,7 @@
                     </th>
                     <th class="sort align-middle" scope="col">MODALIDAD</th>
                     <th class="sort align-middle pe-3" scope="col">PACIENTE</th>
+                    <th class="sort align-middle pe-3" scope="col">TÉLEFONO</th>
                     <th class="sort align-middle" scope="col">ESTATUS</th>
                     <th class="sort align-middle" scope="col">FECHA</th>
                     <th class="sort align-middle" scope="col">HORA</th>
@@ -127,6 +128,16 @@
                         >
                           {{ domain.patient.firstName }}
                           {{ domain.patient.lastName }}
+                        </h6>
+                      </td>
+                      <td
+                        class="city align-middle white-space-nowrap text-body"
+                      >
+                        <h6
+                          class="mb-0 ms-3 fw-semibold cursor-pointer"
+                          [routerLink]="['/patients/', domain.patient.id]"
+                        >
+                          {{ domain.patient.phoneNumber }}
                         </h6>
                       </td>
                       <td class="mobile_number align-middle white-space-nowrap">
@@ -182,6 +193,11 @@
                                 "
                                 target="_blank"
                                 >Ver estudio</a
+                              >
+                              <a
+                                class="dropdown-item cursor-pointer"
+                                (click)="sendStudy(domain.id)"
+                                >Enviar estudio</a
                               >
                               <div class="dropdown-divider"></div>
                             }

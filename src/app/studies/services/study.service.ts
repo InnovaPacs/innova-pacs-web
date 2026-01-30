@@ -164,4 +164,17 @@ export class StudyService {
       headers,
     });
   }
+
+  sendById(id: string): Observable<void> {
+    const url = `${this.baseUrl}/api/studies/${id}/send`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.post<void>(
+      url,
+      {},
+      {
+        headers,
+      }
+    );
+  }
 }
