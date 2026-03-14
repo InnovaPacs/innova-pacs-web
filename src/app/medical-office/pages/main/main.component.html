@@ -39,7 +39,7 @@
                         <div class="row g-0 align-items-center" (click)="onCardClick(medicalOffice.id)">
                           <div class="col-auto">
                             <img 
-                            [src]="medicalOffice.logo ? 'https://persist.rocks/innova-pacs-service/api/files/' + medicalOffice.logo : 'assets/images/profile/unknown.jpg'" 
+                            [src]="medicalOffice.logo | fileUrl : 'assets/images/profile/unknown.jpg'" 
                               alt="Logo" 
                               class="img-fluid rounded-circle" 
                               style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #ddd;">

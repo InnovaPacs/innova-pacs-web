@@ -4,6 +4,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { HeaderComponent } from './components/header/header.component';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
+import { FileUrlPipe } from './pipes/file-url.pipe';
 
 
 
@@ -11,7 +12,8 @@ import { FooterComponent } from './components/footer/footer.component';
   declarations: [
     MenuComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    FileUrlPipe
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { FooterComponent } from './components/footer/footer.component';
   exports: [
     HeaderComponent,
     MenuComponent,
-    FooterComponent
+    FooterComponent,
+    FileUrlPipe
   ]
 })
 export class SharedModule { }
