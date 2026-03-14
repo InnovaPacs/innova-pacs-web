@@ -1,5 +1,5 @@
 export const environment = {
   name: 'development',
   production: false,
-  baseUrl: 'https://persist.rocks/med-iq-service',
+  baseUrl: 'https://bautistaj.dev/med-iq-service',
 };
