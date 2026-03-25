@@ -5,7 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 InnovaPACS (Med IQ) is an Angular 17 frontend for a RIS/PACS system targeting small medical clinics in Mexico. It integrates with:
-- A Java/Spring Boot backend API at `https://bautistaj.dev/med-iq-service`
+
+- A Java/Spring Boot backend API at `https://persist.lat/med-iq-service`
 - DCM4CHEE (open-source PACS for DICOM image storage)
 - OHIF Viewer (web-based DICOM visualization)
 - Kafka/HL7 messaging (handled by the backend, not this repo)
@@ -72,6 +73,7 @@ The app uses **lazy-loaded feature modules** routed from `app-routing.module.ts`
 ### Build Configurations
 
 Defined in `angular.json`:
+
 - **production** — Output hashing, optimized, no source maps
 - **dev** — Source maps, no optimization
 - **deploy** — Used by `npm run build:dev`; optimized, output hashing, base href `/med-iq/`
@@ -95,7 +97,7 @@ Defined in `angular.json`:
 
 ### Environment Config
 
-- `src/environments/environment.ts` — Dev: `baseUrl: 'https://bautistaj.dev/med-iq-service'`
+- `src/environments/environment.ts` — Dev: `baseUrl: 'https://persist.lat/med-iq-service'`
 - `src/environments/environment.dev.ts` — Deploy config
 
 ### Deployment
