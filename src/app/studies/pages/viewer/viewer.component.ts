@@ -56,7 +56,7 @@ export class ViewerComponent {
         return;
       }
 
-      const url = pacsConfig.viewerUrl + study.studyInstance;
+      const url = `${pacsConfig.viewerUrl}/viewer?StudyInstanceUIDs=${study.studyInstance}`;
       this.viewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     } catch {
       this.error = 'Error al cargar el visualizador. Intente nuevamente.';

@@ -46,7 +46,7 @@ export class PatientViewerComponent implements OnInit {
         this.patientPortalService.getPacsConfiguration(study.medicalOffice.id)
       );
 
-      const url = pacsConfig.viewerUrl + study.studyInstance;
+      const url = `${pacsConfig.viewerUrl}/patient-viewer?StudyInstanceUIDs=${study.studyInstance}`;
       this.viewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     } catch {
       this.error = 'Error al cargar el visualizador. Intente nuevamente.';
