@@ -55,6 +55,10 @@ const routes: Routes = [
     loadChildren: () => import('./pacs-configuration/pacs-configuration.module').then(m => m.PacsConfigurationModule)
   },
   {
+    path: 'patient-portal',
+    loadChildren: () => import('./patient-portal/patient-portal.module').then(m => m.PatientPortalModule)
+  },
+  {
     path: '**',
     redirectTo: 'patients'
   }

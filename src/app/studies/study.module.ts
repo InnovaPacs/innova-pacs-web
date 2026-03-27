@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MainComponent } from './pages/main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StudyFormComponent as StudyFormComponent } from './components/study-form/study-form.component';
+import { ViewerComponent } from './pages/viewer/viewer.component';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { PatientsModule } from '../patients/patients.module';
 
@@ -15,7 +16,8 @@ import { PatientsModule } from '../patients/patients.module';
   declarations: [
     StudyLayoutComponent,
     MainComponent,
-    StudyFormComponent
+    StudyFormComponent,
+    ViewerComponent,
   ],
   imports: [
     CommonModule,

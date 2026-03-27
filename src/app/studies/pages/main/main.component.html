@@ -187,11 +187,7 @@
                             @if (domain.studyInstance) {
                               <a
                                 class="dropdown-item cursor-pointer"
-                                [href]="
-                                  pacsConfiguration.viewerUrl +
-                                  domain.studyInstance
-                                "
-                                target="_blank"
+                                [routerLink]="['/studies/viewer', domain.id]"
                                 >Ver estudio</a
                               >
                               <a
