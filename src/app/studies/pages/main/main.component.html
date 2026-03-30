@@ -57,10 +57,9 @@
               <label for="status" class="form-label">Estatus</label>
               <select id="status" class="form-select" formControlName="status">
                 <option value="">Todos los estatus</option>
-                <option value="created">Finializado</option>
-                <option value="scheduled">En proceso</option>
-                <option value="INTERPRETED">Interpretado</option>
-                <option value="cancelled">Cancelado</option>
+                @for (s of studyStatusService.statuses; track s.code) {
+                  <option [value]="s.code">{{ s.name }}</option>
+                }
               </select>
             </div>
 

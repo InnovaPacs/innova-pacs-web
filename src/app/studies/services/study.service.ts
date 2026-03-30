@@ -150,7 +150,7 @@ export class StudyService {
     }
 
     if (search?.modalities) {
-      params = params.set('modality', search.modalities);
+      params = params.set('modalities', search.modalities);
     }
 
     return params;

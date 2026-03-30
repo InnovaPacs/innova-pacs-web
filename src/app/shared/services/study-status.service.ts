@@ -6,11 +6,11 @@ import { Injectable } from "@angular/core";
 export class StudyStatusService {
   constructor() { }
   statuses = [
-    { code: 'CREATED', name: 'Creada' },
-    { code: 'SCHEDULED', name: 'En proceso' },
-    { code: 'CANCELLED', name: 'Cancelado', },
+    { code: 'CREATED', name: 'Creado' },
+    { code: 'SCHEDULED', name: 'Programado' },
+    { code: 'COMPLETED', name: 'Completado' },
+    { code: 'CANCELLED', name: 'Cancelado' },
     { code: 'INTERPRETED', name: 'Interpretado' },
-    { code: 'COMPLETED', name: 'Completada' }
   ];
 
   getStatusName(statusCode: string): string {
