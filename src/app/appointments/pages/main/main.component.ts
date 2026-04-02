@@ -4,9 +4,10 @@ import { Appointment } from '../../interfaces/appointment.interface';
 import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   private service = inject(AppointmentService);

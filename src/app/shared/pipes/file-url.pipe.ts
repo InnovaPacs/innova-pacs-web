@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Pipe({
-  name: 'fileUrl'
+    name: 'fileUrl',
+    standalone: false
 })
 export class FileUrlPipe implements PipeTransform {
   private readonly filesBaseUrl = `${environment.baseUrl}/api/files`;

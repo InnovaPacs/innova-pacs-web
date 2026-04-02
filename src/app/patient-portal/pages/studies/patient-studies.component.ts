@@ -5,8 +5,9 @@ import { Study } from '../../../studies/interfaces/study.interface';
 import { Patient } from '../../../patients/interfaces/patient.interface';
 
 @Component({
-  selector: 'app-patient-studies',
-  templateUrl: './patient-studies.component.html',
+    selector: 'app-patient-studies',
+    templateUrl: './patient-studies.component.html',
+    standalone: false
 })
 export class PatientStudiesComponent implements OnInit {
   private patientPortalService = inject(PatientPortalService);

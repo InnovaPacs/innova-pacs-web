@@ -8,9 +8,10 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { FileService } from '../../../shared/services/file.service';
 
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.css'
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrl: './user-form.component.css',
+    standalone: false
 })
 export class UserFormComponent implements OnInit {
   private selectedFile!: File;

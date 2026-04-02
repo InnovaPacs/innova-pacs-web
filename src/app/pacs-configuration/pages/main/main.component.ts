@@ -4,9 +4,10 @@ import { PacsConfiguration } from '../../interfaces/pacs-configuration.interface
 import { Pagination, Item } from '../../../shared/interfaces/pagination.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   private service = inject(PacsConfigurationService);

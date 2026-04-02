@@ -7,9 +7,10 @@ import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
 import { FileService } from '../../../shared/services/file.service';
 
 @Component({
-  selector: 'app-doctor-form',
-  templateUrl: './doctor-form.component.html',
-  styleUrl: './doctor-form.component.css'
+    selector: 'app-doctor-form',
+    templateUrl: './doctor-form.component.html',
+    styleUrl: './doctor-form.component.css',
+    standalone: false
 })
 export class DoctorFormComponent {
   private selectedFile!: File;

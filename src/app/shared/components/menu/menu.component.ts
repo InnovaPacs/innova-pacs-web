@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.css',
+    standalone: false
 })
 export class MenuComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);

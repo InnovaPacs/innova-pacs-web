@@ -6,9 +6,10 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   private medicalOfficeService = inject(MedicalOfficeService);

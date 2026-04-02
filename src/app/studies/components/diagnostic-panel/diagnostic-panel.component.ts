@@ -22,9 +22,10 @@ const ERROR_MESSAGES: Record<number, string> = {
 };
 
 @Component({
-  selector: 'app-diagnostic-panel',
-  templateUrl: './diagnostic-panel.component.html',
-  styleUrl: './diagnostic-panel.component.css',
+    selector: 'app-diagnostic-panel',
+    templateUrl: './diagnostic-panel.component.html',
+    styleUrl: './diagnostic-panel.component.css',
+    standalone: false
 })
 export class DiagnosticPanelComponent implements OnInit {
   @Input() study!: Study;

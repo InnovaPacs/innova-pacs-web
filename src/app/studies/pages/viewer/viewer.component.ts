@@ -8,9 +8,10 @@ import { Study } from '../../interfaces/study.interface';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-viewer',
-  templateUrl: './viewer.component.html',
-  styleUrl: './viewer.component.css',
+    selector: 'app-viewer',
+    templateUrl: './viewer.component.html',
+    styleUrl: './viewer.component.css',
+    standalone: false
 })
 export class ViewerComponent {
   private route = inject(ActivatedRoute);

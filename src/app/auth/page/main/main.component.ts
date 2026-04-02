@@ -8,9 +8,10 @@ import { tap } from 'rxjs';
 import { StudyService } from '../../../studies/services/study.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css',
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   public fb = inject(FormBuilder);

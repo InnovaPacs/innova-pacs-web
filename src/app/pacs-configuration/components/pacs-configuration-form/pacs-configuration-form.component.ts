@@ -6,9 +6,10 @@ import { PacsConfigurationService } from '../../service/pacs-configuration.servi
 import { PacsConfiguration, UpdatePacsConfiguration } from '../../interfaces/pacs-configuration.interface';
 
 @Component({
-  selector: 'app-pacs-configuration-form',
-  templateUrl: './pacs-configuration-form.component.html',
-  styleUrl: './pacs-configuration-form.component.css'
+    selector: 'app-pacs-configuration-form',
+    templateUrl: './pacs-configuration-form.component.html',
+    styleUrl: './pacs-configuration-form.component.css',
+    standalone: false
 })
 export class PacsConfigurationFormComponent {
   private fb = inject(FormBuilder);

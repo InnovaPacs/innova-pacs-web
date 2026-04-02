@@ -3,9 +3,10 @@ import { PatientService } from '../../../patients/services/patient.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 
 @Component({
-  selector: 'app-new-urgency',
-  templateUrl: './new-urgency.component.html',
-  styleUrl: './new-urgency.component.css',
+    selector: 'app-new-urgency',
+    templateUrl: './new-urgency.component.html',
+    styleUrl: './new-urgency.component.css',
+    standalone: false
 })
 export class NewUrgencyComponent {
   private patientService = inject(PatientService);

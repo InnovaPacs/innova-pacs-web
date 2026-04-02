@@ -14,9 +14,10 @@ import { StudyService } from '../../../studies/services/study.service';
 import { Modality } from '../../../studies/interfaces/modality.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent implements OnInit {
   private service = inject(AppointmentService);

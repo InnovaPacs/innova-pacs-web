@@ -23,9 +23,10 @@ import { VendorsService } from '../../../shared/services/vendors.service';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-urgency-form',
-  templateUrl: './urgency-form.component.html',
-  styleUrl: './urgency-form.component.css',
+    selector: 'app-urgency-form',
+    templateUrl: './urgency-form.component.html',
+    styleUrl: './urgency-form.component.css',
+    standalone: false
 })
 export class UrgencyFormComponent {
   private service = inject(AppointmentService);

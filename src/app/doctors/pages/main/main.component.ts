@@ -5,9 +5,10 @@ import { Item, Pagination } from '../../../shared/interfaces/pagination.interfac
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   private service = inject(DoctorService);

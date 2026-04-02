@@ -4,9 +4,10 @@ import { User } from '../../interfaces/user.interface';
 import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent implements OnInit {
   private userService = inject(UserService);

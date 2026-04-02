@@ -7,9 +7,10 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class PatientMainComponent {
   private service = inject(PatientService);

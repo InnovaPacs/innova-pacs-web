@@ -8,9 +8,10 @@ import { FileService } from '../../../shared/services/file.service';
 import { PacsFile } from '../../../shared/interfaces/file.interface';
 
 @Component({
-  selector: 'app-medical-office-form',
-  templateUrl: './medical-office-form.component.html',
-  styleUrl: './medical-office-form.component.css'
+    selector: 'app-medical-office-form',
+    templateUrl: './medical-office-form.component.html',
+    styleUrl: './medical-office-form.component.css',
+    standalone: false
 })
 export class MedicalOfficeFormComponent {
   private fb = inject(FormBuilder);

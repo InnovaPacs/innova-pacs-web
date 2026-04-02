@@ -12,9 +12,10 @@ import { AppointmenStatusService } from '../../../shared/services/appointment-st
 import { StudyService } from '../../../studies/services/study.service';
 
 @Component({
-  selector: 'app-schedule',
-  templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.css',
+    selector: 'app-schedule',
+    templateUrl: './schedule.component.html',
+    styleUrl: './schedule.component.css',
+    standalone: false
 })
 export class ScheduleComponent implements OnInit {
   public title: string = `Detalle de consultas médicas`;

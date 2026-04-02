@@ -23,9 +23,10 @@ import { AppointmentService } from '../../../appointments/services/appointment.s
 import { StudyStatusService } from '../../../shared/services/study-status.service';
 
 @Component({
-  selector: 'app-study-form',
-  templateUrl: './study-form.component.html',
-  styleUrl: './study-form.component.css',
+    selector: 'app-study-form',
+    templateUrl: './study-form.component.html',
+    styleUrl: './study-form.component.css',
+    standalone: false
 })
 export class StudyFormComponent implements OnChanges {
   private fb = inject(FormBuilder);

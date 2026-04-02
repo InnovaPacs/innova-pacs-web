@@ -5,8 +5,9 @@ import { firstValueFrom } from 'rxjs';
 import { PatientPortalService } from '../../services/patient-portal.service';
 
 @Component({
-  selector: 'app-patient-viewer',
-  templateUrl: './patient-viewer.component.html',
+    selector: 'app-patient-viewer',
+    templateUrl: './patient-viewer.component.html',
+    standalone: false
 })
 export class PatientViewerComponent implements OnInit {
   private route = inject(ActivatedRoute);

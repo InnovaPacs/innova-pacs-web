@@ -20,9 +20,10 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-urgency-form-v2',
-  templateUrl: './urgency-form-v2.component.html',
-  styleUrl: './urgency-form-v2.component.css',
+    selector: 'app-urgency-form-v2',
+    templateUrl: './urgency-form-v2.component.html',
+    styleUrl: './urgency-form-v2.component.css',
+    standalone: false
 })
 export class UrgencyFormV2Component {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
