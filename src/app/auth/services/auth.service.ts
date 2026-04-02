@@ -3,7 +3,6 @@ import { Observable, map, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { User, AuthStatus, LoginResponse, SignUp } from '../interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { cu } from '@fullcalendar/core/internal-common';
 
 @Injectable({
   providedIn: 'root',

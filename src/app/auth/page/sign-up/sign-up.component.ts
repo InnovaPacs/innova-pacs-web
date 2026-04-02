@@ -1,17 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
-import { em } from '@fullcalendar/core/internal-common';
 import { SignUp } from '../../interfaces';
 import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
-    selector: 'app-sign-up',
-    templateUrl: './sign-up.component.html',
-    styleUrl: './sign-up.component.css',
-    standalone: false
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.component.html',
+  styleUrl: './sign-up.component.css',
+  standalone: false,
 })
 export class SignUpComponent {
   public fb = inject(FormBuilder);
@@ -22,7 +20,7 @@ export class SignUpComponent {
   public signUpForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     username: ['', [Validators.required, Validators.minLength(3)]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   signUp() {
@@ -32,11 +30,11 @@ export class SignUpComponent {
     }
 
     const { username, password, email } = this.signUpForm.value;
-    
+
     const user: SignUp = {
-      email: email ,
+      email: email,
       username: username,
-      password: password
+      password: password,
     };
 
     this.authService.signUp(user).subscribe(() => {
