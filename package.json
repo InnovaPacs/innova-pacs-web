@@ -13,7 +13,14 @@
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "nice-napi"]
+    "onlyBuiltDependencies": ["esbuild", "nice-napi"],
+    "overrides": {
+      "tar": ">=7.5.11",
+      "serialize-javascript": ">=7.0.5",
+      "brace-expansion": ">=1.1.13",
+      "tmp": ">=0.2.4",
+      "picomatch": ">=4.0.4"
+    }
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
