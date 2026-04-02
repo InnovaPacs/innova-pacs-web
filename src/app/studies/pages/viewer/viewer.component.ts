@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { StudyService } from '../../services/study.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { Study } from '../../interfaces/study.interface';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -20,6 +21,7 @@ export class ViewerComponent {
   private medicalOfficeService = inject(MedicalOfficeService);
 
   public viewerUrl: SafeResourceUrl | null = null;
+  public study: Study | null = null;
   public loading = true;
   public error: string | null = null;
 
@@ -49,6 +51,8 @@ export class ViewerComponent {
           )
         ),
       ]);
+
+      this.study = study;
 
       if (!study.studyInstance) {
         this.error = 'Este estudio no tiene imágenes DICOM asociadas.';

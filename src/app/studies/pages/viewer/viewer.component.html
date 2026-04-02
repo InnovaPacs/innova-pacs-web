@@ -30,13 +30,18 @@
           </div>
         }
 
-        @if (!loading && !error && viewerUrl) {
-          <iframe
-            [src]="viewerUrl"
-            class="viewer-frame"
-            allowfullscreen
-            allow="fullscreen"
-          ></iframe>
+        @if (!loading && !error && viewerUrl && study) {
+          <div class="viewer-layout">
+            <div class="viewer-iframe-col">
+              <iframe
+                [src]="viewerUrl"
+                class="viewer-frame"
+                allowfullscreen
+                allow="fullscreen"
+              ></iframe>
+            </div>
+            <app-diagnostic-panel [study]="study" />
+          </div>
         }
       </div>
     </div>

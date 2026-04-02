@@ -17,6 +17,9 @@ export class PatientStudiesComponent implements OnInit {
   public loading = true;
   public error: string | null = null;
 
+  public downloadingPdf = new Set<string>();
+  public pdfErrors = new Map<string, string>();
+
   ngOnInit(): void {
     this.patient = this.patientPortalService.verifiedPatient();
     if (!this.patient) {
@@ -41,6 +44,29 @@ export class PatientStudiesComponent implements OnInit {
 
   viewStudy(studyId: string): void {
     this.router.navigate(['/patient-portal/viewer', studyId]);
+  }
+
+  async downloadDiagnostic(studyId: string): Promise<void> {
+    if (this.downloadingPdf.has(studyId)) return;
+
+    this.downloadingPdf.add(studyId);
+    this.pdfErrors.delete(studyId);
+
+    try {
+      await this.patientPortalService.downloadDiagnosticPdf(studyId);
+    } catch {
+      this.pdfErrors.set(studyId, 'El diagnóstico aún no está disponible.');
+    } finally {
+      this.downloadingPdf.delete(studyId);
+    }
+  }
+
+  isDownloadingPdf(studyId: string): boolean {
+    return this.downloadingPdf.has(studyId);
+  }
+
+  getPdfError(studyId: string): string | undefined {
+    return this.pdfErrors.get(studyId);
   }
 
   getStatusLabel(status: string): string {

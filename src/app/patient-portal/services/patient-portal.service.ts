@@ -36,6 +36,20 @@ export class PatientPortalService {
     return this.http.get<Study>(url);
   }
 
+  async downloadDiagnosticPdf(studyId: string): Promise<void> {
+    const url = `${this.baseUrl}/api/public/diagnostics/${studyId}/pdf`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('PDF no disponible');
+    }
+
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, '_blank');
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+  }
+
   clearPatient(): void {
     this.verifiedPatient.set(null);
   }

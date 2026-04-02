@@ -51,7 +51,8 @@
                     <th class="align-middle" scope="col">ESTATUS</th>
                     <th class="align-middle" scope="col">FECHA</th>
                     <th class="align-middle" scope="col">HORA</th>
-                    <th class="align-middle" scope="col">ACCIONES</th>
+                    <th class="align-middle" scope="col">IMÁGENES</th>
+                    <th class="align-middle" scope="col">DIAGNÓSTICO</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -89,6 +90,25 @@
                           </button>
                         } @else {
                           <span class="text-muted fs-sm">Sin imágenes</span>
+                        }
+                      </td>
+                      <td class="align-middle">
+                        <button
+                          class="btn btn-sm btn-outline-primary"
+                          (click)="downloadDiagnostic(study.id)"
+                          [disabled]="isDownloadingPdf(study.id)"
+                        >
+                          @if (isDownloadingPdf(study.id)) {
+                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                          } @else {
+                            <span class="fas fa-file-pdf me-1"></span>
+                          }
+                          Descargar
+                        </button>
+                        @if (getPdfError(study.id)) {
+                          <p class="text-danger mb-0 mt-1" style="font-size: 0.7rem;">
+                            {{ getPdfError(study.id) }}
+                          </p>
                         }
                       </td>
                     </tr>
