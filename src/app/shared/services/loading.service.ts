@@ -8,9 +8,9 @@ export class LoadingService {
 
   constructor() { }
 
-  showLoading(message: string = 'Cargando ...') {
+  showLoading(message: string = 'Procesando ...') {
     Swal.fire({
-      title: 'Procesando ...',
+      title: message,
       html: '<div class="spinner"></div>',
       allowOutsideClick: false,
       didOpen: () => {

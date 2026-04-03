@@ -60,7 +60,6 @@ export class PacsConfigurationService {
   }
 
   save(bodyRequest: UpdatePacsConfiguration):Observable<PacsConfiguration> {
-    console.log('bodyRequest: ', bodyRequest);
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/pacs-configurations`;
 

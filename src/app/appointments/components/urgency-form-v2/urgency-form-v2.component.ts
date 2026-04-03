@@ -36,6 +36,10 @@ export class UrgencyFormV2Component {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  public showModal = false;
+  public modalType!: string;
+  public origing: string = 'appointment';
+
   patient: Patient | null = null;
   doctor: Doctor | null = null;
 
@@ -176,9 +180,7 @@ export class UrgencyFormV2Component {
         next: (response) => {
           this.router.navigate(['/calendar/schedule']);
         },
-        error: (error) => {
-          console.error('Error saving appointment', error);
-        },
+        error: () => {},
       });
   }
 
@@ -238,5 +240,52 @@ export class UrgencyFormV2Component {
 
   private getMedicalOffice(): string | null {
     return this.auth.currentMedicalOfficeId();
+  }
+
+  public openModal(modalType: string): void {
+    this.showModal = true;
+    this.modalType = modalType;
+  }
+
+  public closeModal(): void {
+    this.showModal = false;
+  }
+
+  public handleNewPatient(patient: Patient): void {
+    this.patients = [...this.patients, patient];
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        this.patientInstance = this.vendorsService.initChoices(
+          this.patientInstance,
+          this.patientRef
+        );
+        this.vendorsService.setChoices(
+          this.patientInstance,
+          patient.id,
+          `${patient.firstName} ${patient.lastName || ''}`
+        );
+        this.form.patchValue({ patientId: patient.id });
+        this.closeModal();
+      }, 100);
+    });
+  }
+
+  public handleNewDoctor(doctor: Doctor): void {
+    this.doctors = [...this.doctors, doctor];
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        this.radiologistInstance = this.vendorsService.initChoices(
+          this.radiologistInstance,
+          this.radiologistRef
+        );
+        this.vendorsService.setChoices(
+          this.radiologistInstance,
+          doctor.id,
+          `${doctor.name}`
+        );
+        this.form.patchValue({ radiologistId: doctor.id });
+        this.closeModal();
+      }, 100);
+    });
   }
 }

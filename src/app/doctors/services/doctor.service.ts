@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
+import { SKIP_LOADING } from '../../shared/interceptor/skip-loading.token';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { DoctorPage } from '../interfaces/doctor-page.interface';
@@ -72,6 +73,7 @@ export class DoctorService {
 
     return this.http.get<Doctor[]>(url, {
       headers,
+      context: new HttpContext().set(SKIP_LOADING, true),
     });
   }
 

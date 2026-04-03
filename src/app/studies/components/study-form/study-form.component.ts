@@ -192,10 +192,7 @@ export class StudyFormComponent implements OnChanges {
           this.studyId = studyId!;
           return this.service.getById(this.studyId);
         }),
-        catchError((error) => {
-          console.error('Error al obtener el consultorio:', error);
-          return EMPTY;
-        })
+        catchError(() => EMPTY)
       )
       .subscribe((response) => {
         this.patchForm(response);

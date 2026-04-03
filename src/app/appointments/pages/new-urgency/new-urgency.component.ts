@@ -14,29 +14,6 @@ export class NewUrgencyComponent {
   public appointmentId!: string;
 
   ngOnInit(): void {
-    this.doctorService.getByName('DOCTOR EN TURNO (ASIGNAR)').subscribe({
-      next: (data) => {
-        console.log('Doctor encontrado:', data);
-      },
-      error: (err) => {
-        console.error('Error fetching doctor by name:', err);
-      },
-      complete: () => {
-        console.log('Búsqueda completada.');
-      },
-    });
-
-    this.patientService.getByCurp('DESCONOCIDO').subscribe({
-      next: (data) => {
-        console.log('Paciente encontrado:', data);
-      },
-      error: (err) => {
-        console.error('Error fetching patient by CURP:', err);
-      },
-      complete: () => {
-        console.log('Búsqueda completada.');
-      },
-    });
   }
 
   public handleNewAppointment(appointmentId: string) {

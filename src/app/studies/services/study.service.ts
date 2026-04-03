@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { StudyPage } from '../interfaces/study-page.interface';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { SKIP_LOADING } from '../../shared/interceptor/skip-loading.token';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { Study, StudyDto } from '../interfaces/study.interface';
@@ -52,6 +53,7 @@ export class StudyService {
 
     return this.http.get<Study>(url, {
       headers,
+      context: new HttpContext().set(SKIP_LOADING, true),
     });
   }
 

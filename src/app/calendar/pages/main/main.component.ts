@@ -72,8 +72,6 @@ export class MainComponent implements OnInit {
 
   openModal(eventId: string) {
     const appointment = this.appointments.filter(event => event.id === eventId)[0];
-    console.log('this.appointments ', this.appointments);
-    console.log('this.appointments ', appointment);
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -200,7 +198,6 @@ export class MainComponent implements OnInit {
 
   onSelectChange(event: Event) {
     const selectedId = (event.target as HTMLSelectElement).value;
-    console.log('Selected study exam type ID:', selectedId);
     this.getAllData(this.currentMonth, this.currentYear, selectedId);
   }
 

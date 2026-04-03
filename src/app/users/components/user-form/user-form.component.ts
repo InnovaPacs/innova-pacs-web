@@ -40,10 +40,7 @@ export class UserFormComponent implements OnInit {
         this.id = id!;
         return this.userService.getById(this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el usuario:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(user => {
       this.patchUserForm(user);
     });
@@ -77,7 +74,6 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.invalid) {
-      console.warn('Form is invalid');
       return;
     }
     

@@ -283,7 +283,7 @@ export class AppointmentFormComponent {
 
     requestAnimationFrame(() => {
       setTimeout(() => {
-        if (this.modalType === 'radiologist') {
+        if (this.modalType === 'doctors') {
           this.doctorRequestedInstance = this.vendorsService.initChoices(
             this.doctorRequestedInstance,
             this.doctorRequestedRef

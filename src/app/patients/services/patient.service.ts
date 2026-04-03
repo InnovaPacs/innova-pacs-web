@@ -49,7 +49,6 @@ export class PatientService {
   }
 
   update(id: string, bodyRequest: UpdatePatient): Observable<Patient> {
-    console.log('update: ', bodyRequest);
     const url = `${this.baseUrl}/api/patients/${id}`;
     const headers = this.authService.getHeaders();
 
@@ -59,7 +58,6 @@ export class PatientService {
   }
 
   save(bodyRequest: UpdatePatient): Observable<Patient> {
-    console.log('save: ', bodyRequest);
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/patients`;
 

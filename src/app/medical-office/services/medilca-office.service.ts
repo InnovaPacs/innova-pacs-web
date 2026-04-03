@@ -1,7 +1,8 @@
 import { inject, Injectable, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { SKIP_LOADING } from '../../shared/interceptor/skip-loading.token';
 import { environment } from '../../../environments/environment';
 import { MedicalOfficePage } from '../interfaces/medical-office-page.interface';
 import {
@@ -115,6 +116,7 @@ export class MedicalOfficeService {
 
     return this.http.get<MedicalOffice>(url, {
       headers,
+      context: new HttpContext().set(SKIP_LOADING, true),
     });
   }
 
@@ -126,6 +128,7 @@ export class MedicalOfficeService {
 
     return this.http.get<PacsConfiguration>(url, {
       headers,
+      context: new HttpContext().set(SKIP_LOADING, true),
     });
   }
 }

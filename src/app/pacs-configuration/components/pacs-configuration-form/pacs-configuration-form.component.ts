@@ -37,10 +37,7 @@ export class PacsConfigurationFormComponent {
         this.id = id!;
         return this.service.getById(this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(response => {
       this.title = `Editar pacs "${response.title}"`;
       this.patchForm(response);
@@ -66,7 +63,6 @@ export class PacsConfigurationFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
-      console.warn('Form is invalid');
       return;
     }
 

@@ -42,10 +42,7 @@ export class DoctorFormComponent {
         this.id = id!;
         return this.service.getById(this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(response => {
       this.title = `Editar médico "${response.name}"`;
       this.patchForm(response);
@@ -77,7 +74,6 @@ export class DoctorFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
-      console.warn('Form is invalid');
       return;
     }
     
@@ -117,17 +113,27 @@ export class DoctorFormComponent {
   }
 
   handleCreate(update: UpdateDoctor): void {
-    this.fileService.save(this.selectedFile).pipe(
-      switchMap((response) => {
-        update.photo = response.id;
-        return this.service.save(update);
-      })
-    ).subscribe((result: Doctor) => {
-      if (this.origin === 'appointment') {
-        this.doctorCreated.emit(result);
-      } else {
-        this.router.navigate(['/doctors/main']);
-      }
-    });
+    if (this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.service.save(update);
+        })
+      ).subscribe((result: Doctor) => {
+        this.afterCreate(result);
+      });
+    } else {
+      this.service.save(update).subscribe((result: Doctor) => {
+        this.afterCreate(result);
+      });
+    }
+  }
+
+  private afterCreate(result: Doctor): void {
+    if (this.origin === 'appointment') {
+      this.doctorCreated.emit(result);
+    } else {
+      this.router.navigate(['/doctors/main']);
+    }
   }
 }

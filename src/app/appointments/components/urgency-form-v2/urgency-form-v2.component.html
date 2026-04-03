@@ -20,6 +20,7 @@
       type="button"
       class="btn btn-success d-flex align-items-center justify-content-center w-100"
       style="height: 47px; width: 100%"
+      (click)="openModal('patients')"
     >
       <i class="fa-solid fa-hospital-user"></i>
     </button>
@@ -47,6 +48,7 @@
       type="button"
       class="btn btn-success d-flex align-items-center justify-content-center w-100"
       style="height: 47px; width: 100%"
+      (click)="openModal('radiologist')"
     >
       <i class="fa-solid fa-user-doctor"></i>
     </button>
@@ -87,3 +89,36 @@
   <!-- ######### Detalles de ESTUDIOS -->
   <button type="submit" class="btn btn-primary">Agendar Urgencia</button>
 </form>
+
+<div
+  class="modal fade modal-xl"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': showModal }"
+  *ngIf="showModal"
+  style="background: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+      @if (modalType === 'patients') {
+        <app-patient-form
+          [origin]="origing"
+          (patientCreated)="handleNewPatient($event)"
+        ></app-patient-form>
+      }
+      @if (modalType === 'radiologist') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
+    </div>
+  </div>
+</div>

@@ -1,25 +1,31 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { EMPTY, Observable, catchError, finalize, tap, throwError } from "rxjs";
+import { EMPTY, Observable, catchError, finalize, throwError } from "rxjs";
 import { LoadingService } from "../services/loading.service";
 import { Router } from "@angular/router";
+import { SKIP_LOADING } from "./skip-loading.token";
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
   private router = inject(Router);
-  private hasError = false;
+  private activeRequests = 0;
+
   constructor(private loadingService: LoadingService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loadingService.showLoading();
-    this.hasError = false
+    const skipLoading = req.context.get(SKIP_LOADING);
+
+    if (!skipLoading) {
+      this.activeRequests++;
+      if (this.activeRequests === 1) {
+        this.loadingService.showLoading();
+      }
+    }
 
     return next.handle(req).pipe(
       catchError((error) => {
-        this.hasError = true; 
-
         if (error?.error?.message === 'USERNAME_IS_ALREADY_TAKE' || error?.error?.message === 'EMAIL_IS_ALREADY_TAKE') {
-          this.loadingService.showErrorMessage('Nombre de usuario ó email ya estan registrados');
+          this.loadingService.showErrorMessage('Nombre de usuario ó email ya están registrados');
           return EMPTY;
         }
 
@@ -34,19 +40,15 @@ export class LoadingInterceptor implements HttpInterceptor {
           return EMPTY;
         }
 
-        
-
-        this.loadingService.showErrorMessage('A ocurrido un error: ' + (error?.error?.message || 'Unknown error'));
+        this.loadingService.showErrorMessage('Ha ocurrido un error: ' + (error?.error?.message || 'Unknown error'));
         return throwError(() => error);
       }),
-      tap(() => {
-        if (this.hasError) {
-          return;
-        }
-      }),
       finalize(() => {
-        if (!this.hasError) {
-          this.loadingService.hideLoading();
+        if (!skipLoading) {
+          this.activeRequests--;
+          if (this.activeRequests === 0) {
+            this.loadingService.hideLoading();
+          }
         }
       })
     );

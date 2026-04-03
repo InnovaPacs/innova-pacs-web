@@ -47,7 +47,6 @@ export class MainComponent {
 
   private getAllData(page: number) {
     this.service.getAll(page).subscribe((response) => {
-      console.log('response: ', response.content);
       this.domains = response.content;
       
       this.pagination = {

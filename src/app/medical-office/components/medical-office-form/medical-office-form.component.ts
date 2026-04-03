@@ -39,10 +39,7 @@ export class MedicalOfficeFormComponent {
         this.id = id!;
         return this.medicalOfficeService.getById(null, this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(medicalOffice => {
       this.patchMedicalOfficeForm(medicalOffice);
     });
@@ -71,7 +68,6 @@ export class MedicalOfficeFormComponent {
 
   onSubmit() {
     if (this.medicalOfficeForm.invalid) {
-      console.warn('Form is invalid');
       return;
     }
 

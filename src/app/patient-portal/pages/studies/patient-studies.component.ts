@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { PatientPortalService } from '../../services/patient-portal.service';
 import { Study } from '../../../studies/interfaces/study.interface';
@@ -12,6 +13,7 @@ import { Patient } from '../../../patients/interfaces/patient.interface';
 export class PatientStudiesComponent implements OnInit {
   private patientPortalService = inject(PatientPortalService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   public patient: Patient | null = null;
   public studies: Study[] = [];
@@ -31,16 +33,18 @@ export class PatientStudiesComponent implements OnInit {
   }
 
   private loadStudies(): void {
-    this.patientPortalService.getPatientStudies(this.patient!.id).subscribe({
-      next: (studies) => {
-        this.studies = studies;
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Error al cargar los estudios. Intente nuevamente.';
-        this.loading = false;
-      },
-    });
+    this.patientPortalService.getPatientStudies(this.patient!.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (studies) => {
+          this.studies = studies;
+          this.loading = false;
+        },
+        error: () => {
+          this.error = 'Error al cargar los estudios. Intente nuevamente.';
+          this.loading = false;
+        },
+      });
   }
 
   viewStudy(studyId: string): void {

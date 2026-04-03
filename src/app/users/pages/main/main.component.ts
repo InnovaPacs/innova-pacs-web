@@ -42,7 +42,6 @@ export class MainComponent implements OnInit {
   }
 
   navigate(page: number):void {
-    console.log(page);
     this.getAllData(page);
   }
 

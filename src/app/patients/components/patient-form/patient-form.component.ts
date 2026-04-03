@@ -54,10 +54,7 @@ export class PatientFormComponent {
         this.id = id!;
         return this.service.getById(this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(response => {
       this.title = `Editar paciente "${response.firstName} ${response.lastName}"`;
       this.patchForm(response);
@@ -153,18 +150,27 @@ export class PatientFormComponent {
   }
 
   handleCreate(update: UpdatePatient): void {
-    this.fileService.save(this.selectedFile).pipe(
-      switchMap((response) => {
-        update.photo = response.id;
-        return this.service.save(update);
-      })
-    )
-    .subscribe(result => {
-      if (this.origin === 'appointment') {
-        this.patientCreated.emit(result);
-      } else {
-        this.router.navigate(['/patients/main']);
-      }
-    });
+    if (this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.service.save(update);
+        })
+      ).subscribe(result => {
+        this.afterCreate(result);
+      });
+    } else {
+      this.service.save(update).subscribe(result => {
+        this.afterCreate(result);
+      });
+    }
+  }
+
+  private afterCreate(result: Patient): void {
+    if (this.origin === 'appointment') {
+      this.patientCreated.emit(result);
+    } else {
+      this.router.navigate(['/patients/main']);
+    }
   }
 }

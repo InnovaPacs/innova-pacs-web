@@ -63,8 +63,6 @@ export class AppointmentService {
   }
 
   save(bodyRequest: AppointmentDto): Observable<Appointment> {
-    console.log('bodyRequest ', bodyRequest);
-
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/appointments`;
     return this.http.post<Appointment>(url, bodyRequest, {

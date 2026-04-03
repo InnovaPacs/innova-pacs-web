@@ -88,7 +88,6 @@ ngOnInit(): void {
 
   onSubmit(): void {
     const mainSearch = this.form.get('mainSearch')?.value;
-    console.log(mainSearch);
     this.getAllData(0, mainSearch);
   }
 }

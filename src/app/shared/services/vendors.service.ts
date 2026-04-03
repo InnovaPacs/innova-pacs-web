@@ -9,28 +9,22 @@ export class VendorsService {
   constructor() {}
 
   initChoices(instance: any, selectRef: ElementRef): any {
-    console.log('Initializing Choices instance');
     if (instance && typeof instance.destroy === 'function') {
-      console.log('Destroying existing Choices instance');
       instance.destroy();
     }
 
     if (!selectRef || !selectRef.nativeElement) {
-      console.log('Select reference is invalid');
       return null;
     }
 
     const select = selectRef.nativeElement;
 
-    const newInstance = new Choices(select, {
+    return new Choices(select, {
       removeItemButton: false,
       placeholder: true,
       shouldSort: false,
       allowHTML: true,
     });
-
-    console.log('New Choices instance created:', newInstance);
-    return newInstance;
   }
 
   setChoices(instance: any, id: string, label: string) {
