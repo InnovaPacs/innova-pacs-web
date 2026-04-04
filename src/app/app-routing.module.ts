@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { isNotAuthenticatedGuard } from './auth/guards/is-not-authenticated.guard';
 import { isAuthenticatedGuard } from './auth/guards/is-authenticated.guard';
+import { hasPermissionGuard } from './auth/guards/has-permission.guard';
+import { Permission } from './auth/enums/permissions.enum';
 
 const routes: Routes = [
   {
@@ -16,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'patients',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.VIEW_PATIENT)],
     loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule)
   },
   {
@@ -26,32 +28,32 @@ const routes: Routes = [
   },
   {
     path: 'users',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.MANAGE_USERS)],
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
   },
   {
     path: 'calendar',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.VIEW_AGENDA)],
     loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule)
   },
   {
     path: 'medical-offices',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.MANAGE_OFFICE)],
     loadChildren: () => import('./medical-office/medical-office.module').then(m => m.MedicalOfficeModule)
   },
   {
     path: 'doctors',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.VIEW_DOCTOR)],
     loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule)
   },
   {
     path: 'studies',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.VIEW_STUDY)],
     loadChildren: () => import('./studies/study.module').then(m => m.StudyModule)
   },
   {
     path: 'pacs-configurations',
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard, hasPermissionGuard(Permission.MANAGE_PACS)],
     loadChildren: () => import('./pacs-configuration/pacs-configuration.module').then(m => m.PacsConfigurationModule)
   },
   {
@@ -60,7 +62,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'patients'
+    redirectTo: 'studies'
   }
 ];
 

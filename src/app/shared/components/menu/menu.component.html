@@ -39,7 +39,7 @@
               >
                 <li class="collapsed-nav-item-title d-none">Citas Médicas</li>
 
-                <li class="nav-item">
+                <li *hasPermission="'VIEW_STUDY'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -51,7 +51,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
+                <li *hasPermission="'VIEW_AGENDA'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -63,7 +63,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
+                <li *hasPermission="'VIEW_PATIENT'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -75,7 +75,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
+                <li *hasPermission="'VIEW_DOCTOR'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -121,7 +121,7 @@
                 id="nv-configurations"
               >
                 <li class="collapsed-nav-item-title d-none">Configuraciones</li>
-                <li class="nav-item">
+                <li *hasPermission="'MANAGE_PACS'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -132,7 +132,7 @@
                     </div>
                   </a>
                 </li>
-                <li class="nav-item cursor-pointer">
+                <li *hasPermission="'MANAGE_OFFICE'" class="nav-item cursor-pointer">
                   <a
                     class="nav-link"
                     routerLinkActive="active"
@@ -143,7 +143,7 @@
                     </div>
                   </a>
                 </li>
-                <li class="nav-item">
+                <li *hasPermission="'MANAGE_USERS'" class="nav-item">
                   <a
                     class="nav-link"
                     routerLinkActive="active"

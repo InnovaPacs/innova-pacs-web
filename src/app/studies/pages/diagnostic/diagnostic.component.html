@@ -1,0 +1,299 @@
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <!-- Header -->
+        <div class="d-flex mb-4 justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-3">
+            <h3 class="mb-0">Crear diagnóstico</h3>
+            @if (status) {
+              <span
+                class="badge fs-6"
+                [class.bg-secondary]="isDraft"
+                [class.bg-primary]="status === 'SIGNED'"
+                [class.bg-success]="status === 'COMPLETED'"
+              >
+                {{ statusLabel }}
+              </span>
+            }
+          </div>
+          <button class="btn btn-outline-secondary" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i> Regresar a estudios
+          </button>
+        </div>
+
+        <hr class="my-3" />
+
+        <!-- Loading state -->
+        @if (loading) {
+          <div class="d-flex justify-content-center align-items-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <span class="ms-3">Cargando...</span>
+          </div>
+        }
+
+        @if (!loading && study) {
+          <!-- Study info -->
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <p class="text-muted mb-1 small fw-semibold">ACCESSION NUMBER</p>
+              <p class="mb-0 fw-semibold">{{ study.accessionNumber }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted mb-1 small fw-semibold">PACIENTE</p>
+              <p class="mb-0 fw-semibold">
+                {{ study.patient.firstName }} {{ study.patient.lastName }}
+              </p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted mb-1 small fw-semibold">MODALIDAD</p>
+              <p class="mb-0" [style.color]="study.modality.color">
+                [{{ study.modality.name }}]
+              </p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted mb-1 small fw-semibold">FECHA</p>
+              <p class="mb-0">{{ study.studyDate | date: 'dd/MM/yyyy' }}</p>
+            </div>
+          </div>
+
+          <hr class="my-3" />
+
+          <!-- Alerts -->
+          @if (errorMsg) {
+            <div class="alert alert-danger py-2">{{ errorMsg }}</div>
+          }
+          @if (successMsg) {
+            <div class="alert alert-success py-2">{{ successMsg }}</div>
+          }
+
+          <form [formGroup]="form">
+            <div class="row g-4">
+              <!-- Médico -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold"
+                  >MÉDICO <span class="text-danger">*</span></label
+                >
+                @if (!isReadOnly) {
+                  <select class="form-select" formControlName="doctorId">
+                    <option [ngValue]="null" disabled>
+                      Seleccionar médico
+                    </option>
+                    @for (doctor of doctors; track doctor.id) {
+                      <option [value]="doctor.id">
+                        {{ doctor.name }} — {{ doctor.specialty }}
+                      </option>
+                    }
+                  </select>
+                } @else {
+                  <p class="form-control-plaintext">
+                    {{ diagnostic?.doctorName }}
+                    <span class="text-muted"
+                      >— {{ diagnostic?.doctorSpecialty }}</span
+                    >
+                  </p>
+                  @if (diagnostic?.doctorLicense) {
+                    <p class="text-muted small">
+                      Cédula: {{ diagnostic?.doctorLicense }}
+                    </p>
+                  }
+                }
+              </div>
+
+              <!-- Información clínica -->
+              <div class="col-12">
+                <label class="form-label fw-semibold"
+                  >INFORMACIÓN CLÍNICA <span class="text-danger">*</span></label
+                >
+                @if (!isReadOnly) {
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    formControlName="clinicalInfo"
+                    placeholder="Motivo de consulta y antecedentes relevantes..."
+                  ></textarea>
+                } @else {
+                  <p class="form-control-plaintext border rounded p-2 bg-light">
+                    {{ diagnostic?.clinicalInfo }}
+                  </p>
+                }
+              </div>
+
+              <!-- Técnica -->
+              <div class="col-12">
+                <label class="form-label fw-semibold"
+                  >TÉCNICA <span class="text-danger">*</span></label
+                >
+                @if (!isReadOnly) {
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    formControlName="technique"
+                    placeholder="Técnica de adquisición utilizada..."
+                  ></textarea>
+                } @else {
+                  <p class="form-control-plaintext border rounded p-2 bg-light">
+                    {{ diagnostic?.technique }}
+                  </p>
+                }
+              </div>
+
+              <!-- Hallazgos -->
+              <div class="col-12">
+                <label class="form-label fw-semibold"
+                  >HALLAZGOS <span class="text-danger">*</span></label
+                >
+                <p class="text-muted small mb-1">
+                  Un hallazgo por línea — el PDF los mostrará como bullets
+                </p>
+                @if (!isReadOnly) {
+                  <textarea
+                    class="form-control"
+                    rows="5"
+                    formControlName="findings"
+                    placeholder="Hallazgo 1&#10;Hallazgo 2&#10;Hallazgo 3"
+                  ></textarea>
+                } @else {
+                  <p
+                    class="form-control-plaintext border rounded p-2 bg-light"
+                    style="white-space: pre-line"
+                  >
+                    {{ diagnostic?.findings }}
+                  </p>
+                }
+              </div>
+
+              <!-- Impresión diagnóstica -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold"
+                  >IMPRESIÓN DIAGNÓSTICA
+                  <span class="text-danger">*</span></label
+                >
+                <p class="text-muted small mb-1">
+                  Primera línea = diagnóstico principal
+                </p>
+                @if (!isReadOnly) {
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    formControlName="diagnosticImpression"
+                    placeholder="Diagnóstico principal&#10;Diagnóstico secundario..."
+                  ></textarea>
+                } @else {
+                  <p
+                    class="form-control-plaintext border rounded p-2 bg-light"
+                    style="white-space: pre-line"
+                  >
+                    {{ diagnostic?.diagnosticImpression }}
+                  </p>
+                }
+              </div>
+
+              <!-- Recomendaciones -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold"
+                  >RECOMENDACIONES
+                  <span class="text-muted fw-normal">(opcional)</span></label
+                >
+                <p class="text-muted small mb-1">Una recomendación por línea</p>
+                @if (!isReadOnly) {
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    formControlName="recommendations"
+                    placeholder="Recomendación 1&#10;Recomendación 2"
+                  ></textarea>
+                } @else {
+                  <p
+                    class="form-control-plaintext border rounded p-2 bg-light"
+                    style="white-space: pre-line"
+                  >
+                    {{ diagnostic?.recommendations || '—' }}
+                  </p>
+                }
+              </div>
+            </div>
+          </form>
+
+          <!-- Actions -->
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            @if (!isReadOnly) {
+              <button
+                class="btn btn-primary"
+                (click)="save()"
+                [disabled]="form.invalid || saving"
+              >
+                @if (saving) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+                <i class="fas fa-save me-1"></i>
+                {{ diagnostic ? 'Guardar cambios' : 'Guardar borrador' }}
+              </button>
+            }
+
+            @if (isDraft && diagnostic) {
+              <button
+                class="btn btn-success"
+                (click)="sign()"
+                [disabled]="signing"
+              >
+                @if (signing) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+                <i class="fas fa-pen-nib me-1"></i> Firmar diagnóstico
+              </button>
+            }
+
+            @if (status === 'SIGNED') {
+              <button
+                class="btn btn-outline-success"
+                (click)="complete()"
+                [disabled]="completing"
+              >
+                @if (completing) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+                <i class="fas fa-check-circle me-1"></i> Completar
+              </button>
+            }
+
+            @if (pdfAvailable) {
+              <button
+                class="btn btn-outline-primary"
+                (click)="openPdf()"
+                [disabled]="openingPdf"
+              >
+                @if (openingPdf) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+                <i class="fas fa-file-pdf me-1"></i> Descargar PDF
+              </button>
+            }
+          </div>
+
+          <!-- Firma note -->
+          @if (diagnostic?.signedAt) {
+            <p class="text-muted small mt-3 mb-0">
+              <i class="fas fa-pen-nib me-1"></i>
+              Firmado por: {{ diagnostic?.doctorName }} —
+              {{ diagnostic?.signedAt | date: 'dd/MM/yyyy HH:mm' }}
+            </p>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

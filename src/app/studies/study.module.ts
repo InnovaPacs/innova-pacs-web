@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { StudyFormComponent as StudyFormComponent } from './components/study-form/study-form.component';
 import { ViewerComponent } from './pages/viewer/viewer.component';
 import { DiagnosticPanelComponent } from './components/diagnostic-panel/diagnostic-panel.component';
+import { DiagnosticPageComponent } from './pages/diagnostic/diagnostic.component';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { PatientsModule } from '../patients/patients.module';
 
@@ -20,6 +21,7 @@ import { PatientsModule } from '../patients/patients.module';
     StudyFormComponent,
     ViewerComponent,
     DiagnosticPanelComponent,
+    DiagnosticPageComponent,
   ],
   imports: [
     CommonModule,

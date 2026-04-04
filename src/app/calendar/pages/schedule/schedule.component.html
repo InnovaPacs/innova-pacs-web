@@ -143,33 +143,27 @@
           <div class="slot-actions d-flex justify-content-end gap-1">
             @if (schedule?.appointment?.status === 'SCHEDULED') {
               <button
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-primary btn-sm"
                 (click)="confirmed(schedule.appointment.id)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
-                title="Configirma cita"
+                title="Confirmar cita"
               >
-                <i
-                  class="fa-solid fa-check-circle"
-                  width="16px"
-                  height="16px"
-                ></i>
+                <i class="fa-solid fa-check-circle" width="16px" height="16px"></i>
               </button>
             }
 
             @if (schedule?.appointment?.status === 'CONFIRMED') {
               <button
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-success btn-sm"
                 (click)="finished(schedule.appointment.id)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Finalizar"
               >
-                <i
-                  class="fa-solid fa-calendar-check"
-                  width="16px"
-                  height="16px"
-                ></i>
+                <i class="fa-solid fa-calendar-check" width="16px" height="16px"></i>
               </button>
             }
 
@@ -178,17 +172,14 @@
               schedule?.appointment?.status === 'CONFIRMED'
             ) {
               <button
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-warning btn-sm"
                 (click)="cancel(schedule.appointment.id)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Cancelar"
               >
-                <i
-                  class="fa-solid fa-calendar-times"
-                  width="16px"
-                  height="16px"
-                ></i>
+                <i class="fa-solid fa-calendar-times" width="16px" height="16px"></i>
               </button>
             }
 
@@ -199,6 +190,7 @@
               schedule?.appointment?.status === 'CANCELLED'
             ) {
               <button
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-danger btn-sm"
                 (click)="onCancel(schedule.appointment.id)"
                 data-bs-toggle="tooltip"
@@ -211,34 +203,29 @@
 
             @if (!schedule?.appointment) {
               <button
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-primary btn-sm"
                 (click)="onTimeSelected(schedule.hour, schedule.minutes)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Crear cita"
               >
-                <i
-                  class="fa-solid fa-calendar-plus"
-                  width="16px"
-                  height="16px"
-                ></i>
+                <i class="fa-solid fa-calendar-plus" width="16px" height="16px"></i>
               </button>
 
               <button
+                *hasPermission="'CREATE_URGENCY'"
                 class="btn btn-danger btn-sm"
                 (click)="onTimeSelected(schedule.hour, schedule.minutes, true)"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"
                 title="Urgencias"
               >
-                <i
-                  class="fa-solid fa-calendar-plus"
-                  width="16px"
-                  height="16px"
-                ></i>
+                <i class="fa-solid fa-calendar-plus" width="16px" height="16px"></i>
               </button>
             } @else {
               <a
+                *hasPermission="'CREATE_CONSULT'"
                 class="btn btn-info btn-sm"
                 [routerLink]="['/appointments/new', schedule?.appointment?.id]"
                 data-bs-toggle="tooltip"

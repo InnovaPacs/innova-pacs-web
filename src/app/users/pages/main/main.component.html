@@ -6,7 +6,7 @@
         <div class="card-body p-4">
           <div class="d-flex mb-4 justify-content-between align-items-center">
             <h3>Detalle de Usuarios</h3>
-            <button class="btn btn-primary" [routerLink]="['/users/register']">
+            <button *hasPermission="'MANAGE_USERS'" class="btn btn-primary" [routerLink]="['/users/register']">
               Registrar Usuario
             </button>
           </div>

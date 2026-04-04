@@ -4,6 +4,7 @@ import { StudyLayoutComponent } from './layout/study-layout/study-layout.compone
 import { MainComponent } from './pages/main/main.component';
 import { StudyFormComponent } from './components/study-form/study-form.component';
 import { ViewerComponent } from './pages/viewer/viewer.component';
+import { DiagnosticPageComponent } from './pages/diagnostic/diagnostic.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
       { path: 'main', component: MainComponent },
       { path: 'register', component: StudyFormComponent },
       { path: 'viewer/:studyId', component: ViewerComponent },
+      { path: 'diagnostic/:studyId', component: DiagnosticPageComponent },
       { path: ':studyId', component: StudyFormComponent },
       { path: '**', redirectTo: 'main' },
     ]

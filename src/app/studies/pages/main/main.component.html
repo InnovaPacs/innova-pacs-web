@@ -4,11 +4,13 @@
       <div class="card-body p-4">
         <div class="d-flex mb-4 justify-content-between align-items-center">
           <h3>Detalle de estudios</h3>
-          @if (pacsConfiguration) {
-            <button class="btn btn-primary" (click)="syncStudies()">
-              Bajar estudios desde {{ pacsConfiguration.title }}
-            </button>
-          }
+          <ng-container *hasPermission="'SEND_STUDY'">
+            @if (pacsConfiguration) {
+              <button class="btn btn-primary" (click)="syncStudies()">
+                Bajar estudios desde {{ pacsConfiguration.title }}
+              </button>
+            }
+          </ng-container>
         </div>
 
         <hr class="my-3" />
@@ -190,6 +192,7 @@
                                 >Ver estudio</a
                               >
                               <a
+                                *hasPermission="'SEND_STUDY'"
                                 class="dropdown-item cursor-pointer"
                                 (click)="sendStudy(domain.id)"
                                 >Enviar estudio</a
@@ -198,6 +201,14 @@
                             }
 
                             <a
+                              *hasPermission="'CREATE_DIAGNOSTIC'"
+                              class="dropdown-item cursor-pointer"
+                              [routerLink]="['/studies/diagnostic', domain.id]"
+                              >Crear diagnóstico</a
+                            >
+
+                            <a
+                              *hasPermission="'DELETE_STUDY'"
                               class="dropdown-item text-danger"
                               style="cursor: pointer"
                               (click)="deleteStudy(domain.id)"

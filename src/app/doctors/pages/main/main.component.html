@@ -6,7 +6,7 @@
               <div class="card-body p-4">
                 <div class="d-flex mb-4 justify-content-between align-items-center">
                   <h3>Detalle de médicos</h3>
-                  <button class="btn btn-primary" [routerLink]="['/doctors/register']">Registrar doctor</button>
+                  <button *hasPermission="'CREATE_DOCTOR'" class="btn btn-primary" [routerLink]="['/doctors/register']">Registrar doctor</button>
                 </div>
                 <hr class="my-4">
                 <div class="table-responsive" data-simplebar>
@@ -60,9 +60,9 @@
                               <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
-                                  <a class="dropdown-item"  [routerLink]="['/doctors/', domain.id]">Editar</a>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item text-danger" style="cursor: pointer;">Eliminar</a>
+                                  <a *hasPermission="'EDIT_DOCTOR'" class="dropdown-item" [routerLink]="['/doctors/', domain.id]">Editar</a>
+                                  <div *hasPermission="'DELETE_DOCTOR'" class="dropdown-divider"></div>
+                                  <a *hasPermission="'DELETE_DOCTOR'" class="dropdown-item text-danger" style="cursor: pointer;">Eliminar</a>
                                 </div>
                               </div>
                             </td>
