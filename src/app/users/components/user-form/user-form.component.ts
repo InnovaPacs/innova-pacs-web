@@ -43,10 +43,9 @@ export class UserFormComponent implements OnInit {
       catchError(() => EMPTY)
     ).subscribe(user => {
       this.patchUserForm(user);
+      this.userForm.get('status')?.enable();
+      this.userForm.get('role')?.enable();
     });
-
-    this.disableControl('status');
-    this.disableControl('role');
   }
 
   patchUserForm(user: User) {
@@ -68,7 +67,8 @@ export class UserFormComponent implements OnInit {
       status,
       email,
       password,
-      photo
+      photo,
+      medicalOfficeId: this.authService.currentMedicalOfficeId() ?? undefined
     };
   }
 
@@ -84,10 +84,6 @@ export class UserFormComponent implements OnInit {
     } else {
       this.handleCreate(data);
     }
-  }
-
-  private disableControl(controlName: string) {
-    this.userForm.get(controlName)?.disable();
   }
 
   onFileSelected(event: any): void {
@@ -107,24 +103,30 @@ export class UserFormComponent implements OnInit {
         })
       ).subscribe((result) => {
           this.authService.setUpdatedPhoto(result.photo);
-          this.router.navigate(['/patients/main']);
+          this.router.navigate(['/users']);
         }
       );
     } else {
-      this.userService.update(update, this.id).subscribe(reposne => {
-        this.router.navigate(['/patients/main']);
+      this.userService.update(update, this.id).subscribe(() => {
+        this.router.navigate(['/users']);
       });
     }
   }
-  
+
   handleCreate(update: UpdateUser): void {
-    this.fileService.save(this.selectedFile).pipe(
-      switchMap((response) => {
-        update.photo = response.id;
-        return this.userService.saveUser(update);
-      })
-    ).subscribe((result: User) => {
-      this.router.navigate(['/patients/main']);
-    });
+    if (this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.userService.saveUser(update);
+        })
+      ).subscribe(() => {
+        this.router.navigate(['/users']);
+      });
+    } else {
+      this.userService.saveUser(update).subscribe(() => {
+        this.router.navigate(['/users']);
+      });
+    }
   }
 }

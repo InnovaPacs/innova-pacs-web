@@ -1,5 +1,5 @@
 export const environment = {
   name: 'dev',
   production: false,
-  baseUrl: 'https://persist.lat/med-iq-service',
+  baseUrl: 'http://localhost:8091',
 };

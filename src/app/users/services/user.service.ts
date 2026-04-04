@@ -75,4 +75,10 @@ export class UserService {
       headers
     });
   }
+
+  delete(id: string): Observable<void> {
+    const headers = this.authService.getHeaders();
+    const url = `${this.baseUrl}/api/users/${id}`;
+    return this.http.delete<void>(url, { headers });
+  }
 }
