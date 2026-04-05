@@ -29,7 +29,7 @@ export class DiagnosticService {
     });
   }
 
-  create(studyId: string, dto: DiagnosticDto): Observable<Diagnostic> {
+  save(studyId: string, dto: DiagnosticDto): Observable<Diagnostic> {
     return this.http.post<Diagnostic>(this.url(studyId), dto, {
       headers: this.authService.getHeaders(),
       context: this.skipLoadingContext,

@@ -11,6 +11,7 @@ export class StudyStatusService {
     { code: 'COMPLETED', name: 'Completado' },
     { code: 'CANCELLED', name: 'Cancelado' },
     { code: 'INTERPRETED', name: 'Interpretado' },
+    { code: 'DIAGNOSTICADO', name: 'Diagnosticado' },
   ];
 
   getStatusName(statusCode: string): string {

@@ -16,10 +16,10 @@ import { firstValueFrom } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
-    selector: 'app-main',
-    templateUrl: './main.component.html',
-    styleUrl: './main.component.css',
-    standalone: false
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrl: './main.component.css',
+  standalone: false,
 })
 export class MainComponent {
   private service = inject(StudyService);
@@ -146,5 +146,10 @@ export class MainComponent {
     this.service.sendById(id).subscribe(() => {
       this.loadingService.showSuccessMessage('Estudio enviado correctamente.');
     });
+  }
+
+  public viewStudy(studyInstance: string): void {
+    const baseUrl = this.pacsConfiguration?.viewerUrl;
+    window.open(`${baseUrl}/viewer?StudyInstanceUIDs=${studyInstance}`, '_blank');
   }
 }

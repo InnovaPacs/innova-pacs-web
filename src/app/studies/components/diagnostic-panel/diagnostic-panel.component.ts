@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Study } from '../../interfaces/study.interface';
-import { Diagnostic, DiagnosticStatus } from '../../interfaces/diagnostic.interface';
+import {
+  Diagnostic,
+  DiagnosticStatus,
+} from '../../interfaces/diagnostic.interface';
 import { DiagnosticService } from '../../services/diagnostic.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { Doctor } from '../../../doctors/interfaces/doctor.interface';
@@ -22,10 +25,10 @@ const ERROR_MESSAGES: Record<number, string> = {
 };
 
 @Component({
-    selector: 'app-diagnostic-panel',
-    templateUrl: './diagnostic-panel.component.html',
-    styleUrl: './diagnostic-panel.component.css',
-    standalone: false
+  selector: 'app-diagnostic-panel',
+  templateUrl: './diagnostic-panel.component.html',
+  styleUrl: './diagnostic-panel.component.css',
+  standalone: false,
 })
 export class DiagnosticPanelComponent implements OnInit {
   @Input() study!: Study;
@@ -118,7 +121,7 @@ export class DiagnosticPanelComponent implements OnInit {
       if (!this.diagnostic) {
         // Paso 1 — crear
         this.diagnostic = await firstValueFrom(
-          this.diagnosticService.create(this.study.id, dto)
+          this.diagnosticService.save(this.study.id, dto)
         );
       } else {
         // Paso 3 — actualizar borrador
@@ -203,7 +206,8 @@ export class DiagnosticPanelComponent implements OnInit {
     try {
       await this.diagnosticService.openPdf(this.study.id);
     } catch {
-      this.errorMsg = 'El PDF solo está disponible después de firmar el diagnóstico.';
+      this.errorMsg =
+        'El PDF solo está disponible después de firmar el diagnóstico.';
     } finally {
       this.openingPdf = false;
     }

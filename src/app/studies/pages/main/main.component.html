@@ -153,6 +153,8 @@
                               domain?.status === 'COMPLETED',
                             'badge-phoenix-danger':
                               domain?.status === 'CANCELLED',
+                            'badge-phoenix-warning':
+                              domain?.status === 'DIAGNOSTICADO',
                           }"
                         >
                           <span class="badge-label">{{
@@ -188,7 +190,7 @@
                             @if (domain.studyInstance) {
                               <a
                                 class="dropdown-item cursor-pointer"
-                                [routerLink]="['/studies/viewer', domain.id]"
+                                (click)="viewStudy(domain.studyInstance)"
                                 >Ver estudio</a
                               >
                               <a
