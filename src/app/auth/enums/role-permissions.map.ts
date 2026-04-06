@@ -38,7 +38,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.VIEW_STUDY,
     Permission.SEND_STUDY,
     Permission.DELETE_STUDY,
-    Permission.CREATE_DIAGNOSTIC,
+    //Permission.CREATE_DIAGNOSTIC,
     Permission.DOWNLOAD_DIAGNOSTIC,
     Permission.VIEW_AGENDA,
     Permission.CREATE_CONSULT,
