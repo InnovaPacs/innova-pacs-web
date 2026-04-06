@@ -211,7 +211,7 @@
                               >
                             }
 
-                            @if (domain.status !== 'INTERPRETED') {
+                            @if (domain.status === 'COMPLETED') {
                               <a
                                 *hasPermission="'CREATE_DIAGNOSTIC'"
                                 class="dropdown-item cursor-pointer"
