@@ -6,7 +6,11 @@
         <div class="card-body p-4">
           <div class="d-flex mb-4 justify-content-between align-items-center">
             <h3>Detalle de Usuarios</h3>
-            <button *hasPermission="'MANAGE_USERS'" class="btn btn-primary" [routerLink]="['/users/register']">
+            <button
+              *hasPermission="'MANAGE_USERS'"
+              class="btn btn-primary"
+              [routerLink]="['/users/register']"
+            >
               Registrar Usuario
             </button>
           </div>
@@ -173,101 +177,3 @@
   </div>
   <app-footer></app-footer>
 </div>
-
-<!--
-
-<div class="container-fluid">
-  
-  <div class="row">
-      <div class="col-lg-12 d-flex align-items-stretch">
-          <div class="card w-100">
-            <div class="card-body p-4">
-              <div class="d-flex mb-4 justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Detalle de usuarios</h5>
-
-                <button class="btn btn-primary" [routerLink]="['/users/register']">Registrar usuario</button>
-                
-              </div>
-
-              <hr class="my-4">
-              
-              <div class="table-responsive" data-simplebar>
-                <table class="table table-borderless align-middle text-nowrap">
-                  <thead>
-                    <tr>
-                      <th scope="col">Nombre</th>
-                      <th scope="col">Rol</th>
-                      <th scope="col">Estatus</th>
-                      <th scope="col">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (user of users; track user.id) {
-                      <tr>
-                        <td>
-                          <div class="d-flex align-items-center">
-                            <div class="me-4">
-                              <img [src]="user.photo | fileUrl: './assets/theme/assets/img/user.png'"
-                                  width="50"
-                                  class="rounded-circle"
-                                  [alt]="user.username"/>
-                            </div>
-                            <div>
-                              <h6 class="mb-1 fw-bolder">{{ user.username }}</h6>
-                              <p class="fs-3 mb-0">{{ user.email }}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="fs-3 fw-normal mb-0 text-success" *ngFor="let role of user.roles">
-                            {{ role.name }}
-                          </p>
-                        </td>
-                        <td>
-                          <span
-                            [ngClass]="{
-                              'badge bg-light-success text-success': user.status === 'ACTIVE',
-                              'badge bg-light-danger text-danger': user.status === 'INACTIVE'
-                            }"
-                            class="rounded-pill px-3 py-2 fs-3">
-                            {{ user.status }}
-                          </span>
-                        </td>
-                        <td>
-                          <div class="dropdown">
-                            <button [id]="'dropdownMenuButton-' + user.id" data-bs-toggle="dropdown" aria-expanded="false"
-                              class="rounded-circle btn-transparent rounded-circle btn-sm px-1 btn shadow-none"
-                            >
-                              <i class="ti ti-dots-vertical fs-7 d-block"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" [attr.aria-labelledby]="'dropdownMenuButton-' + user.id">
-                              @if (user.status === 'ACTIVE') {
-                                <li><a class="dropdown-item text-danger" style="cursor: pointer" (click)="deleteUser(user.id)">Desactivar</a></li>
-                              }
-                              <li>
-                                <a class="dropdown-item" [routerLink]="['/users/', user.id]">Editar</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-
-                <nav aria-label="Page navigation example" [class.disabled]="true">
-                  <ul class="pagination">
-                    <li class="page-item" [class.disabled]="pagination.currentPage === 0"><a class="page-link" (click)="navigate(pagination.currentPage - 1)">Anterior</a></li>
-                    @for (item of pagination.items; track $index) {
-                      <li class="page-item"><a class="page-link" [class.disabled]="item.index === pagination.currentPage" [ngClass]="{ 'active': item.index === pagination.currentPage }" (click)="navigate(item.index)">{{ item.name }}</a></li>
-                    }
-                    <li class="page-item" [class.disabled]="pagination.currentPage === (pagination.totalPages - 1)"><a class="page-link" (click)="navigate(pagination.currentPage + 1)">Siguiente</a></li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-  </div>
-  <app-footer></app-footer>
-</div>-->

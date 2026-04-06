@@ -18,4 +18,5 @@ export interface UpdateUser {
     password: string;
     photo: string;
     medicalOfficeId?: string;
+    doctorId?: string;
 }

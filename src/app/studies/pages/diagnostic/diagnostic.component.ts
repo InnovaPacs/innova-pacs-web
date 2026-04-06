@@ -21,6 +21,7 @@ import { DoctorService } from '../../../doctors/services/doctor.service';
 import { Doctor } from '../../../doctors/interfaces/doctor.interface';
 import { StudyStatusService } from '../../../shared/services/study-status.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-diagnostic-page',
@@ -37,11 +38,12 @@ export class DiagnosticPageComponent implements OnInit {
   private doctorService = inject(DoctorService);
   public studyStatusService = inject(StudyStatusService);
   private readonly destroyRef = inject(DestroyRef);
+  private authService = inject(AuthService);
 
   public study: Study | null = null;
   public diagnostic: Diagnostic | null = null;
   public doctors: Doctor[] = [];
-  public id!: string;
+  public studyId!: string;
 
   public form: FormGroup = this.fb.group({
     doctorId: [null, Validators.required],
@@ -62,7 +64,20 @@ export class DiagnosticPageComponent implements OnInit {
       .getFullData()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response) => (this.doctors = response),
+        next: (response) => {
+          this.doctors = response;
+          console.log('Doctores obtenidos:', this.doctors);
+          console.log(
+            'Doctores obtenidos:',
+            this.authService.currentUser()!.id
+          );
+          this.doctors.map((doctor) => {
+            if (doctor.userId === this.authService.currentUser()!.id) {
+              console.log('Doctor encontrado:', doctor);
+              this.form.patchValue({ doctorId: doctor.id });
+            }
+          });
+        },
         error: (err) => this.handleError(err),
       });
   }
@@ -73,17 +88,19 @@ export class DiagnosticPageComponent implements OnInit {
         map((params) => params.get('studyId')),
         filter((id) => !!id),
         switchMap((id) => {
-          this.id = id!;
-          return this.studyService.getById(this.id);
+          this.studyId = id!;
+          return this.studyService.getById(this.studyId);
         }),
         catchError(() => EMPTY)
       )
       .subscribe((response) => {
         this.study = response;
-        this.diagnosticService.getByStudyId(this.id).subscribe((diagnostic) => {
-          this.diagnostic = diagnostic;
-          this.patchForm(diagnostic);
-        });
+        this.diagnosticService
+          .getByStudyId(this.studyId)
+          .subscribe((diagnostic) => {
+            this.diagnostic = diagnostic;
+            this.patchForm(diagnostic);
+          });
       });
   }
 
@@ -109,7 +126,7 @@ export class DiagnosticPageComponent implements OnInit {
     }
 
     const data = this.getFormValue();
-    if (this.id) {
+    if (this.diagnostic) {
       this.handleUpdate(data);
     } else {
       this.handleCreate(data);
@@ -138,7 +155,7 @@ export class DiagnosticPageComponent implements OnInit {
 
   handleCreate(update: DiagnosticDto): void {
     this.diagnosticService
-      .save(this.id, update)
+      .save(this.studyId, update)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => this.onDiagnosticSaved(response),

@@ -14,6 +14,7 @@ import { Modality } from '../../interfaces/modality.interface';
 import { StudyStatusService } from '../../../shared/services/study-status.service';
 import { firstValueFrom } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { DiagnosticService } from '../../services/diagnostic.service';
 
 @Component({
   selector: 'app-main',
@@ -32,6 +33,7 @@ export class MainComponent {
   public modalities: Modality[] = [];
   public studyStatusService = inject(StudyStatusService);
   public loadingService = inject(LoadingService);
+  private diagnosticService = inject(DiagnosticService);
 
   pagination: Pagination = {
     currentPage: 0,
@@ -150,6 +152,16 @@ export class MainComponent {
 
   public viewStudy(studyInstance: string): void {
     const baseUrl = this.pacsConfiguration?.viewerUrl;
-    window.open(`${baseUrl}/viewer?StudyInstanceUIDs=${studyInstance}`, '_blank');
+    window.open(
+      `${baseUrl}/viewer?StudyInstanceUIDs=${studyInstance}`,
+      '_blank'
+    );
+  }
+
+  public downloadPdf(studyId: string): void {
+    this.diagnosticService.openPdf(studyId).catch((error) => {
+      console.error('Error al descargar el PDF:', error);
+      alert('No se pudo descargar el PDF. Intenta de nuevo más tarde.');
+    });
   }
 }

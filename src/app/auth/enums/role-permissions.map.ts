@@ -1,10 +1,10 @@
 import { Permission } from './permissions.enum';
 
 export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
-
   MEDICO: [
     Permission.VIEW_STUDY,
     Permission.CREATE_DIAGNOSTIC,
+    Permission.DOWNLOAD_DIAGNOSTIC,
     Permission.VIEW_AGENDA,
   ],
 
@@ -21,6 +21,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.CREATE_DOCTOR,
     Permission.EDIT_DOCTOR,
     Permission.DELETE_DOCTOR,
+    Permission.DOWNLOAD_DIAGNOSTIC,
   ],
 
   RADIOLOGO: [
@@ -30,6 +31,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.CREATE_URGENCY,
     Permission.VIEW_PATIENT,
     Permission.CREATE_PATIENT,
+    Permission.DOWNLOAD_DIAGNOSTIC,
   ],
 
   ADMINISTRADOR: [
@@ -37,6 +39,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.SEND_STUDY,
     Permission.DELETE_STUDY,
     Permission.CREATE_DIAGNOSTIC,
+    Permission.DOWNLOAD_DIAGNOSTIC,
     Permission.VIEW_AGENDA,
     Permission.CREATE_CONSULT,
     Permission.CREATE_URGENCY,

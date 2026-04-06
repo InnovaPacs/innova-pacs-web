@@ -154,7 +154,7 @@
                             'badge-phoenix-danger':
                               domain?.status === 'CANCELLED',
                             'badge-phoenix-warning':
-                              domain?.status === 'DIAGNOSTICADO',
+                              domain?.status === 'INTERPRETED',
                           }"
                         >
                           <span class="badge-label">{{
@@ -202,20 +202,36 @@
                               <div class="dropdown-divider"></div>
                             }
 
-                            <a
-                              *hasPermission="'CREATE_DIAGNOSTIC'"
-                              class="dropdown-item cursor-pointer"
-                              [routerLink]="['/studies/diagnostic', domain.id]"
-                              >Crear diagnóstico</a
-                            >
+                            @if (domain.status === 'INTERPRETED') {
+                              <a
+                                *hasPermission="'DOWNLOAD_DIAGNOSTIC'"
+                                class="dropdown-item cursor-pointer"
+                                (click)="downloadPdf(domain.id)"
+                                >Descargar diagnóstico</a
+                              >
+                            }
 
-                            <a
-                              *hasPermission="'DELETE_STUDY'"
-                              class="dropdown-item text-danger"
-                              style="cursor: pointer"
-                              (click)="deleteStudy(domain.id)"
-                              >Eliminar</a
-                            >
+                            @if (domain.status !== 'INTERPRETED') {
+                              <a
+                                *hasPermission="'CREATE_DIAGNOSTIC'"
+                                class="dropdown-item cursor-pointer"
+                                [routerLink]="[
+                                  '/studies/diagnostic',
+                                  domain.id,
+                                ]"
+                                >Crear diagnóstico</a
+                              >
+                            }
+
+                            @if (domain.status !== 'INTERPRETED') {
+                              <a
+                                *hasPermission="'DELETE_STUDY'"
+                                class="dropdown-item text-danger"
+                                style="cursor: pointer"
+                                (click)="deleteStudy(domain.id)"
+                                >Eliminar</a
+                              >
+                            }
                           </div>
                         </div>
                       </td>
