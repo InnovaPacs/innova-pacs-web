@@ -5,6 +5,7 @@ import { map, filter, switchMap, catchError, EMPTY, of } from 'rxjs';
 import { PatientService } from '../../services/patient.service';
 import { Patient, UpdatePatient } from '../../interfaces/patient.interface';
 import { FileService } from '../../../shared/services/file.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
     selector: 'app-patient-form',
@@ -19,7 +20,14 @@ export class PatientFormComponent {
   private service = inject(PatientService);
   private router = inject(Router);
   private fileService = inject(FileService);
+  private loadingService = inject(LoadingService);
   title: string = 'Registrar paciente';
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    firstName: 'Nombre',
+    dateOfBirth: 'Fecha de nacimiento',
+    gender: 'Género',
+  };
   public id!: string;
   
   @Input() 
@@ -29,20 +37,20 @@ export class PatientFormComponent {
 
   public form: FormGroup = this.fb.group({
     firstName: [null, Validators.required],
-    lastName: [null, Validators.required],
+    lastName: [null],
     dateOfBirth: [null, Validators.required],
     gender: [null, Validators.required],
-    address: [null, Validators.required],
-    phoneNumber: [null, Validators.required],
-    email: [null, Validators.required],
-    city: [null, Validators.required],
-    maritalStatus: [null, Validators.required],
-    notes: [null, Validators.required],
-    postalCode: [null, Validators.required],
-    curp: [null, Validators.required],
-    rfc: [null, Validators.required],
-    country: [null, Validators.required],
-    state: [null, Validators.required],
+    address: [null],
+    phoneNumber: [null],
+    email: [null],
+    city: [null],
+    maritalStatus: [null],
+    notes: [null],
+    postalCode: [null],
+    curp: [null],
+    rfc: [null],
+    country: [null],
+    state: [null],
     photo: [null]
   });
 
@@ -111,6 +119,10 @@ export class PatientFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
+      const missing = Object.keys(this.requiredFieldLabels).filter(
+        key => this.form.get(key)?.invalid
+      ).map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
 

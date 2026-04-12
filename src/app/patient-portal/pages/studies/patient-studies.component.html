@@ -1,13 +1,13 @@
 <div class="min-vh-100 bg-body-tertiary py-4 px-3">
   <div class="container-xl">
-
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h3 class="mb-1">Mis Estudios Médicos</h3>
         @if (patient) {
           <p class="text-muted mb-0 fs-sm">
-            Bienvenido, <strong>{{ patient.firstName }} {{ patient.lastName }}</strong>
+            Bienvenido,
+            <strong>{{ patient.firstName }} {{ patient.lastName }}</strong>
           </p>
         }
       </div>
@@ -18,7 +18,6 @@
 
     <div class="card shadow-sm">
       <div class="card-body p-4">
-
         @if (loading) {
           <div class="text-center py-5">
             <div class="spinner-border text-primary" role="status">
@@ -86,29 +85,21 @@
                             class="btn btn-sm btn-primary"
                             (click)="viewStudy(study.id)"
                           >
-                            <span class="fas fa-eye me-1"></span> Ver imágenes
+                            Ver imágenes
                           </button>
                         } @else {
                           <span class="text-muted fs-sm">Sin imágenes</span>
                         }
                       </td>
                       <td class="align-middle">
-                        <button
-                          class="btn btn-sm btn-outline-primary"
-                          (click)="downloadDiagnostic(study.id)"
-                          [disabled]="isDownloadingPdf(study.id)"
-                        >
-                          @if (isDownloadingPdf(study.id)) {
-                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
-                          } @else {
-                            <span class="fas fa-file-pdf me-1"></span>
-                          }
-                          Descargar
-                        </button>
-                        @if (getPdfError(study.id)) {
-                          <p class="text-danger mb-0 mt-1" style="font-size: 0.7rem;">
-                            {{ getPdfError(study.id) }}
-                          </p>
+                        @if (study.status === 'INTERPRETED') {
+                          <button
+                            class="btn btn-sm btn-outline-primary"
+                            (click)="downloadDiagnostic(study.id)"
+                            [disabled]="isDownloadingPdf(study.id)"
+                          >
+                            Descargar
+                          </button>
                         }
                       </td>
                     </tr>
@@ -118,7 +109,6 @@
             </div>
           }
         }
-
       </div>
     </div>
   </div>

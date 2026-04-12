@@ -15,7 +15,7 @@
                   <div class="container">
                       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="row">
                           <div class="mb-3 col-xm-12 col-md-6">
-                            <label for="firstName" class="form-label">Nombre</label>
+                            <label for="firstName" class="form-label">Nombre <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="firstName" placeholder="Ingresa nombre"
                               formControlName="firstName">
                           </div>
@@ -27,13 +27,13 @@
                           </div>
                           
                           <div class="mb-3 col-xm-12 col-md-6">
-                              <label for="dateOfBirth" class="form-label">Ingrese fecha de nacimiento</label>
+                              <label for="dateOfBirth" class="form-label">Ingrese fecha de nacimiento <span class="text-danger">*</span></label>
                               <input type="date" class="form-control" id="dateOfBirth" placeholder="Ingresa fecha de nacimiento"
                                 formControlName="dateOfBirth">
                           </div>
                           
                           <div class="mb-3 col-xm-12 col-md-6">
-                              <label for="gender" class="form-label">Ingrese genero</label>
+                              <label for="gender" class="form-label">Ingrese genero <span class="text-danger">*</span></label>
                               <select class="form-select" id="gender" formControlName="gender">
                                 <option value="M">Masculino</option>
                                 <option value="F">Femenino</option>

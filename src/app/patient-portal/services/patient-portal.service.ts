@@ -21,8 +21,8 @@ export class PatientPortalService {
     return new HttpContext().set(SKIP_LOADING, true);
   }
 
-  getPatientByCurp(curp: string): Observable<Patient> {
-    const url = `${this.baseUrl}/api/public/patients/curp/${curp}`;
+  getPatientById(id: string): Observable<Patient> {
+    const url = `${this.baseUrl}/api/public/patients/${id}`;
     return this.http.get<Patient>(url, { context: this.skipLoadingContext });
   }
 

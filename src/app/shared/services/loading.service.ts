@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoadingService {
-
-  constructor() { }
+  constructor() {}
 
   showLoading(message: string = 'Procesando ...') {
     Swal.fire({
@@ -16,9 +15,9 @@ export class LoadingService {
       didOpen: () => {
         Swal.showLoading();
       },
-      background: '#1e1e2f',   // Fondo oscuro
-      color: '#f1f1f1',         // Texto claro
-      iconColor: '#facc15'
+      background: '#1e1e2f', // Fondo oscuro
+      color: '#f1f1f1', // Texto claro
+      iconColor: '#facc15',
     });
   }
 
@@ -26,25 +25,39 @@ export class LoadingService {
     Swal.close();
   }
 
-   showErrorMessage(message: string):void {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: message,  
-        background: '#1e1e2f',   // Fondo oscuro
-        color: '#f1f1f1',         // Texto claro
-        iconColor: '#facc15'
-      });
-    }
+  showErrorMessage(message: string): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: message,
+      background: '#1e1e2f', // Fondo oscuro
+      color: '#f1f1f1', // Texto claro
+      iconColor: '#facc15',
+    });
+  }
 
-     showSuccessMessage(message: string):void {
-      Swal.fire({
-        icon: "success",
-        title: "¡Operación exitosa!",
-        text: message,  
-        background: '#1e1e2f',   // Fondo oscuro
-        color: '#f1f1f1',         // Texto claro
-        iconColor: '#facc15'
-      });
-    }
+  showSuccessMessage(message: string): void {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Operación exitosa!',
+      text: message,
+      background: '#1e1e2f',
+      color: '#f1f1f1',
+      iconColor: '#facc15',
+    });
+  }
+
+  showRequiredFieldsAlert(missingFields: string[]): void {
+    const list = missingFields.map((f) => `<li>${f}</li>`).join('');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obligatorios',
+      html: `<ul style="text-align:left;margin-top:8px">${list}</ul>`,
+      confirmButtonText: 'Entendido',
+      background: '#1e1e2f',
+      color: '#f1f1f1',
+      iconColor: '#fa1515',
+      confirmButtonColor: '#fa1515',
+    });
+  }
 }
