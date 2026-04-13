@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { catchError, EMPTY, filter, map, startWith, switchMap } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UpdateUser, User } from '../../interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import { FileService } from '../../../shared/services/file.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { Doctor } from '../../../doctors/interfaces/doctor.interface';
 
@@ -26,18 +27,26 @@ export class UserFormComponent implements OnInit {
   private authService = inject(AuthService);
   private fileService = inject(FileService);
   private doctorService = inject(DoctorService);
+  private loadingService = inject(LoadingService);
 
   public title: string = 'Perfil';
   public id!: string;
   public doctors: Doctor[] = [];
   public showDoctorSelector = false;
 
+  private readonly requiredFieldLabels: Record<string, string> = {
+    username: 'Nombre de usuario',
+    email: 'Email',
+    role: 'Rol',
+    password: 'Contraseña',
+  };
+
   public userForm: FormGroup = this.fb.group({
-    username: [null],
-    email: [null],
+    username: [null, Validators.required],
+    email: [null, Validators.required],
     status: [null],
-    role: [null],
-    password: [null],
+    role: [null, Validators.required],
+    password: [null, Validators.required],
     doctorId: [null],
   });
 
@@ -57,6 +66,9 @@ export class UserFormComponent implements OnInit {
       this.patchUserForm(user);
       this.userForm.get('status')?.enable();
       this.userForm.get('role')?.enable();
+      // En edición la contraseña es opcional
+      this.userForm.get('password')?.clearValidators();
+      this.userForm.get('password')?.updateValueAndValidity();
     });
   }
 
@@ -105,6 +117,11 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.userForm.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
 

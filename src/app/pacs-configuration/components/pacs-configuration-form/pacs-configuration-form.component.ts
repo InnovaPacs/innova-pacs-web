@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { PacsConfigurationService } from '../../service/pacs-configuration.service';
 import { PacsConfiguration, UpdatePacsConfiguration } from '../../interfaces/pacs-configuration.interface';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
     selector: 'app-pacs-configuration-form',
@@ -16,9 +17,18 @@ export class PacsConfigurationFormComponent {
   private route = inject(ActivatedRoute);
   private service = inject(PacsConfigurationService);
   private router = inject(Router);
+  private loadingService = inject(LoadingService);
   public title: string = 'Crear Pacs';
-  
+
   id!: string;
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    title: 'ITitle',
+    ipAddress: 'Dirección IP',
+    hl7port: 'Puerto HL7',
+    dicomPort: 'Puerto DICOM',
+    viewerUrl: 'URL visualizador',
+  };
 
   public form: FormGroup = this.fb.group({
     title: [null, Validators.required],
@@ -63,6 +73,11 @@ export class PacsConfigurationFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.form.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
 

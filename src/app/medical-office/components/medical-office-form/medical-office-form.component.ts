@@ -6,6 +6,7 @@ import { MedicalOfficeService } from '../../services/medilca-office.service';
 import { MedicalOffice, UpdateMedicalOffice } from '../../interfaces/medical-office.interface';
 import { FileService } from '../../../shared/services/file.service';
 import { PacsFile } from '../../../shared/interfaces/file.interface';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
     selector: 'app-medical-office-form',
@@ -20,9 +21,16 @@ export class MedicalOfficeFormComponent {
   private router = inject(Router);
   private fileService = inject(FileService);
   
+  private loadingService = inject(LoadingService);
   private selectedFile!: File;
   private id!: string;
   public title: string = 'Registrar consultorio';
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    name: 'Nombre del consultorio',
+    address: 'Dirección',
+    phone: 'Teléfono',
+  };
 
   public medicalOfficeForm: FormGroup = this.fb.group({
     name: [null, Validators.required],
@@ -68,6 +76,11 @@ export class MedicalOfficeFormComponent {
 
   onSubmit() {
     if (this.medicalOfficeForm.invalid) {
+      this.medicalOfficeForm.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.medicalOfficeForm.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
 

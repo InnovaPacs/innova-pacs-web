@@ -21,21 +21,33 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="name" class="form-label">Nombre del consultorio</label>
+                          <label for="name" class="form-label">Nombre del consultorio <span class="text-danger">*</span></label>
                           <input type="text" class="form-control" id="name" placeholder="Ingresa nombre del consultorio"
-                            formControlName="name">
+                            formControlName="name"
+                            [class.is-invalid]="medicalOfficeForm.get('name')?.invalid && medicalOfficeForm.get('name')?.touched">
+                          @if (medicalOfficeForm.get('name')?.invalid && medicalOfficeForm.get('name')?.touched) {
+                            <div class="invalid-feedback">El nombre del consultorio es obligatorio.</div>
+                          }
                         </div>
 
                         <div class="mb-3">
-                            <label for="address" class="form-label">Ingrese dirección</label>
+                            <label for="address" class="form-label">Dirección <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="address" placeholder="Ingresa dirección"
-                              formControlName="address">
+                              formControlName="address"
+                              [class.is-invalid]="medicalOfficeForm.get('address')?.invalid && medicalOfficeForm.get('address')?.touched">
+                            @if (medicalOfficeForm.get('address')?.invalid && medicalOfficeForm.get('address')?.touched) {
+                              <div class="invalid-feedback">La dirección es obligatoria.</div>
+                            }
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Ingrese telefono</label>
+                            <label for="phone" class="form-label">Teléfono <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="phone" placeholder="Ingresa telefono"
-                              formControlName="phone">
+                              formControlName="phone"
+                              [class.is-invalid]="medicalOfficeForm.get('phone')?.invalid && medicalOfficeForm.get('phone')?.touched">
+                            @if (medicalOfficeForm.get('phone')?.invalid && medicalOfficeForm.get('phone')?.touched) {
+                              <div class="invalid-feedback">El teléfono es obligatorio.</div>
+                            }
                         </div>
                         <button type="submit" class="btn btn-primary">Guradar</button>
                     </form>  

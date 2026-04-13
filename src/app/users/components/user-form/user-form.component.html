@@ -27,46 +27,65 @@
                   </div>
 
                   <div class="mb-3 col-xm-12 col-md-6">
-                    <label for="username" class="form-label">Nombre de usuario</label>
+                    <label for="username" class="form-label">Nombre de usuario <span class="text-danger">*</span></label>
                     <input
                       type="text"
                       class="form-control"
                       id="username"
                       placeholder="Ingresa nombre de usuario"
                       formControlName="username"
+                      [class.is-invalid]="userForm.get('username')?.invalid && userForm.get('username')?.touched"
                     />
+                    @if (userForm.get('username')?.invalid && userForm.get('username')?.touched) {
+                      <div class="invalid-feedback">El nombre de usuario es obligatorio.</div>
+                    }
                   </div>
 
                   <div class="mb-3 col-xm-12 col-md-6">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                     <input
                       type="email"
                       class="form-control"
                       id="email"
                       placeholder="Ingresa email"
                       formControlName="email"
+                      [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
                     />
+                    @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+                      <div class="invalid-feedback">El email es obligatorio.</div>
+                    }
                   </div>
 
                   <div class="mb-3 col-xm-12 col-md-6">
-                    <label for="password" class="form-label">Nuevo password</label>
+                    <label for="password" class="form-label">
+                      Contraseña @if (!id) { <span class="text-danger">*</span> }
+                    </label>
                     <input
                       type="password"
                       class="form-control"
                       id="password"
-                      placeholder="Ingresa nuevo password"
+                      placeholder="Ingresa contraseña"
                       formControlName="password"
+                      [class.is-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
                     />
+                    @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+                      <div class="invalid-feedback">La contraseña es obligatoria.</div>
+                    }
                   </div>
 
                   <div class="mb-3 col-xm-12 col-md-6">
-                    <label for="role" class="form-label">Rol</label>
-                    <select class="form-select" id="role" formControlName="role">
+                    <label for="role" class="form-label">Rol <span class="text-danger">*</span></label>
+                    <select class="form-select" id="role" formControlName="role"
+                      [class.is-invalid]="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+                      <option [ngValue]="null" disabled>Seleccione rol</option>
                       <option value="ADMINISTRADOR">Administrador</option>
                       <option value="RECEPCION">Recepción</option>
                       <option value="MEDICO">Médico</option>
                       <option value="RADIOLOGO">Radiólogo</option>
                     </select>
+                    @if (userForm.get('role')?.invalid && userForm.get('role')?.touched) {
+                      <div class="invalid-feedback">El rol es obligatorio.</div>
+                    }
                   </div>
 
                   @if (showDoctorSelector) {

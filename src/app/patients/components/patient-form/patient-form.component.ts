@@ -119,6 +119,7 @@ export class PatientFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       const missing = Object.keys(this.requiredFieldLabels).filter(
         key => this.form.get(key)?.invalid
       ).map(key => this.requiredFieldLabels[key]);

@@ -6,6 +6,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.CREATE_DIAGNOSTIC,
     Permission.DOWNLOAD_DIAGNOSTIC,
     Permission.VIEW_AGENDA,
+    Permission.SYNC_STUDIES,
   ],
 
   RECEPCION: [
@@ -22,6 +23,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.EDIT_DOCTOR,
     Permission.DELETE_DOCTOR,
     Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.SYNC_STUDIES,
   ],
 
   RADIOLOGO: [
@@ -32,6 +34,7 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.VIEW_PATIENT,
     Permission.CREATE_PATIENT,
     Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.SYNC_STUDIES,
   ],
 
   ADMINISTRADOR: [
@@ -54,5 +57,6 @@ export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
     Permission.MANAGE_PACS,
     Permission.MANAGE_USERS,
     Permission.MANAGE_OFFICE,
+    Permission.SYNC_STUDIES,
   ],
 };

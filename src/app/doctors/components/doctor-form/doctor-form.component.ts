@@ -5,6 +5,7 @@ import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { DoctorService } from '../../services/doctor.service';
 import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
 import { FileService } from '../../../shared/services/file.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
     selector: 'app-doctor-form',
@@ -19,8 +20,15 @@ export class DoctorFormComponent {
   private service = inject(DoctorService);
   private router = inject(Router);
   private fileService = inject(FileService);
+  private loadingService = inject(LoadingService);
   public title: string = 'Registrar médico';
   public id!: string;
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    name: 'Nombre',
+    phone: 'Teléfono',
+    email: 'Email',
+  };
 
   @Input() 
   origin!: string;
@@ -74,6 +82,11 @@ export class DoctorFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.form.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
     

@@ -4,10 +4,10 @@
       <div class="card-body p-4">
         <div class="d-flex mb-4 justify-content-between align-items-center">
           <h3>Detalle de estudios</h3>
-          <ng-container *hasPermission="'SEND_STUDY'">
+          <ng-container *hasPermission="'SYNC_STUDIES'">
             @if (pacsConfiguration) {
               <button class="btn btn-primary" (click)="syncStudies()">
-                Bajar estudios desde {{ pacsConfiguration.title }}
+                Sincronizar estudios
               </button>
             }
           </ng-container>

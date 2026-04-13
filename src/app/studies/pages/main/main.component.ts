@@ -106,14 +106,40 @@ export class MainComponent {
   }
 
   public syncStudies(): void {
-    this.service.syncStudies().subscribe(() => {
-      this.getAllData(this.medicalOfficeId!, 0, null);
+    this.service.syncStudies().subscribe({
+      next: () => {
+        this.getAllData(this.medicalOfficeId!, 0, null);
+        this.loadingService.showSuccessMessage(
+          'La sincronización inicio, espere unos segundos.'
+        );
+      },
+      error: () => {
+        this.loadingService.showErrorMessage(
+          'No se pudieron sincronizar los estudios. Intenta de nuevo.'
+        );
+      },
     });
   }
 
-  public deleteStudy(id: string): void {
-    this.service.deleteById(id).subscribe(() => {
-      this.getAllData(this.medicalOfficeId, 0, null);
+  public async deleteStudy(id: string): Promise<void> {
+    const confirmed = await this.loadingService.showConfirmDialog(
+      '¿Eliminar estudio?',
+      'Esta acción no se puede deshacer.'
+    );
+    if (!confirmed) return;
+
+    this.service.deleteById(id).subscribe({
+      next: () => {
+        this.getAllData(this.medicalOfficeId, 0, null);
+        this.loadingService.showSuccessMessage(
+          'Estudio eliminado correctamente.'
+        );
+      },
+      error: () => {
+        this.loadingService.showErrorMessage(
+          'No se pudo eliminar el estudio. Intenta de nuevo.'
+        );
+      },
     });
   }
 
@@ -145,8 +171,17 @@ export class MainComponent {
   }
 
   public sendStudy(id: string): void {
-    this.service.sendById(id).subscribe(() => {
-      this.loadingService.showSuccessMessage('Estudio enviado correctamente.');
+    this.service.sendById(id).subscribe({
+      next: () => {
+        this.loadingService.showSuccessMessage(
+          'Estudio enviado correctamente.'
+        );
+      },
+      error: () => {
+        this.loadingService.showErrorMessage(
+          'No se pudo enviar el estudio. Intenta de nuevo.'
+        );
+      },
     });
   }
 
@@ -159,9 +194,10 @@ export class MainComponent {
   }
 
   public downloadPdf(studyId: string): void {
-    this.diagnosticService.openPdf(studyId).catch((error) => {
-      console.error('Error al descargar el PDF:', error);
-      alert('No se pudo descargar el PDF. Intenta de nuevo más tarde.');
+    this.diagnosticService.openPdf(studyId).catch(() => {
+      this.loadingService.showErrorMessage(
+        'No se pudo descargar el PDF. Intenta de nuevo más tarde.'
+      );
     });
   }
 }
