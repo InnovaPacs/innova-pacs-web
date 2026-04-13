@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientPortalService } from '../../services/patient-portal.service';
 
 @Component({
@@ -8,9 +8,10 @@ import { PatientPortalService } from '../../services/patient-portal.service';
   templateUrl: './verify.component.html',
   standalone: false,
 })
-export class VerifyComponent {
+export class VerifyComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private patientPortalService = inject(PatientPortalService);
 
   public form: FormGroup = this.fb.group({
@@ -19,6 +20,13 @@ export class VerifyComponent {
 
   public loading = false;
   public error: string | null = null;
+
+  ngOnInit(): void {
+    const folio = this.route.snapshot.queryParamMap.get('folio');
+    if (folio) {
+      this.form.patchValue({ patientId: folio });
+    }
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return;
