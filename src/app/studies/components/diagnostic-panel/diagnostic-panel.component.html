@@ -1,0 +1,279 @@
+<div class="diag-panel" [class.diag-panel--collapsed]="collapsed">
+  <!-- Toggle tab -->
+  <button
+    class="diag-panel__toggle"
+    (click)="togglePanel()"
+    [title]="collapsed ? 'Abrir panel' : 'Cerrar panel'"
+  >
+    <i
+      class="fas"
+      [class.fa-chevron-right]="collapsed"
+      [class.fa-chevron-left]="!collapsed"
+    ></i>
+  </button>
+
+  <!-- Panel body -->
+  <div class="diag-panel__body">
+    <!-- Header -->
+    <div class="diag-panel__header">
+      <span class="diag-panel__title">Panel de Diagnóstico</span>
+      @if (status) {
+        <span
+          class="diag-badge"
+          [class.diag-badge--draft]="isDraft"
+          [class.diag-badge--signed]="status === 'SIGNED'"
+          [class.diag-badge--completed]="status === 'COMPLETED'"
+        >
+          {{ statusLabel }}
+        </span>
+      }
+    </div>
+
+    @if (loading) {
+      <div class="diag-panel__loading">
+        <div
+          class="spinner-border spinner-border-sm text-primary"
+          role="status"
+        ></div>
+        <span class="ms-2">Cargando...</span>
+      </div>
+    }
+
+    @if (!loading) {
+      <!-- Study info -->
+      <div class="diag-section">
+        <p class="diag-accession">{{ study.accessionNumber }}</p>
+        <p class="diag-patient">
+          {{ study.patient.firstName }} {{ study.patient.lastName }}
+        </p>
+        <div class="diag-meta">
+          <span><strong>Modalidad:</strong> {{ study.modality.name }}</span>
+          <span
+            ><strong>Fecha:</strong>
+            {{ study.studyDate | date: 'dd/MM/yyyy' }}</span
+          >
+        </div>
+      </div>
+
+      <hr class="diag-divider" />
+
+      <form [formGroup]="form">
+        <!-- Médico -->
+        <div class="diag-section">
+          <label class="diag-label">MÉDICO</label>
+          @if (!isReadOnly) {
+            <select
+              class="form-select form-select-sm"
+              formControlName="doctorId"
+            >
+              <option [ngValue]="null" disabled>Seleccionar médico</option>
+              @for (doctor of doctors; track doctor.id) {
+                <option [value]="doctor.id">
+                  {{ doctor.name }} — {{ doctor.specialty }}
+                </option>
+              }
+            </select>
+          } @else {
+            <p class="diag-value">
+              {{ diagnostic?.doctorName }}
+              <span class="text-muted"
+                >— {{ diagnostic?.doctorSpecialty }}</span
+              >
+            </p>
+            @if (diagnostic?.doctorLicense) {
+              <p class="diag-license">
+                Cédula: {{ diagnostic?.doctorLicense }}
+              </p>
+            }
+          }
+        </div>
+
+        <hr class="diag-divider" />
+
+        <!-- Información clínica -->
+        <div class="diag-section">
+          <label class="diag-label">INFORMACIÓN CLÍNICA</label>
+          @if (!isReadOnly) {
+            <textarea
+              class="form-control form-control-sm"
+              rows="2"
+              formControlName="clinicalInfo"
+              placeholder="Motivo de consulta y antecedentes relevantes..."
+            ></textarea>
+          } @else {
+            <p class="diag-value">{{ diagnostic?.clinicalInfo }}</p>
+          }
+        </div>
+
+        <!-- Técnica -->
+        <div class="diag-section">
+          <label class="diag-label">TÉCNICA</label>
+          @if (!isReadOnly) {
+            <textarea
+              class="form-control form-control-sm"
+              rows="2"
+              formControlName="technique"
+              placeholder="Técnica de adquisición utilizada..."
+            ></textarea>
+          } @else {
+            <p class="diag-value">{{ diagnostic?.technique }}</p>
+          }
+        </div>
+
+        <!-- Hallazgos -->
+        <div class="diag-section">
+          <label class="diag-label">HALLAZGOS</label>
+          <p class="diag-hint">
+            Un hallazgo por línea — el PDF los mostrará como bullets
+          </p>
+          @if (!isReadOnly) {
+            <textarea
+              class="form-control form-control-sm"
+              rows="4"
+              formControlName="findings"
+              placeholder="Hallazgo 1&#10;Hallazgo 2&#10;Hallazgo 3"
+            ></textarea>
+          } @else {
+            <p class="diag-value">{{ diagnostic?.findings }}</p>
+          }
+        </div>
+
+        <!-- Impresión diagnóstica -->
+        <div class="diag-section">
+          <label class="diag-label">IMPRESIÓN DIAGNÓSTICA</label>
+          <p class="diag-hint">Primera línea = diagnóstico principal</p>
+          @if (!isReadOnly) {
+            <textarea
+              class="form-control form-control-sm"
+              rows="2"
+              formControlName="diagnosticImpression"
+              placeholder="Diagnóstico principal&#10;Diagnóstico secundario..."
+            ></textarea>
+          } @else {
+            <p class="diag-value">{{ diagnostic?.diagnosticImpression }}</p>
+          }
+        </div>
+
+        <!-- Recomendaciones (opcional) -->
+        <div class="diag-section">
+          <label class="diag-label"
+            >RECOMENDACIONES
+            <span class="diag-optional">(opcional)</span></label
+          >
+          <p class="diag-hint">Una recomendación por línea</p>
+          @if (!isReadOnly) {
+            <textarea
+              class="form-control form-control-sm"
+              rows="2"
+              formControlName="recommendations"
+              placeholder="Recomendación 1&#10;Recomendación 2"
+            ></textarea>
+          } @else {
+            <p class="diag-value">{{ diagnostic?.recommendations || '—' }}</p>
+          }
+        </div>
+      </form>
+
+      <!-- Feedback -->
+      @if (errorMsg) {
+        <div class="alert alert-danger py-2 mt-2 mb-0">{{ errorMsg }}</div>
+      }
+      @if (successMsg) {
+        <div class="alert alert-success py-2 mt-2 mb-0">{{ successMsg }}</div>
+      }
+
+      <!-- Acciones según estado -->
+      <div class="diag-actions">
+        <!-- DRAFT o sin diagnóstico: guardar -->
+        @if (!isReadOnly) {
+          <button
+            class="btn btn-primary btn-sm w-100"
+            (click)="save()"
+            [disabled]="form.invalid || saving"
+          >
+            @if (saving) {
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
+            }
+            <i class="fas fa-save me-1"></i>
+            {{ diagnostic ? 'Guardar cambios' : 'Guardar borrador' }}
+          </button>
+        }
+
+        <!-- DRAFT y diagnóstico existente: firmar -->
+        @if (isDraft && diagnostic) {
+          <button
+            class="btn btn-success btn-sm w-100 mt-2"
+            (click)="sign()"
+            [disabled]="signing"
+          >
+            @if (signing) {
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
+            }
+            <i class="fas fa-pen-nib me-1"></i> Firmar diagnóstico
+          </button>
+        }
+
+        <!-- SIGNED: PDF + completar -->
+        @if (status === 'SIGNED') {
+          <button
+            class="btn btn-outline-primary btn-sm w-100 mt-2"
+            (click)="openPdf()"
+            [disabled]="openingPdf"
+          >
+            @if (openingPdf) {
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
+            }
+            <i class="fas fa-file-pdf me-1"></i> Descargar PDF
+          </button>
+          <button
+            class="btn btn-outline-success btn-sm w-100 mt-2"
+            (click)="complete()"
+            [disabled]="completing"
+          >
+            @if (completing) {
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
+            }
+            <i class="fas fa-check-circle me-1"></i> Completar
+          </button>
+        }
+
+        <!-- COMPLETED: solo PDF -->
+        @if (status === 'COMPLETED') {
+          <button
+            class="btn btn-outline-primary btn-sm w-100"
+            (click)="openPdf()"
+            [disabled]="openingPdf"
+          >
+            @if (openingPdf) {
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
+            }
+            <i class="fas fa-file-pdf me-1"></i> Descargar PDF
+          </button>
+        }
+      </div>
+
+      <!-- Nota de firma -->
+      @if (diagnostic?.signedAt) {
+        <p class="diag-footer-note">
+          Firmado por: {{ diagnostic?.doctorName }}<br />
+          {{ diagnostic?.signedAt | date: 'dd/MM/yyyy HH:mm' }}
+        </p>
+      }
+    }
+  </div>
+</div>

@@ -3,32 +3,56 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { tap } from 'rxjs';
+import { StudyService } from '../../../studies/services/study.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   public fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private loadingService = inject(LoadingService);
+  private studyService = inject(StudyService);
 
   public loginForm = this.fb.group({
-    username: ['camposbj1990', [Validators.required]],
-    password: ['camposbj1990', [Validators.required, Validators.minLength(6)]]
+    username: ['Bautista', [Validators.required]],
+    password: ['camposbj1990', [Validators.required, Validators.minLength(6)]],
   });
 
   login() {
     const { username, password } = this.loginForm.value;
-    
-    this.authService.login(username||'', password||'').subscribe(
-      {
-        next: () => this.router.navigateByUrl('/patients/main'),
+
+    this.authService.login(username || '', password || '').subscribe({
+      next: () => this.router.navigateByUrl('/patients/main'),
+      error: (error) => {
+        this.loadingService.showErrorMessage(error.message);
+      },
+    });
+  }
+
+  loginV2() {
+    const { username, password } = this.loginForm.value;
+
+    this.authService
+      .login(username || '', password || '')
+      .pipe(
+        tap(() => {
+          this.studyService.syncStudies().subscribe();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl('/studies/main');
+        },
         error: (error) => {
-          Swal.fire('Error', error, 'error');
-        }
-      }
-    );
+          this.loadingService.showErrorMessage(error.message);
+        },
+      });
   }
 }

@@ -21,21 +21,33 @@
                           </div>
                           
                           <div class="mb-3">
-                            <label for="name" class="form-label">Nombre</label>
+                            <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" placeholder="Ingresa nombre"
-                              formControlName="name">
+                              formControlName="name"
+                              [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+                            @if (form.get('name')?.invalid && form.get('name')?.touched) {
+                              <div class="invalid-feedback">El nombre es obligatorio.</div>
+                            }
                           </div>
 
                           <div class="mb-3">
-                              <label for="email" class="form-label">Email</label>
+                              <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                               <input type="email" class="form-control" id="email" placeholder="Ingresa email"
-                                formControlName="email">
+                                formControlName="email"
+                                [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched">
+                              @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                                <div class="invalid-feedback">El email es obligatorio.</div>
+                              }
                           </div>
-                          
+
                           <div class="mb-3">
-                              <label for="phone" class="form-label">Ingrese telefono</label>
+                              <label for="phone" class="form-label">Teléfono <span class="text-danger">*</span></label>
                               <input type="text" class="form-control" id="phone" placeholder="Ingresa telefono"
-                                formControlName="phone">
+                                formControlName="phone"
+                                [class.is-invalid]="form.get('phone')?.invalid && form.get('phone')?.touched">
+                              @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+                                <div class="invalid-feedback">El teléfono es obligatorio.</div>
+                              }
                           </div>
 
                           <div class="mb-3">

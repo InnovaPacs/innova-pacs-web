@@ -6,11 +6,13 @@ import { MedicalOfficeService } from '../../services/medilca-office.service';
 import { MedicalOffice, UpdateMedicalOffice } from '../../interfaces/medical-office.interface';
 import { FileService } from '../../../shared/services/file.service';
 import { PacsFile } from '../../../shared/interfaces/file.interface';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
-  selector: 'app-medical-office-form',
-  templateUrl: './medical-office-form.component.html',
-  styleUrl: './medical-office-form.component.css'
+    selector: 'app-medical-office-form',
+    templateUrl: './medical-office-form.component.html',
+    styleUrl: './medical-office-form.component.css',
+    standalone: false
 })
 export class MedicalOfficeFormComponent {
   private fb = inject(FormBuilder);
@@ -19,8 +21,16 @@ export class MedicalOfficeFormComponent {
   private router = inject(Router);
   private fileService = inject(FileService);
   
+  private loadingService = inject(LoadingService);
   private selectedFile!: File;
   private id!: string;
+  public title: string = 'Registrar consultorio';
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    name: 'Nombre del consultorio',
+    address: 'Dirección',
+    phone: 'Teléfono',
+  };
 
   public medicalOfficeForm: FormGroup = this.fb.group({
     name: [null, Validators.required],
@@ -37,10 +47,7 @@ export class MedicalOfficeFormComponent {
         this.id = id!;
         return this.medicalOfficeService.getById(null, this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(medicalOffice => {
       this.patchMedicalOfficeForm(medicalOffice);
     });
@@ -69,7 +76,11 @@ export class MedicalOfficeFormComponent {
 
   onSubmit() {
     if (this.medicalOfficeForm.invalid) {
-      console.warn('Form is invalid');
+      this.medicalOfficeForm.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.medicalOfficeForm.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
 

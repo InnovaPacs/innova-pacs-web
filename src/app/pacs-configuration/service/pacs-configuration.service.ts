@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { PacsConfigurationPage } from '../interfaces/pacs-configuration-page.interface';
 import { PacsConfiguration, UpdatePacsConfiguration } from '../interfaces/pacs-configuration.interface';
@@ -60,7 +60,6 @@ export class PacsConfigurationService {
   }
 
   save(bodyRequest: UpdatePacsConfiguration):Observable<PacsConfiguration> {
-    console.log('bodyRequest: ', bodyRequest);
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/pacs-configurations`;
 

@@ -17,4 +17,6 @@ export interface UpdateUser {
     status: string;
     password: string;
     photo: string;
+    medicalOfficeId?: string;
+    doctorId?: string;
 }

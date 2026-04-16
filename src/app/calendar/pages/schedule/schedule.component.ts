@@ -1,168 +1,154 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppointmentService } from '../../../appointments/services/appointment.service';
-import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
-import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
+import { Modality } from '../../../studies/interfaces/modality.interface';
 import { Schedule } from '../../../appointments/interfaces/appointment-schedule.interface';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { VendorsService } from '../../../shared/services/vendors.service';
+import { StudySearch } from '../../../studies/interfaces/study-seaarch.interface';
+import { AuthService } from '../../../auth/services/auth.service';
+import { MedicalOfficeService } from '../../../medical-office/services/medilca-office.service';
+import { AppointmenStatusService } from '../../../shared/services/appointment-status.service';
+import { StudyService } from '../../../studies/services/study.service';
 
 @Component({
-  selector: 'app-schedule',
-  templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.css'
+    selector: 'app-schedule',
+    templateUrl: './schedule.component.html',
+    styleUrl: './schedule.component.css',
+    standalone: false
 })
 export class ScheduleComponent implements OnInit {
-  public title: string = 'Detalle de consultas medicas';
-  @ViewChild('examTypeSelectRef', { static: false }) examTypeSelectRef!: ElementRef;
-  examTypeChoicesInstance: any;
-
-  @ViewChild('appointmentDate', { static: false }) appointmentDate!: ElementRef;
-  startDatepickerInstance: any;
-
+  public title: string = `Detalle de consultas médicas`;
+  private studyService = inject(StudyService);
   private service = inject(AppointmentService);
   private router = inject(Router);
-  private radiologyExamService = inject(RadiologyExamService);
-  public radiolodyExamTypes: RadiolodyExamType[] = [];
+  public modalities: Modality[] = [];
   public schedules: Schedule[] = [];
-  private date: string | null | undefined;
   private modalitySelected: string | null | undefined;
-  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
-  private vendorsService = inject(VendorsService);
+  private authService = inject(AuthService);
+  private medicalOfficeService = inject(MedicalOfficeService);
+  private statusService = inject(AppointmenStatusService);
 
   public form: FormGroup = this.fb.group({
-    appointmentDate: [null],
-    radiologyExamTypeId: [null]
+    date: [null],
+    status: [''],
+    accessionNumber: [null],
+    patientName: [null],
+    modalities: [''],
   });
-  
+
   ngOnInit(): void {
-    this.getRadiologyExams();
-    this.getQueryParams();
+    this.loadMedicalOffice();
+    this.setInitialFilter();
+    this.getSchedule(this.form.value);
+    this.getModalitiesData();
   }
 
-  private getRadiologyExams() {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
-      this.radiolodyExamTypes = response;
-      setTimeout(() => {
-        this.vendorsService.initChoices(this.examTypeChoicesInstance, this.examTypeSelectRef);
-        this.vendorsService.initFlatpickr(this.startDatepickerInstance, this.appointmentDate);
-      }, 0);
-    });
-  }
-
-  onSelectChange(event: Event) {
-    this.modalitySelected = (event.target as HTMLSelectElement).value;
-  
-    if(this.date && this.modalitySelected) {
-      this.getSchedule(this.date, this.modalitySelected);
-    }
-  }
-
-  onDateSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const selectedDate = input.value; 
-    this.date = selectedDate;
-
-    if(this.date && this.modalitySelected) {
-      this.getSchedule(this.date, this.modalitySelected);
-    }
-  }
-
-  private getSchedule(date: string, modality: string) {
-    this.service.getAllSchedule(date, modality).subscribe(response => {
-      this.schedules = response;
-    });
-  }
-
-  onTimeSelected(hour: string, minute: string): void {
-    const radiolodyExamType = this.radiolodyExamTypes.find(ret => ret.id === this.modalitySelected);
-    if(radiolodyExamType) {
-      this.router.navigate(['/appointments/register'], {
-        queryParams: { 
-          hour: hour, minute: minute, 
-          duration: radiolodyExamType['duration'], 
-          modality: this.modalitySelected,
-          appointmentDate:  this.date
-        }
+  private loadMedicalOffice(): void {
+    if (!this.authService.getMedicalOfficeStatus()) {
+      this.medicalOfficeService.getLastByUserId(null).subscribe({
+        next: (medicalOffice) => {
+          if (medicalOffice && medicalOffice.id) {
+            this.authService.selectMedicalOffice(medicalOffice.id);
+          }
+        },
       });
     }
   }
 
-  sendToPacs(appointmentId: string) {
-    this.service.sendToPacs(appointmentId).subscribe(() => {
-      Swal.fire({
-            title: "Enviada!",
-            text: "Se envio a pacs.",
-            icon: "success"
-          });
-
-      if(this.date && this.modalitySelected) {
-        this.getSchedule(this.date, this.modalitySelected);
-      }
+  private setInitialFilter(): void {
+    this.form.patchValue({
+      date: this.getToday(),
     });
   }
 
-  cancelToPacs(appointmentId: string) {
-    this.service.cancelToPacs(appointmentId).subscribe(() => {
-      Swal.fire({
-            title: "Enviada!",
-            text: "Se cancelo en pacs.",
-            icon: "success"
-          });
-          
-      if(this.date && this.modalitySelected) {
-        this.getSchedule(this.date, this.modalitySelected);
-      }
+  private getSchedule(search: StudySearch | null = null): void {
+    this.service.getAllSchedule(search).subscribe((response) => {
+      this.schedules = response;
+    });
+  }
+
+  onTimeSelected(
+    hour: string,
+    minute: string,
+    isUrgency: boolean = false
+  ): void {
+    const appointmentDate = this.form.get('date')?.value;
+    const ulr = isUrgency ? '/appointments/urgency' : '/appointments/new';
+
+    this.router.navigate([ulr], {
+      queryParams: {
+        hour: hour,
+        minute: minute,
+        duration: 30,
+        modality: this.modalitySelected,
+        appointmentDate: appointmentDate,
+      },
+    });
+  }
+
+  cancel(appointmentId: string) {
+    this.service.cancel(appointmentId).subscribe(() => {
+      this.getSchedule(this.form.value);
+    });
+  }
+
+  finished(appointmentId: string) {
+    this.service.finished(appointmentId).subscribe(() => {
+      this.getSchedule(this.form.value);
+    });
+  }
+
+  confirmed(appointmentId: string) {
+    this.service.confirmed(appointmentId).subscribe(() => {
+      this.getSchedule(this.form.value);
     });
   }
 
   onCancel(scheduleId: string): void {
     Swal.fire({
-      title: "¿Estas segunro de cancelar?",
-      icon: "warning",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "¡Si, cancelar!"
+      title: '¿Estas segunro de eliminar?',
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: '¡Si, eliminar!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.service.cancelById(scheduleId).subscribe(() => {
-          Swal.fire({
-            title: "Cancelar!",
-            text: "La cita fue cancelada.",
-            icon: "success"
-          });
-
-          if(this.date && this.modalitySelected) {
-            this.getSchedule(this.date, this.modalitySelected);
-          }
+        this.service.deleteById(scheduleId).subscribe(() => {
+          this.getSchedule(this.form.value);
         });
       }
     });
   }
 
-  private getQueryParams() {
-    this.route.queryParamMap.subscribe(data => {
-      this.modalitySelected = this.getModality(data);
-      this.date = this.getAppointmentDate(data);
-      
-      if(this.date && this.modalitySelected) {
-        this.form.patchValue({
-          appointmentDate: this.date,
-          radiologyExamTypeId: this.modalitySelected
-        });
-        
-        this.getSchedule(this.date, this.modalitySelected);
-      }
+  onSubmit(): void {
+    if (!this.form.get('date')?.value) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Por favor, ingrese la fecha para filtrar.',
+        icon: 'error',
+      });
+      return;
+    }
+
+    this.getSchedule(this.form.value);
+  }
+
+  getStatusName(statusCode: string | undefined): string {
+    return statusCode ? this.statusService.getStatusName(statusCode) : '';
+  }
+
+  private getToday(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  getModalitiesData(): void {
+    this.studyService.getAllModalieties().subscribe((data) => {
+      this.modalities = data;
     });
-  }
-
-  private getModality(data: ParamMap):string| null {
-    return  data.get('modality');;
-  }
-
-  private getAppointmentDate(data: ParamMap):string| null {
-    return data.get('appointmentDate');;
   }
 }
-

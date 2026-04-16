@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { UpdateUser, User } from '../interfaces/user.interface';
 import { UserPage } from '../interfaces/user-page.interface';
@@ -74,5 +74,11 @@ export class UserService {
     return this.http.put<User>(url, user, {
       headers
     });
+  }
+
+  delete(id: string): Observable<void> {
+    const headers = this.authService.getHeaders();
+    const url = `${this.baseUrl}/api/users/${id}`;
+    return this.http.delete<void>(url, { headers });
   }
 }

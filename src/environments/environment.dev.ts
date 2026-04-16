@@ -1,5 +1,5 @@
-export const  environment = {
-    name: 'dev',
-    production: false,
-    baseUrl: 'https://persist.rocks/innova-pacs-service',
+export const environment = {
+  name: 'dev',
+  production: false,
+  baseUrl: 'https://persist.lat/med-iq-service',
 };

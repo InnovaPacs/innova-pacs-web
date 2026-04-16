@@ -5,11 +5,13 @@ import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 import { DoctorService } from '../../services/doctor.service';
 import { Doctor, UpdateDoctor } from '../../interfaces/doctor.interface';
 import { FileService } from '../../../shared/services/file.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
-  selector: 'app-doctor-form',
-  templateUrl: './doctor-form.component.html',
-  styleUrl: './doctor-form.component.css'
+    selector: 'app-doctor-form',
+    templateUrl: './doctor-form.component.html',
+    styleUrl: './doctor-form.component.css',
+    standalone: false
 })
 export class DoctorFormComponent {
   private selectedFile!: File;
@@ -18,8 +20,15 @@ export class DoctorFormComponent {
   private service = inject(DoctorService);
   private router = inject(Router);
   private fileService = inject(FileService);
+  private loadingService = inject(LoadingService);
   public title: string = 'Registrar médico';
   public id!: string;
+
+  private readonly requiredFieldLabels: Record<string, string> = {
+    name: 'Nombre',
+    phone: 'Teléfono',
+    email: 'Email',
+  };
 
   @Input() 
   origin!: string;
@@ -41,10 +50,7 @@ export class DoctorFormComponent {
         this.id = id!;
         return this.service.getById(this.id);
       }),
-      catchError(error => {
-        console.error('Error al obtener el consultorio:', error);
-        return EMPTY;
-      })
+      catchError(() => EMPTY)
     ).subscribe(response => {
       this.title = `Editar médico "${response.name}"`;
       this.patchForm(response);
@@ -76,7 +82,11 @@ export class DoctorFormComponent {
 
   onSubmit() {
     if (this.form.invalid) {
-      console.warn('Form is invalid');
+      this.form.markAllAsTouched();
+      const missing = Object.keys(this.requiredFieldLabels)
+        .filter(key => this.form.get(key)?.invalid)
+        .map(key => this.requiredFieldLabels[key]);
+      this.loadingService.showRequiredFieldsAlert(missing);
       return;
     }
     
@@ -116,17 +126,27 @@ export class DoctorFormComponent {
   }
 
   handleCreate(update: UpdateDoctor): void {
-    this.fileService.save(this.selectedFile).pipe(
-      switchMap((response) => {
-        update.photo = response.id;
-        return this.service.save(update);
-      })
-    ).subscribe((result: Doctor) => {
-      if (this.origin === 'appointment') {
-        this.doctorCreated.emit(result);
-      } else {
-        this.router.navigate(['/doctors/main']);
-      }
-    });
+    if (this.selectedFile) {
+      this.fileService.save(this.selectedFile).pipe(
+        switchMap((response) => {
+          update.photo = response.id;
+          return this.service.save(update);
+        })
+      ).subscribe((result: Doctor) => {
+        this.afterCreate(result);
+      });
+    } else {
+      this.service.save(update).subscribe((result: Doctor) => {
+        this.afterCreate(result);
+      });
+    }
+  }
+
+  private afterCreate(result: Doctor): void {
+    if (this.origin === 'appointment') {
+      this.doctorCreated.emit(result);
+    } else {
+      this.router.navigate(['/doctors/main']);
+    }
   }
 }

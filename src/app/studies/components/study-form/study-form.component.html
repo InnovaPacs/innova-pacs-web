@@ -1,0 +1,196 @@
+<form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-floating form-floating-advance-select col-md-6">
+    <label class="ps-4" for="modalityId">Modalida</label>
+    <select
+      class="form-select"
+      *ngIf="modalities.length > 0"
+      #modalityIdRef
+      formControlName="modalityId"
+      id="modalityId"
+      (change)="onSelectModality($event)"
+    >
+      <option value="none" selected>No ha seleccionado modalidad</option>
+      @for (domain of modalities; track domain.id) {
+        <option [value]="domain.id">
+          [{{ domain.name }}] {{ domain.description }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="form-floating form-floating-advance-select col-md-6">
+    <label class="ps-4" for="modalityTypeId">Estudio</label>
+    <select
+      class="form-select"
+      #modalityTypeIdRef
+      formControlName="modalityTypeId"
+      id="modalityTypeId"
+    >
+      <option value="none" selected>No ha seleccionado un estudio</option>
+    </select>
+  </div>
+
+  <div
+    class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select"
+  >
+    <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
+    <select
+      class="form-select"
+      *ngIf="doctors.length > 0"
+      #radiologistRef
+      formControlName="radiologistId"
+      id="radiologistId"
+    >
+      <option value="none" selected>No ha seleccionado radiologo</option>
+      @for (domain of doctors; track domain.id) {
+        <option [value]="domain.id">{{ domain.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="col-sm-1 col-xm-1 col-md-1">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('radiologist')"
+    >
+      <i class="fa-solid fa-user-doctor"></i>
+    </button>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="appointmentId === null"
+  >
+    Guradar estudio
+  </button>
+</form>
+
+<div
+  class="modal fade modal-xl"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': showModal }"
+  *ngIf="showModal"
+  style="background: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+
+      @if (modalType === 'doctors' || modalType === 'radiologist') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
+
+      @if (modalType === 'patients') {
+        <app-patient-form
+          [origin]="origing"
+          (patientCreated)="handleNewPatient($event)"
+        ></app-patient-form>
+      }
+    </div>
+  </div>
+</div>
+
+<div
+  class="card-header pb-3 d-sm-flex d-xl-block d-xxl-flex justify-content-between align-items-start"
+>
+  <div>
+    <h3 class="text-body-highlight">Estudios registrados</h3>
+    <p class="mb-0">Lista de estdios</p>
+  </div>
+  @if (studies.length > 0) {
+    <div class="dropdown">
+      <button
+        class="btn btn-sm btn-phoenix-secondary bg-body-emphasis bg-body-hover action-btn"
+        type="button"
+        data-bs-toggle="dropdown"
+        data-boundary="window"
+        aria-haspopup="true"
+        aria-expanded="false"
+        data-bs-reference="parent"
+      >
+        <span class="fas fa-ellipsis-h" data-fa-transform="shrink-2"></span>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end">
+        <a
+          class="dropdown-item cursor-pointer"
+          (click)="updateStatus('SCHEDULED')"
+          >En proceso</a
+        >
+        <a
+          class="dropdown-item cursor-pointer"
+          (click)="updateStatus('CANCELLED')"
+          >Cancelar</a
+        >
+      </div>
+    </div>
+  }
+</div>
+<div class="card-body">
+  <table class="table fs-10 mb-0">
+    <thead>
+      <tr>
+        <th
+          class="sort ps-0 align-middle"
+          data-sort="country"
+          style="min-width: 100px"
+        >
+          MODALIDAD
+        </th>
+        <th
+          class="sort align-middle"
+          data-sort="users"
+          style="min-width: 115px"
+        >
+          DESCRIPCIÓN
+        </th>
+        <th class="sort text-end align-middle" data-sort="status">STATUS</th>
+      </tr>
+    </thead>
+    <tbody class="list" id="table-country-wise-visitors">
+      @for (domain of studies; track domain.id) {
+        <tr>
+          <td class="py-2 white-space-nowrap ps-0 country">
+            <p class="mb-0 ps-3 fw-bold fs-9">{{ domain.modality.name }}</p>
+          </td>
+          <td class="py-2 align-middle users">
+            <h6>{{ domain.modality.description }}</h6>
+          </td>
+          <td class="py-2 align-middle text-end status">
+            <span
+              class="badge badge-phoenix fs-10"
+              [ngClass]="{
+                'badge-phoenix-primary': domain?.status === 'CREATED',
+                'badge-phoenix-success': domain?.status === 'SCHEDULED',
+                'badge-phoenix-info': domain?.status === 'COMPLETED',
+                'badge-phoenix-danger': domain?.status === 'CANCELLED',
+              }"
+            >
+              <span class="badge-label">{{
+                getStatusName(domain?.status)
+              }}</span>
+              <span
+                class="ms-1"
+                data-feather="package"
+                style="height: 12.8px; width: 12.8px"
+              ></span>
+            </span>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

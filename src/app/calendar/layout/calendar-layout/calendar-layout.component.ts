@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-calendar-layout',
-  templateUrl: './calendar-layout.component.html',
-  styleUrl: './calendar-layout.component.css'
+    selector: 'app-calendar-layout',
+    templateUrl: './calendar-layout.component.html',
+    styleUrl: './calendar-layout.component.css',
+    standalone: false
 })
 export class CalendarLayoutComponent {
   public title = 'Calendario';

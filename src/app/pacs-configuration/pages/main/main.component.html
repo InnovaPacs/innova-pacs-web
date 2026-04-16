@@ -6,13 +6,20 @@
               <div class="card-body p-4">
                 
                 <div class="d-flex mb-4 justify-content-between align-items-center">
-                  <h3>Detalle de configuraciones</h3>
-                  <button class="btn btn-primary" [routerLink]="['/pacs-configurations/register']">Registrar configuracion</button>
+                  <h3>Detalle de PACS</h3>
+                  <button class="btn btn-primary" [routerLink]="['/pacs-configurations/register']">Registrar PACS</button>
                 </div>
   
                 <hr class="my-4">
 
-                <div class="table-responsive" data-simplebar>
+                <div class="table-responsive">
+                  @if (domains.length == 0) {
+                    <div class="alert alert-outline-primary d-flex align-items-center" style="width: 100%;" role="alert">
+                      <span class="fas fa-info-circle text-primary fs-5 me-3"></span>
+                      <p class="mb-0 flex-1">¡Aún no tienes datos!</p>
+                      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  }
                   <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1">
                     <div class="table-responsive scrollbar ms-n1 ps-1">
                       <table class="table table-sm fs-9 mb-0">
@@ -20,7 +27,8 @@
                           <tr>
                             <th class="sort align-middle" scope="col">ITITLE</th>
                             <th class="sort align-middle" scope="col">IP</th>
-                            <th class="sort align-middle pe-3" scope="col">PUERTO</th>
+                            <th class="sort align-middle pe-3" scope="col">PUERTO HL7</th>
+                            <th class="sort align-middle pe-3" scope="col">PUERTO DICOM</th>
                             <th class="sort align-middle" scope="col">ESTATUS</th>
                             <th class="sort align-middle" scope="col">ACCIONES</th>
 
@@ -35,12 +43,13 @@
                               </a>
                             </td>
                             <td class="email align-middle white-space-nowrap">{{ domain.ipAddress }}</td>
-                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.port }}</td>
+                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.hl7port }}</td>
+                            <td class="mobile_number align-middle white-space-nowrap">{{ domain.dicomPort }}</td>
                             <td class="city align-middle white-space-nowrap text-body">
                               @if (domain.isActive) {
-                                <p class="fs-3 fw-normal mb-0"><i class="ti ti-check fs-7 text-success"></i></p>
+                                <i class="fa-solid fa-circle-check"></i>
                               } @else {
-                                <p class="fs-3 fw-normal mb-0"><i class="ti ti-x fs-7 text-warning"></i></p>
+                                <i class="fa-solid fa-circle-xmark"></i>
                               }
                             </td>
                             <td>

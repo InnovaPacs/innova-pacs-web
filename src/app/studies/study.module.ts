@@ -1,0 +1,38 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { StudyRoutingModule as StudyRoutingModule } from './study-routing.module';
+import { StudyLayoutComponent as StudyLayoutComponent } from './layout/study-layout/study-layout.component';
+import { SharedModule } from '../shared/shared.module';
+import { MainComponent } from './pages/main/main.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { StudyFormComponent as StudyFormComponent } from './components/study-form/study-form.component';
+import { ViewerComponent } from './pages/viewer/viewer.component';
+import { DiagnosticPanelComponent } from './components/diagnostic-panel/diagnostic-panel.component';
+import { DiagnosticPageComponent } from './pages/diagnostic/diagnostic.component';
+import { DoctorsModule } from '../doctors/doctors.module';
+import { PatientsModule } from '../patients/patients.module';
+
+
+@NgModule({
+  declarations: [
+    StudyLayoutComponent,
+    MainComponent,
+    StudyFormComponent,
+    ViewerComponent,
+    DiagnosticPanelComponent,
+    DiagnosticPageComponent,
+  ],
+  imports: [
+    CommonModule,
+    StudyRoutingModule,
+    ReactiveFormsModule,
+    SharedModule,
+    DoctorsModule,
+    PatientsModule
+  ],
+  exports: [
+    StudyFormComponent
+  ]
+})
+export class StudyModule { }

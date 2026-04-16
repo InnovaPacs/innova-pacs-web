@@ -1,12 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../interfaces/user.interface';
-import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
+import {
+  Item,
+  Pagination,
+} from '../../../shared/interfaces/pagination.interface';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+  styleUrl: './main.component.css',
+  standalone: false,
 })
 export class MainComponent implements OnInit {
   private userService = inject(UserService);
@@ -17,45 +21,50 @@ export class MainComponent implements OnInit {
     size: 0,
     totalElements: 0,
     totalPages: 0,
-    items: []
-  }
+    items: [],
+  };
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.getAllData(0);
   }
 
-  getItems(totalPages: number):Item[] {
+  getItems(totalPages: number): Item[] {
     let items = [];
 
     for (let i = 0; i < totalPages; i++) {
       const item = {
-        'name': `${i + 1}`,
-        'index': i
-      }
+        name: `${i + 1}`,
+        index: i,
+      };
 
       items.push(item);
     }
     return items;
   }
 
-  navigate(page: number):void {
-    console.log(page);
+  navigate(page: number): void {
     this.getAllData(page);
+  }
+
+  deleteUser(userId: string): void {
+    this.userService.delete(userId).subscribe(() => {
+      this.getAllData(this.pagination.currentPage);
+    });
   }
 
   private getAllData(page: number) {
     this.userService.getAll(page).subscribe((response) => {
       this.users = response.content;
-      
+
       this.pagination = {
         currentPage: response.number,
         size: response.size,
         totalElements: response.totalElements,
         totalPages: response.totalPages,
-        items: this.getItems(response.totalPages)
-      }
+        items: this.getItems(response.totalPages),
+      };
     });
   }
 }

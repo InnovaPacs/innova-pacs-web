@@ -1,81 +1,102 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environments';
+import { SKIP_LOADING } from '../../shared/interceptor/skip-loading.token';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth/services/auth.service';
 import { DoctorPage } from '../interfaces/doctor-page.interface';
 import { Doctor, UpdateDoctor } from '../interfaces/doctor.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DoctorService {
   private readonly baseUrl = environment.baseUrl;
   private authService = inject(AuthService);
   private http = inject(HttpClient);
-  
-  constructor() { }
 
-  getAll(page: number):Observable<DoctorPage> {
-    const url = `${this.baseUrl}/api/doctors?page=${page}`;
+  constructor() {}
+
+  getAll(page: number, mainSearch: string | null): Observable<DoctorPage> {
+    const url = `${this.baseUrl}/api/doctors`;
     const headers = this.authService.getHeaders();
+    const params = this.getParams(page, mainSearch);
 
-    return this.http.get(url,  
-      {
-        headers
-      }
-    ).pipe(
-      map((response: any) => {
-        return {
-          content: response.content,
-          totalElements: response.totalElements,
-          size: response.size,
-          number: response.number,
-          totalPages: response.totalPages
-        }
+    return this.http
+      .get(url, {
+        params,
+        headers,
       })
-    );
+      .pipe(
+        map((response: any) => {
+          return {
+            content: response.content,
+            totalElements: response.totalElements,
+            size: response.size,
+            number: response.number,
+            totalPages: response.totalPages,
+          };
+        })
+      );
   }
 
-  getById(medicalOfficeId: string):Observable<Doctor> {
+  getById(medicalOfficeId: string): Observable<Doctor> {
     const url = `${this.baseUrl}/api/doctors/${medicalOfficeId}`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Doctor>(url,  
-      {
-        headers
-      }
-    );
+    return this.http.get<Doctor>(url, {
+      headers,
+    });
   }
 
-  update(id: string, bodyRequest: UpdateDoctor):Observable<Doctor> {
+  update(id: string, bodyRequest: UpdateDoctor): Observable<Doctor> {
     const url = `${this.baseUrl}/api/doctors/${id}`;
     const headers = this.authService.getHeaders();
-    
-    return this.http.put<Doctor>(url, bodyRequest,
-      {
-        headers
-      }
-    );
+
+    return this.http.put<Doctor>(url, bodyRequest, {
+      headers,
+    });
   }
 
-  save(bodyRequest: UpdateDoctor):Observable<Doctor> {
+  save(bodyRequest: UpdateDoctor): Observable<Doctor> {
     const headers = this.authService.getHeaders();
     const url = `${this.baseUrl}/api/doctors`;
 
     return this.http.post<Doctor>(url, bodyRequest, {
-      headers
+      headers,
     });
   }
 
-  getFullData():Observable<Doctor[]> {
+  getFullData(): Observable<Doctor[]> {
     const url = `${this.baseUrl}/api/doctors/full-data`;
     const headers = this.authService.getHeaders();
 
-    return this.http.get<Doctor[]>(url,
-      {
-        headers
-      }
-    );
+    return this.http.get<Doctor[]>(url, {
+      headers,
+      context: new HttpContext().set(SKIP_LOADING, true),
+    });
+  }
+
+  private getParams(page: number, search: string | null): HttpParams {
+    let params = new HttpParams();
+
+    if (search) {
+      params = params.set('mainSearch', search);
+    }
+
+    if (page >= 0) {
+      params = params.set('page', page);
+    }
+
+    return params;
+  }
+
+  getByName(name: string): Observable<Doctor> {
+    const url = `${this.baseUrl}/api/doctors/name/${name}`;
+    const headers = this.authService.getHeaders();
+
+    return this.http.get<Doctor>(url, {
+      headers,
+    });
   }
 }

@@ -10,21 +10,22 @@ import { AppointmentFullData } from '../../../appointments/interfaces/appointmen
 import { CalendarEvent } from '../../interfaces/calendar-event.interface';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
-import { RadiologyExamService } from '../../../radiology-exam/services/radiology-exam.service';
-import { RadiolodyExamType } from '../../../radiology-exam/interfaces/radiology-exam-type.interface';
+import { StudyService } from '../../../studies/services/study.service';
+import { Modality } from '../../../studies/interfaces/modality.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent implements OnInit {
   private service = inject(AppointmentService);
   private router = inject(Router);
-  private radiologyExamService = inject(RadiologyExamService);
+  private studyService = inject(StudyService);
   private currentMonth: number = 0;
   private currentYear: number = 0;
-  public radiolodyExamTypes:RadiolodyExamType[] = [];
+  public radiolodyExamTypes:Modality[] = [];
   
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, bootstrapPlugin, timeGridPlugin, listPlugin],
@@ -64,15 +65,13 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.radiologyExamService.getAllRadiologyExamType().subscribe(response => {
+    this.studyService.getAllModalieties().subscribe(response => {
       this.radiolodyExamTypes = response;
     });
   }
 
   openModal(eventId: string) {
     const appointment = this.appointments.filter(event => event.id === eventId)[0];
-    console.log('this.appointments ', this.appointments);
-    console.log('this.appointments ', appointment);
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -114,11 +113,11 @@ export class MainComponent implements OnInit {
         </tr>
         <tr>
           <th>Tipo de Examen:</th>
-          <td> <span style="color: ${appointment.examTypeColor};">${appointment.examTypeName ? appointment.examTypeName: ''}</td>
+          <td> <span style="color: ${appointment};">${appointment ? appointment: ''}</td>
         </tr>
         <tr>
           <th>Descripción del Examen:</th>
-          <td>${appointment.examTypeDescription ? appointment.examTypeDescription : ''}</td>
+          <td>${appointment ? appointment : ''}</td>
         </tr>
       </table>
     </div>
@@ -172,18 +171,18 @@ export class MainComponent implements OnInit {
     }
   }
 
-  getAllData(month: number, year: number, radiologyExamType: string|null): void {
-    this.service.getFullData(month, year, radiologyExamType)
+  getAllData(month: number, year: number, modality: string|null): void {
+    this.service.getFullData(month, year, modality)
     .pipe(
       map((resposne: AppointmentFullData[]) => {
         return resposne.map((app: AppointmentFullData) => {
           this.appointments.push(app);
           return {
             id: app.id,
-            title: `[${app.examTypeName ? app.examTypeName : ''}] ${app.patientFirstName} [${app.medicalOfficeName}]`,
+            title: `[${app ? app : ''}] ${app.patientFirstName} [${app.medicalOfficeName}]`,
             start: `${app.appointmentDate}T${app.appointmentStartHour}`,
             end: `${app.appointmentDate}T"${app.appointmentEndHour}"`,
-            color: `${app.examTypeColor ? app.examTypeColor : 'red'}`
+            color: `${app ? app : 'red'}`
           }
         });
       })
@@ -194,13 +193,11 @@ export class MainComponent implements OnInit {
   }
 
   addStudy(eventId: string) {
-    console.log('eventId ',eventId);
-    this.router.navigate(['/radiology-exams/main'], { queryParams: { appointmentId: eventId } });
+    this.router.navigate(['/studies/main'], { queryParams: { appointmentId: eventId } });
   }
 
   onSelectChange(event: Event) {
     const selectedId = (event.target as HTMLSelectElement).value;
-    console.log('Selected radiology exam type ID:', selectedId);
     this.getAllData(this.currentMonth, this.currentYear, selectedId);
   }
 

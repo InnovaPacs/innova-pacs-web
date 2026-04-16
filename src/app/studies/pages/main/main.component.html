@@ -1,0 +1,292 @@
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="d-flex mb-4 justify-content-between align-items-center">
+          <h3>Detalle de estudios</h3>
+          <ng-container *hasPermission="'SYNC_STUDIES'">
+            @if (pacsConfiguration) {
+              <button class="btn btn-primary" (click)="syncStudies()">
+                Sincronizar estudios
+              </button>
+            }
+          </ng-container>
+        </div>
+
+        <hr class="my-3" />
+
+        <form class="mb-4" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-2">
+              <label for="accessionNumber" class="form-label"
+                >Accession Number</label
+              >
+              <input
+                type="text"
+                id="accessionNumber"
+                class="form-control"
+                placeholder="Accession Number"
+                formControlName="accessionNumber"
+              />
+            </div>
+
+            <div class="col-md-2">
+              <label for="modalities" class="form-label">Modalidad</label>
+              <select
+                id="modalities"
+                class="form-select"
+                formControlName="modalities"
+              >
+                <option value="">Todas las modalidades</option>
+                @for (modality of modalities; track $index) {
+                  <option [value]="modality.name">{{ modality.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label for="patientName" class="form-label">Paciente</label>
+              <input
+                type="text"
+                id="patientName"
+                class="form-control"
+                placeholder="Nombre del paciente"
+                formControlName="patientName"
+              />
+            </div>
+
+            <div class="col-md-2">
+              <label for="status" class="form-label">Estatus</label>
+              <select id="status" class="form-select" formControlName="status">
+                <option value="">Todos los estatus</option>
+                @for (s of studyStatusService.statuses; track s.code) {
+                  <option [value]="s.code">{{ s.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label for="date" class="form-label">Fecha</label>
+              <input
+                type="date"
+                id="date"
+                class="form-control"
+                formControlName="date"
+              />
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive" data-simplebar>
+          <div
+            class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-body-emphasis border-y mt-2 position-relative top-1"
+          >
+            <div class="table-responsive scrollbar ms-n1 ps-1">
+              <table class="table table-sm fs-9 mb-0">
+                <thead>
+                  <tr>
+                    <th class="sort align-middle" scope="col">
+                      ACCESSION NUMBER
+                    </th>
+                    <th class="sort align-middle" scope="col">MODALIDAD</th>
+                    <th class="sort align-middle pe-3" scope="col">PACIENTE</th>
+                    <th class="sort align-middle pe-3" scope="col">TÉLEFONO</th>
+                    <th class="sort align-middle" scope="col">ESTATUS</th>
+                    <th class="sort align-middle" scope="col">FECHA</th>
+                    <th class="sort align-middle" scope="col">HORA</th>
+                    <th class="sort align-middle" scope="col">ACCIONES</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="members-table-body">
+                  @for (domain of domains; track domain.id) {
+                    <tr
+                      class="hover-actions-trigger btn-reveal-trigger position-static"
+                    >
+                      <td class="customer align-middle white-space-nowrap">
+                        {{ domain.accessionNumber }}
+                      </td>
+                      <td class="customer align-middle white-space-nowrap">
+                        <span [ngStyle]="{ color: domain?.modality?.color }"
+                          >[{{
+                            domain?.modality?.name
+                              ? domain.modality.name
+                              : 'No Exam Type Available'
+                          }}]</span
+                        >
+                      </td>
+                      <td
+                        class="city align-middle white-space-nowrap text-body"
+                      >
+                        <h6
+                          class="mb-0 ms-3 fw-semibold cursor-pointer"
+                          [routerLink]="['/patients/', domain.patient.id]"
+                        >
+                          {{ domain.patient.firstName }}
+                          {{ domain.patient.lastName }}
+                        </h6>
+                      </td>
+                      <td
+                        class="city align-middle white-space-nowrap text-body"
+                      >
+                        <h6
+                          class="mb-0 ms-3 fw-semibold cursor-pointer"
+                          [routerLink]="['/patients/', domain.patient.id]"
+                        >
+                          {{ domain.patient.phoneNumber }}
+                        </h6>
+                      </td>
+                      <td class="mobile_number align-middle white-space-nowrap">
+                        <span
+                          class="badge badge-phoenix fs-10"
+                          [ngClass]="{
+                            'badge-phoenix-primary':
+                              domain?.status === 'CREATED',
+                            'badge-phoenix-success':
+                              domain?.status === 'SCHEDULED',
+                            'badge-phoenix-info':
+                              domain?.status === 'COMPLETED',
+                            'badge-phoenix-danger':
+                              domain?.status === 'CANCELLED',
+                            'badge-phoenix-warning':
+                              domain?.status === 'INTERPRETED',
+                          }"
+                        >
+                          <span class="badge-label">{{
+                            getStatusName(domain.status)
+                          }}</span>
+                          <span
+                            class="ms-1"
+                            data-feather="package"
+                            style="height: 12.8px; width: 12.8px"
+                          ></span>
+                        </span>
+                      </td>
+                      <td class="email align-middle white-space-nowrap">
+                        {{ domain.studyDate }}
+                      </td>
+                      <td class="email align-middle white-space-nowrap">
+                        {{ domain.studyTime }}
+                      </td>
+                      <td>
+                        <div class="btn-reveal-trigger position-static">
+                          <button
+                            class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            data-boundary="window"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            data-bs-reference="parent"
+                          >
+                            <span class="fas fa-ellipsis-h fs-10"></span>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-end py-2">
+                            @if (domain.studyInstance) {
+                              <a
+                                class="dropdown-item cursor-pointer"
+                                (click)="viewStudy(domain.studyInstance)"
+                                >Ver estudio</a
+                              >
+                              <a
+                                *hasPermission="'SEND_STUDY'"
+                                class="dropdown-item cursor-pointer"
+                                (click)="sendStudy(domain.id)"
+                                >Enviar estudio</a
+                              >
+                              <div class="dropdown-divider"></div>
+                            }
+
+                            @if (domain.status === 'INTERPRETED') {
+                              <a
+                                *hasPermission="'DOWNLOAD_DIAGNOSTIC'"
+                                class="dropdown-item cursor-pointer"
+                                (click)="downloadPdf(domain.id)"
+                                >Descargar diagnóstico</a
+                              >
+                            }
+
+                            @if (domain.status === 'COMPLETED') {
+                              <a
+                                *hasPermission="'CREATE_DIAGNOSTIC'"
+                                class="dropdown-item cursor-pointer"
+                                [routerLink]="[
+                                  '/studies/diagnostic',
+                                  domain.id,
+                                ]"
+                                >Crear diagnóstico</a
+                              >
+                            }
+
+                            @if (domain.status !== 'INTERPRETED') {
+                              <a
+                                *hasPermission="'DELETE_STUDY'"
+                                class="dropdown-item text-danger"
+                                style="cursor: pointer"
+                                (click)="deleteStudy(domain.id)"
+                                >Eliminar</a
+                              >
+                            }
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div
+              class="row align-items-center justify-content-between py-2 pe-0 fs-9"
+            >
+              <nav aria-label="pagination" [class.disabled]="true">
+                <ul class="pagination">
+                  <li
+                    class="page-item"
+                    [class.disabled]="pagination.currentPage === 0"
+                  >
+                    <a
+                      class="page-link"
+                      (click)="navigate(pagination.currentPage - 1)"
+                      >Anterior</a
+                    >
+                  </li>
+                  @for (item of pagination.items; track $index) {
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        [class.disabled]="item.index === pagination.currentPage"
+                        [ngClass]="{
+                          active: item.index === pagination.currentPage,
+                        }"
+                        (click)="navigate(item.index)"
+                        >{{ item.name }}</a
+                      >
+                    </li>
+                  }
+                  <li
+                    class="page-item"
+                    [class.disabled]="
+                      pagination.currentPage === pagination.totalPages - 1
+                    "
+                  >
+                    <a
+                      class="page-link"
+                      (click)="navigate(pagination.currentPage + 1)"
+                      >Siguiente</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

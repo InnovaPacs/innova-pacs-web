@@ -6,33 +6,83 @@
         <li class="nav-item">
           <!-- parent pages-->
           <div class="nav-item-wrapper">
-            <a class="nav-link dropdown-indicator label-1" href="#nv-appointmetns" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-appointmetns">
+            <a
+              class="nav-link dropdown-indicator label-1"
+              href="#nv-appointmetns"
+              role="button"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              aria-controls="nv-appointmetns"
+            >
               <div class="d-flex align-items-center">
                 <div class="dropdown-indicator-icon-wrapper">
-                  <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                  <span
+                    class="fas fa-caret-right dropdown-indicator-icon"
+                  ></span>
                 </div>
-                <span class="nav-link-icon"><i class="fa-solid fa-calendar-days" width="16px" height="16px"></i></span>
+                <span class="nav-link-icon"
+                  ><i
+                    class="fa-solid fa-calendar-days"
+                    width="16px"
+                    height="16px"
+                  ></i
+                ></span>
                 <span class="nav-link-text">Citas Médicas</span>
               </div>
             </a>
             <div class="parent-wrapper label-1">
-              <ul class="nav collapse parent" routerLinkActive="show" data-bs-parent="#navbarVerticalCollapse" id="nv-appointmetns">
-                <li class="collapsed-nav-item-title d-none"><span class="fas fa-bell text-danger fs-3"></span>Citas Médicas
-                </li>
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/calendar/schedule">
-                    <div class="d-flex align-items-center"><span class="nav-link-text">Agenda</span>
+              <ul
+                class="nav collapse parent"
+                routerLinkActive="show"
+                data-bs-parent="#navbarVerticalCollapse"
+                id="nv-appointmetns"
+              >
+                <li class="collapsed-nav-item-title d-none">Citas Médicas</li>
+
+                <li *hasPermission="'VIEW_STUDY'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/studies/main"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Estudios médicos</span>
                     </div>
                   </a>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/patients/main">
-                    <div class="d-flex align-items-center"><span class="nav-link-text">Pacientes</span>
+                <li *hasPermission="'VIEW_AGENDA'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/calendar/schedule"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Agenda</span>
                     </div>
                   </a>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/doctors">
-                    <div class="d-flex align-items-center"><span class="nav-link-text">Médicos</span>
+                <li *hasPermission="'VIEW_PATIENT'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/patients/main"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Pacientes</span>
+                    </div>
+                  </a>
+                </li>
+
+                <li *hasPermission="'VIEW_DOCTOR'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/doctors/main"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Médicos</span>
                     </div>
                   </a>
                 </li>
@@ -42,21 +92,65 @@
         </li>
 
         <li class="nav-item">
-          <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-configurations" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-configurations">
+          <div class="nav-item-wrapper">
+            <a
+              class="nav-link dropdown-indicator label-1"
+              href="#nv-configurations"
+              role="button"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              aria-controls="nv-configurations"
+            >
               <div class="d-flex align-items-center">
                 <div class="dropdown-indicator-icon-wrapper">
-                  <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                  <span
+                    class="fas fa-caret-right dropdown-indicator-icon"
+                  ></span>
                 </div>
-                <span class="nav-link-icon"><i class="fa-solid fa-gear" width="16px" height="16px"></i></span>
+                <span class="nav-link-icon"
+                  ><i class="fa-solid fa-gear" width="16px" height="16px"></i
+                ></span>
                 <span class="nav-link-text">Configuraciones</span>
               </div>
             </a>
             <div class="parent-wrapper label-1">
-              <ul class="nav collapse parent" routerLinkActive="show" data-bs-parent="#navbarVerticalCollapse" id="nv-configurations">
-                <li class="collapsed-nav-item-title d-none">Configuraciones
+              <ul
+                class="nav collapse parent"
+                routerLinkActive="show"
+                data-bs-parent="#navbarVerticalCollapse"
+                id="nv-configurations"
+              >
+                <li class="collapsed-nav-item-title d-none">Configuraciones</li>
+                <li *hasPermission="'MANAGE_PACS'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/pacs-configurations"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Pacs</span>
+                    </div>
+                  </a>
                 </li>
-                <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/pacs-configurations">
-                    <div class="d-flex align-items-center"><span class="nav-link-text">Pacs</span>
+                <li *hasPermission="'MANAGE_OFFICE'" class="nav-item cursor-pointer">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    (click)="goToMedicalOffice()"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Consultorio</span>
+                    </div>
+                  </a>
+                </li>
+                <li *hasPermission="'MANAGE_USERS'" class="nav-item">
+                  <a
+                    class="nav-link"
+                    routerLinkActive="active"
+                    routerLink="/users"
+                  >
+                    <div class="d-flex align-items-center">
+                      <span class="nav-link-text">Usuarios</span>
                     </div>
                   </a>
                 </li>
@@ -68,44 +162,113 @@
     </div>
   </div>
   <div class="navbar-vertical-footer">
-    <button class="btn navbar-vertical-toggle border-0 fw-semibold w-100 white-space-nowrap d-flex align-items-center"><span class="uil uil-left-arrow-to-left fs-8"></span><span class="uil uil-arrow-from-right fs-8"></span><span class="navbar-vertical-footer-text ms-2">Collapsed View</span></button>
+    <button
+      class="btn navbar-vertical-toggle border-0 fw-semibold w-100 white-space-nowrap d-flex align-items-center"
+    >
+      <span class="uil uil-left-arrow-to-left fa-solid fa-chevron-left fs-8"></span
+      ><span class="uil uil-arrow-from-right fa-solid fa-chevron-right fs-8"></span
+      ><span class="navbar-vertical-footer-text ms-2">Vista reducida</span>
+    </button>
   </div>
 </nav>
 <nav class="navbar navbar-top fixed-top navbar-expand" id="navbarDefault">
   <div class="collapse navbar-collapse justify-content-between">
     <div class="navbar-logo">
-      <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+      <button
+        class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarVerticalCollapse"
+        aria-controls="navbarVerticalCollapse"
+        aria-expanded="false"
+        aria-label="Toggle Navigation"
+      >
+        <span class="navbar-toggle-icon"
+          ><span class="toggle-line"></span
+        ></span>
+      </button>
       <a class="navbar-brand me-1 me-sm-3" routerLink="/calendar/schedule">
         <div class="d-flex align-items-center">
-          <div class="d-flex align-items-center"><img src="./assets/theme/assets/img/logov3.png" alt="MedIQ" width="27" />
+          <div class="d-flex align-items-center">
+            <img
+              src="./assets/theme/assets/img/logov3.png"
+              alt="MedIQ"
+              width="27"
+            />
             <h5 class="logo-text ms-2 d-none d-sm-block">Med</h5>
           </div>
         </div>
       </a>
     </div>
     <ul class="navbar-nav navbar-nav-icons flex-row">
-      <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
-          <div class="avatar avatar-l ">
-            <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt="" />
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link lh-1 pe-0"
+          id="navbarDropdownUser"
+          href="#!"
+          role="button"
+          data-bs-toggle="dropdown"
+          data-bs-auto-close="outside"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <div class="avatar avatar-l">
+            <img
+              class="rounded-circle"
+              [src]="
+                user?.photo | fileUrl: './assets/theme/assets/img/user.png'
+              "
+              [alt]="user?.photo"
+            />
           </div>
         </a>
-        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
+        <div
+          class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border"
+          aria-labelledby="navbarDropdownUser"
+        >
           <div class="card position-relative border-0">
             <div class="card-body p-0">
               <div class="text-center pt-4 pb-3">
-                <div class="avatar avatar-xl ">
-                  <img class="rounded-circle " [src]="user?.photo ? 'https://persist.rocks/innova-pacs-service/api/files/' + user?.photo : 'assets/images/profile/unknown.jpg'" alt=""/>
+                <div class="avatar avatar-xl">
+                  <img
+                    class="rounded-circle"
+                    [src]="
+                      user?.photo
+                        | fileUrl: './assets/theme/assets/img/user.png'
+                    "
+                    [alt]="user?.photo"
+                  />
                 </div>
-                <h6 class="mt-2 text-body-emphasis">{{user?.username}}</h6>
+                <h6 class="mt-2 text-body-emphasis">{{ user?.username }}</h6>
               </div>
             </div>
-            <div class="overflow-auto scrollbar" style="height: 4rem;">
+            <div class="overflow-auto scrollbar" style="height: 4rem">
               <ul class="nav d-flex flex-column mb-2 pb-1">
-                <li class="nav-item"><a class="nav-link px-3 d-block" style="cursor: pointer" (click)="goToProfile()"> <span class="me-2 text-body align-bottom" data-feather="user"></span><span>Perfil</span></a></li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link px-3 d-block"
+                    style="cursor: pointer"
+                    (click)="goToProfile()"
+                  >
+                    <span
+                      class="me-2 text-body align-bottom"
+                      data-feather="user"
+                    ></span
+                    ><span>Perfil</span></a
+                  >
+                </li>
               </ul>
             </div>
             <div class="card-footer p-0 border-top border-translucent">
-              <div class="px-3 my-3"> <a class="btn btn-phoenix-secondary d-flex flex-center w-100" style="cursor: pointer" (click)="logOut()"> <span class="me-2" data-feather="log-out"> </span>Salir</a></div>
+              <div class="px-3 my-3">
+                <a
+                  class="btn btn-phoenix-secondary d-flex flex-center w-100"
+                  style="cursor: pointer"
+                  (click)="logOut()"
+                >
+                  <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </a>
+              </div>
             </div>
           </div>
         </div>

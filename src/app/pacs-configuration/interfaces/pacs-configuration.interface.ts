@@ -1,15 +1,19 @@
 export interface PacsConfiguration {
     id: string;
     title: string;
-    port: string;
+    hl7port: string;
+    dicomPort: string;
     ipAddress: string;
     isActive: boolean;
     medicalOfficeId: string;
+    viewerUrl: string;
 }
 
 export interface UpdatePacsConfiguration {
     title: string;
-    port: string;
+    hl7port: string;
+    dicomPort: string;
     ipAddress: string;
     isActive: boolean;
+    viewerUrl: string;
 }

@@ -1,0 +1,130 @@
+<form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h4 class="fs-7 mb-0">Detalles de paciente</h4>
+  <div
+    class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11"
+  >
+    <select
+      class="form-select"
+      *ngIf="patients.length > 0"
+      #patientRef
+      formControlName="patientId"
+      id="patientId"
+    >
+      <option value="none" selected>No ha seleccionado paciente</option>
+      @for (domain of patients; track domain.id) {
+        <option [value]="domain.id">
+          {{ domain.firstName }} {{ domain.firstName || '' }}
+        </option>
+      }
+    </select>
+    <label for="patientId">Paciente</label>
+  </div>
+  <div class="col-sm-1 col-xm-1 col-md-1">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('patients')"
+    >
+      <i class="fa-solid fa-hospital-user"></i>
+    </button>
+  </div>
+
+  <h4 class="fs-7 mb-0">Detalles de la cita</h4>
+  <td class="py-1" colspan="2">
+    <table class="lh-sm mb-4 mb-sm-0 mb-xl-4">
+      <tbody>
+        <tr>
+          <td class="align-top py-1">
+            <div class="d-flex">
+              <span
+                class="fa-solid fa-hospital-user me-2 text-body-tertiary fs-9"
+              ></span>
+              <h5 class="text-body mb-0 text-nowrap">Consultorio :</h5>
+            </div>
+          </td>
+          <td class="fw-bold ps-1 py-1 text-body-highlight">
+            {{ medicalOffice || 'No especificado' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top py-1">
+            <div class="d-flex">
+              <span
+                class="fa-regular fa-user me-2 text-body-tertiary fs-9"
+              ></span>
+              <h5 class="text-body mb-0 text-nowrap">Doctor :</h5>
+            </div>
+          </td>
+          <td class="fw-bold ps-1 py-1 text-body-highlight">
+            {{ doctor ? doctor.name : 'No especificado' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="align-top py-1">
+            <div class="d-flex">
+              <span
+                class="fa-regular fa-calendar-alt me-2 text-body-tertiary fs-9"
+              ></span>
+              <h5 class="text-body mb-0 text-nowrap">Fecha :</h5>
+            </div>
+          </td>
+          <td class="fw-bold ps-1 py-1 text-body-highlight">{{ date }}</td>
+        </tr>
+        <tr>
+          <td class="align-top py-1">
+            <div class="d-flex">
+              <span
+                class="fa-regular fa-clock me-2 text-body-tertiary fs-9"
+              ></span>
+              <h5 class="text-body mb-0 text-nowrap">Hora :</h5>
+            </div>
+          </td>
+          <td class="fw-bold ps-1 py-1 text-body-highlight">
+            {{ initHour }} - {{ endHour }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </td>
+
+  <!--STUDY FORM-->
+  <app-study-form [appointmentId]="appointmentId"></app-study-form>
+
+  <button type="submit" class="btn btn-primary">Guradar cita médica</button>
+</form>
+
+<div
+  class="modal fade modal-xl"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': showModal }"
+  *ngIf="showModal"
+  style="background: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+      @if (modalType === 'doctors') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
+
+      @if (modalType === 'patients') {
+        <app-patient-form
+          [origin]="origing"
+          (patientCreated)="handleNewPatient($event)"
+        ></app-patient-form>
+      }
+    </div>
+  </div>
+</div>

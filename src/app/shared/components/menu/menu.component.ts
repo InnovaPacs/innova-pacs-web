@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, effect, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../../auth/interfaces';
 declare var $: any;
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.css',
+    standalone: false
 })
 export class MenuComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
@@ -38,5 +38,22 @@ export class MenuComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
+    const toggleBtn = document.querySelector('.navbar-vertical-toggle');
+    if (!toggleBtn) return;
+
+    const storageKey = 'phoenixIsNavbarVerticalCollapsed';
+
+    // Restore persisted state
+    const isCollapsed = JSON.parse(localStorage.getItem(storageKey) ?? 'false');
+    if (isCollapsed) {
+      document.documentElement.classList.add('navbar-vertical-collapsed');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const current = JSON.parse(localStorage.getItem(storageKey) ?? 'false');
+      document.documentElement.classList.toggle('navbar-vertical-collapsed');
+      localStorage.setItem(storageKey, String(!current));
+      toggleBtn.dispatchEvent(new CustomEvent('navbar.vertical.toggle', { bubbles: true }));
+    });
   }
 }

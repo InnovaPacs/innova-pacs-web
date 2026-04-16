@@ -4,9 +4,10 @@ import { Appointment } from '../../interfaces/appointment.interface';
 import { Item, Pagination } from '../../../shared/interfaces/pagination.interface';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+    selector: 'app-main',
+    templateUrl: './main.component.html',
+    styleUrl: './main.component.css',
+    standalone: false
 })
 export class MainComponent {
   private service = inject(AppointmentService);
@@ -46,7 +47,6 @@ export class MainComponent {
 
   private getAllData(page: number) {
     this.service.getAll(page).subscribe((response) => {
-      console.log('response: ', response.content);
       this.domains = response.content;
       
       this.pagination = {

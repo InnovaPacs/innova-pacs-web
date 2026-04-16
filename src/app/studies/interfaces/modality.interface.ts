@@ -1,0 +1,8 @@
+export interface Modality {
+	id: string;
+	name: string;
+	description: string;
+	color: number;
+	code: string;
+	duration: number;
+}

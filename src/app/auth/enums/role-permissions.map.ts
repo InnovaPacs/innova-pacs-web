@@ -1,0 +1,62 @@
+import { Permission } from './permissions.enum';
+
+export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
+  MEDICO: [
+    Permission.VIEW_STUDY,
+    Permission.CREATE_DIAGNOSTIC,
+    Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.VIEW_AGENDA,
+    Permission.SYNC_STUDIES,
+  ],
+
+  RECEPCION: [
+    Permission.VIEW_STUDY,
+    Permission.SEND_STUDY,
+    Permission.VIEW_AGENDA,
+    Permission.CREATE_CONSULT,
+    Permission.CREATE_URGENCY,
+    Permission.VIEW_PATIENT,
+    Permission.CREATE_PATIENT,
+    Permission.EDIT_PATIENT,
+    Permission.VIEW_DOCTOR,
+    Permission.CREATE_DOCTOR,
+    Permission.EDIT_DOCTOR,
+    Permission.DELETE_DOCTOR,
+    Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.SYNC_STUDIES,
+  ],
+
+  RADIOLOGO: [
+    Permission.VIEW_STUDY,
+    Permission.SEND_STUDY,
+    Permission.VIEW_AGENDA,
+    Permission.CREATE_URGENCY,
+    Permission.VIEW_PATIENT,
+    Permission.CREATE_PATIENT,
+    Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.SYNC_STUDIES,
+  ],
+
+  ADMINISTRADOR: [
+    Permission.VIEW_STUDY,
+    Permission.SEND_STUDY,
+    Permission.DELETE_STUDY,
+    //Permission.CREATE_DIAGNOSTIC,
+    Permission.DOWNLOAD_DIAGNOSTIC,
+    Permission.VIEW_AGENDA,
+    Permission.CREATE_CONSULT,
+    Permission.CREATE_URGENCY,
+    Permission.VIEW_PATIENT,
+    Permission.CREATE_PATIENT,
+    Permission.EDIT_PATIENT,
+    Permission.DELETE_PATIENT,
+    Permission.VIEW_DOCTOR,
+    Permission.CREATE_DOCTOR,
+    Permission.EDIT_DOCTOR,
+    Permission.DELETE_DOCTOR,
+    Permission.MANAGE_PACS,
+    Permission.MANAGE_USERS,
+    Permission.MANAGE_OFFICE,
+    Permission.SYNC_STUDIES,
+  ],
+};

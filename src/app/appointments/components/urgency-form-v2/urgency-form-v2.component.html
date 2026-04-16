@@ -1,0 +1,124 @@
+<form class="row gx-3 gy-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- ######### Detalles de ESTUDIOS -->
+  <h4 class="fs-7 mb-0">Paciente</h4>
+  <div
+    class="form-floating form-floating-advance-select col-sm-11 col-xm-11 col-md-11"
+  >
+    <select
+      class="form-select"
+      #patientRef
+      formControlName="patientId"
+      id="patientId"
+    >
+      <option value="none" selected>No ha seleccionado paciente</option>
+    </select>
+    <label for="patientId">Paciente</label>
+  </div>
+
+  <div class="col-sm-1 col-xm-1 col-md-1">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('patients')"
+    >
+      <i class="fa-solid fa-hospital-user"></i>
+    </button>
+  </div>
+  <!-- ######### Detalles de ESTUDIOS -->
+
+  <h4 class="fs-7 mb-0">Estudios médicos</h4>
+  <!-- ######### Detalles de Radiologo -->
+  <div
+    class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select"
+  >
+    <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
+    <select
+      class="form-select"
+      #radiologistRef
+      formControlName="radiologistId"
+      id="radiologistId"
+    >
+      <option value="none" selected>No ha seleccionado radiologo</option>
+    </select>
+  </div>
+
+  <div class="col-sm-1 col-xm-1 col-md-1">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('radiologist')"
+    >
+      <i class="fa-solid fa-user-doctor"></i>
+    </button>
+  </div>
+  <!-- ######### Detalles de Radiologo -->
+
+  <!-- ######### Detalles de ESTUDIOS -->
+  <div class="form-floating form-floating-advance-select col-md-6">
+    <label class="ps-4" for="modalityId">Modalida</label>
+    <select
+      class="form-select"
+      *ngIf="modalities.length > 0"
+      #modalityIdRef
+      formControlName="modalityId"
+      id="modalityId"
+      (change)="onSelectModality($event)"
+    >
+      <option value="none" selected>No ha seleccionado modalidad</option>
+      @for (domain of modalities; track domain.id) {
+        <option [value]="domain.id">
+          [{{ domain.name }}] {{ domain.description }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="form-floating form-floating-advance-select col-md-6">
+    <label class="ps-4" for="modalityTypeId">Estudio</label>
+    <select
+      class="form-select"
+      #modalityTypeIdRef
+      formControlName="modalityTypeId"
+      id="modalityTypeId"
+    >
+      <option value="none" selected>No ha seleccionado un estudio</option>
+    </select>
+  </div>
+  <!-- ######### Detalles de ESTUDIOS -->
+  <button type="submit" class="btn btn-primary">Agendar Urgencia</button>
+</form>
+
+<div
+  class="modal fade modal-xl"
+  tabindex="-1"
+  [ngClass]="{ 'show d-block': showModal }"
+  *ngIf="showModal"
+  style="background: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+      @if (modalType === 'patients') {
+        <app-patient-form
+          [origin]="origing"
+          (patientCreated)="handleNewPatient($event)"
+        ></app-patient-form>
+      }
+      @if (modalType === 'radiologist') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
+    </div>
+  </div>
+</div>

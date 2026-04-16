@@ -21,14 +21,14 @@
   };
 
   const initialConfig = {
-    phoenixIsNavbarVerticalCollapsed: true,
-    phoenixTheme: 'dark',
-    phoenixNavbarTopStyle: 'darker',
-    phoenixNavbarVerticalStyle: 'darker',
+    phoenixIsNavbarVerticalCollapsed: false,
+    phoenixTheme: 'light',
+    phoenixNavbarTopStyle: 'default',
+    phoenixNavbarVerticalStyle: 'default',
     phoenixNavbarPosition: 'vertical',
-    phoenixNavbarTopShape: 'slim',
-    phoenixIsRTL: true,
-    phoenixSupportChat: false
+    phoenixNavbarTopShape: 'default',
+    phoenixIsRTL: false,
+    phoenixSupportChat: true
   };
 
   const CONFIG = { ...initialConfig };

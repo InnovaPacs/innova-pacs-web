@@ -4,20 +4,36 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --output-path ./dist/innova-pacs --base-href /innova-pacs/",
-    "watch": "ng build --watch --configuration development",
+    "start:dev": "ng serve --configuration dev",
+    "build:dev": "ng build --output-path ./dist/med-iq --base-href /med-iq/ --configuration deploy",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration dev",
     "test": "ng test"
   },
   "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "nice-napi"
+    ],
+    "overrides": {
+      "tar": ">=7.5.11",
+      "serialize-javascript": ">=7.0.5",
+      "brace-expansion": ">=1.1.13",
+      "tmp": ">=0.2.4",
+      "picomatch": ">=4.0.4"
+    }
+  },
   "dependencies": {
-    "@angular/animations": "^17.3.0",
-    "@angular/common": "^17.3.0",
-    "@angular/compiler": "^17.3.0",
-    "@angular/core": "^17.3.0",
-    "@angular/forms": "^17.3.0",
-    "@angular/platform-browser": "^17.3.0",
-    "@angular/platform-browser-dynamic": "^17.3.0",
-    "@angular/router": "^17.3.0",
+    "@angular/animations": "^20.3.18",
+    "@angular/common": "^20.3.18",
+    "@angular/compiler": "^20.3.18",
+    "@angular/core": "^20.3.18",
+    "@angular/forms": "^20.3.18",
+    "@angular/platform-browser": "^20.3.18",
+    "@angular/platform-browser-dynamic": "^20.3.18",
+    "@angular/router": "^20.3.18",
     "@fullcalendar/angular": "^6.1.15",
     "@fullcalendar/bootstrap": "^6.1.15",
     "@fullcalendar/core": "^6.1.15",
@@ -27,19 +43,25 @@
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.12.4",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.3.6",
-    "@angular/cli": "^17.3.6",
-    "@angular/compiler-cli": "^17.3.0",
+    "@angular/build": "^20.3.22",
+    "@angular/cli": "^20.3.22",
+    "@angular/compiler-cli": "^20.3.18",
     "@types/jasmine": "~5.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.2"
+    "prettier": "^3.6.2",
+    "typescript": "~5.8.3"
   }
 }
