@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { PatientService } from '../../../patients/services/patient.service';
 import { Patient } from '../../../patients/interfaces/patient.interface';
 import { VendorsService } from '../../../shared/services/vendors.service';
@@ -48,12 +43,14 @@ export class UrgencyFormV2Component {
 
   public patientInstance: any;
   public radiologistInstance: any;
+  public assignedRadiologistInstance: any;
   public modalityTypeInstance: any;
   public modalityInstance: any;
   public doctorRequestedInstance: any;
 
   @ViewChild('patientRef') patientRef!: ElementRef;
   @ViewChild('radiologistRef') radiologistRef!: ElementRef;
+  @ViewChild('assignedRadiologistRef') assignedRadiologistRef!: ElementRef;
   @ViewChild('modalityIdRef') modalityIdRef!: ElementRef;
   @ViewChild('modalityTypeIdRef') modalityTypeIdRef!: ElementRef;
   @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
@@ -61,6 +58,7 @@ export class UrgencyFormV2Component {
   public form: FormGroup = this.fb.group({
     id: [null],
     patientId: [null],
+    requestingDoctorId: [null],
     radiologistId: [null],
     modalityId: [null],
     modalityTypeId: [null],
@@ -72,7 +70,7 @@ export class UrgencyFormV2Component {
 
   ngOnInit() {
     this.loadPatientsAndSelect('DESCONOCIDO');
-    this.loadDoctorsAndSelect('DOCTOR EN TURNO (ASIGNAR)');
+    this.loadDoctorsAndSelect('MÉDICO SOLICITANTE');
     this.getModalitiesData();
     this.getQueryParams();
   }
@@ -223,7 +221,7 @@ export class UrgencyFormV2Component {
           doctor.id,
           `${doctor.name}`
         );
-        this.form.patchValue({ radiologistId: doctor.id });
+        this.form.patchValue({ requestingDoctorId: doctor.id });
         this.closeModal();
       }, 100);
     });
@@ -242,7 +240,7 @@ export class UrgencyFormV2Component {
             );
           }, 100);
         }),
-        switchMap(() => curp ? this.patientService.getByCurp(curp) : of(null))
+        switchMap(() => (curp ? this.patientService.getByCurp(curp) : of(null)))
       )
       .subscribe((patient) => {
         this.patient = patient || null;
@@ -270,9 +268,13 @@ export class UrgencyFormV2Component {
               this.radiologistInstance,
               this.radiologistRef
             );
+            this.assignedRadiologistInstance = this.vendorsService.initChoices(
+              this.assignedRadiologistInstance,
+              this.assignedRadiologistRef
+            );
           }, 100);
         }),
-        switchMap(() => name ? this.doctorService.getByName(name) : of(null))
+        switchMap(() => (name ? this.doctorService.getByName(name) : of(null)))
       )
       .subscribe((doctor) => {
         this.doctor = doctor || null;
@@ -283,9 +285,28 @@ export class UrgencyFormV2Component {
               this.doctor!.id,
               `${this.doctor!.name}`
             );
-            this.form.get('radiologistId')?.setValue(this.doctor!.id);
+            this.form.get('requestingDoctorId')?.setValue(this.doctor!.id);
           }, 150);
         }
       });
+  }
+
+  public handleNewAssignedDoctor(doctor: Doctor): void {
+    this.doctors = [...this.doctors, doctor];
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        this.assignedRadiologistInstance = this.vendorsService.initChoices(
+          this.assignedRadiologistInstance,
+          this.assignedRadiologistRef
+        );
+        this.vendorsService.setChoices(
+          this.assignedRadiologistInstance,
+          doctor.id,
+          `${doctor.name}`
+        );
+        this.form.patchValue({ radiologistId: doctor.id });
+        this.closeModal();
+      }, 100);
+    });
   }
 }

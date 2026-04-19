@@ -33,18 +33,18 @@
   <!-- ######### Detalles de ESTUDIOS -->
 
   <h4 class="fs-7 mb-0">Estudios médicos</h4>
-  <!-- ######### Detalles de Radiologo -->
+  <!-- ######### Detalles de Médico Solicitante -->
   <div
     class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select"
   >
-    <label class="ps-4" for="radiologistId">Radiologo Solicitante</label>
+    <label class="ps-4" for="requestingDoctorId">Médico Solicitante</label>
     <select
       class="form-select"
       #radiologistRef
-      formControlName="radiologistId"
-      id="radiologistId"
+      formControlName="requestingDoctorId"
+      id="requestingDoctorId"
     >
-      <option value="none" selected>No ha seleccionado radiologo</option>
+      <option value="none" selected>No ha seleccionado médico</option>
       @for (doctor of doctors; track doctor.id) {
         <option [value]="doctor.id">{{ doctor.name }}</option>
       }
@@ -61,7 +61,37 @@
       <i class="fa-solid fa-user-doctor"></i>
     </button>
   </div>
-  <!-- ######### Detalles de Radiologo -->
+  <!-- ######### Detalles de Médico Solicitante -->
+
+  <!-- ######### Detalles de Radiólogo Asignado -->
+  <div
+    class="col-sm-11 col-xm-11 col-md-11 form-floating form-floating-advance-select"
+  >
+    <label class="ps-4" for="radiologistId">Radiólogo Asignado</label>
+    <select
+      class="form-select"
+      #assignedRadiologistRef
+      formControlName="radiologistId"
+      id="radiologistId"
+    >
+      <option value="none" selected>No ha seleccionado radiólogo</option>
+      @for (doctor of doctors; track doctor.id) {
+        <option [value]="doctor.id">{{ doctor.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="col-sm-1 col-xm-1 col-md-1">
+    <button
+      type="button"
+      class="btn btn-success d-flex align-items-center justify-content-center w-100"
+      style="height: 47px; width: 100%"
+      (click)="openModal('assignedRadiologist')"
+    >
+      <i class="fa-solid fa-user-doctor"></i>
+    </button>
+  </div>
+  <!-- ######### Detalles de Radiólogo Asignado -->
 
   <!-- ######### Detalles de ESTUDIOS -->
   <div class="form-floating form-floating-advance-select col-md-6">
@@ -125,6 +155,12 @@
         <app-doctor-form
           [origin]="origing"
           (doctorCreated)="handleNewDoctor($event)"
+        ></app-doctor-form>
+      }
+      @if (modalType === 'assignedRadiologist') {
+        <app-doctor-form
+          [origin]="origing"
+          (doctorCreated)="handleNewAssignedDoctor($event)"
         ></app-doctor-form>
       }
     </div>
