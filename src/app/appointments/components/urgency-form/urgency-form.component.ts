@@ -103,9 +103,8 @@ export class UrgencyFormComponent {
   }
 
   private getMainData(): void {
-    this.getDoctorByName('DOCTOR EN TURNO (ASIGNAR)');
-    this.getPatientByName('DESCONOCIDO');
     this.getAllPatients();
+    this.getAllDoctors();
     this.getAllMedicalOffices();
   }
 
@@ -115,21 +114,9 @@ export class UrgencyFormComponent {
     });
   }
 
-  private getDoctorByName(name: string) {
-    this.doctorService.getByName(name).subscribe((doctor) => {
-      this.doctor = doctor || null;
-    });
-  }
-
-  private getPatientByName(curp: string) {
-    this.patientService.getByCurp(curp).subscribe((patient) => {
-      this.patient = patient || null;
-    });
-  }
-
   private getAllDoctors() {
-    this.doctorService.getFullData().subscribe((repsosne) => {
-      this.doctors = repsosne;
+    this.doctorService.getFullData().subscribe((response) => {
+      this.doctors = response;
       setTimeout(() => {
         this.doctorRequestedInstance = this.vendorsService.initChoices(
           this.doctorRequestedInstance,
@@ -147,19 +134,6 @@ export class UrgencyFormComponent {
           this.patientInstance,
           this.patientRef
         );
-
-        this.patientInstance = this.vendorsService.initChoices(
-          this.patientInstance,
-          this.patientRef
-        );
-
-        if (this.patient) {
-          this.vendorsService.setChoices(
-            this.patientInstance,
-            this.patient.id,
-            `${this.patient.firstName} ${this.patient.lastName || ''}`
-          );
-        }
       }, 100);
     });
   }
