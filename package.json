@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --configuration local",
     "start:dev": "ng serve --configuration dev",
     "build:dev": "ng build --output-path ./dist/med-iq --base-href /med-iq/ --configuration deploy",
     "build": "ng build",

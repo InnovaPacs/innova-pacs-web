@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -20,13 +19,12 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
-    selector: 'app-urgency-form-v2',
-    templateUrl: './urgency-form-v2.component.html',
-    styleUrl: './urgency-form-v2.component.css',
-    standalone: false
+  selector: 'app-urgency-form-v2',
+  templateUrl: './urgency-form-v2.component.html',
+  styleUrl: './urgency-form-v2.component.css',
+  standalone: false,
 })
 export class UrgencyFormV2Component {
-  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private vendorsService = inject(VendorsService);
@@ -52,11 +50,13 @@ export class UrgencyFormV2Component {
   public radiologistInstance: any;
   public modalityTypeInstance: any;
   public modalityInstance: any;
+  public doctorRequestedInstance: any;
 
   @ViewChild('patientRef') patientRef!: ElementRef;
   @ViewChild('radiologistRef') radiologistRef!: ElementRef;
   @ViewChild('modalityIdRef') modalityIdRef!: ElementRef;
   @ViewChild('modalityTypeIdRef') modalityTypeIdRef!: ElementRef;
+  @ViewChild('doctorRequestedRef') doctorRequestedRef!: ElementRef;
 
   public form: FormGroup = this.fb.group({
     id: [null],
@@ -75,66 +75,6 @@ export class UrgencyFormV2Component {
     this.loadDoctorsAndSelect('DOCTOR EN TURNO (ASIGNAR)');
     this.getModalitiesData();
     this.getQueryParams();
-  }
-
-  private loadPatientsAndSelect(curp: string) {
-    this.patientService
-      .getFullData()
-      .pipe(
-        tap((response) => {
-          this.patients = response;
-          setTimeout(() => {
-            this.patientInstance = this.vendorsService.initChoices(
-              this.patientInstance,
-              this.patientRef
-            );
-          }, 100);
-        }),
-        switchMap(() => {
-          return curp ? this.patientService.getByCurp(curp) : of(null);
-        })
-      )
-      .subscribe((patient) => {
-        this.patient = patient || null;
-        if (this.patient) {
-          this.vendorsService.setChoices(
-            this.patientInstance,
-            this.patient.id,
-            `${this.patient.firstName} ${this.patient.lastName || ''}`
-          );
-          this.form.get('patientId')?.setValue(this.patient.id);
-        }
-      });
-  }
-
-  private loadDoctorsAndSelect(name: string) {
-    this.doctorService
-      .getFullData()
-      .pipe(
-        tap((response) => {
-          this.doctors = response;
-          setTimeout(() => {
-            this.radiologistInstance = this.vendorsService.initChoices(
-              this.radiologistInstance,
-              this.radiologistRef
-            );
-          }, 100);
-        }),
-        switchMap(() => {
-          return name ? this.doctorService.getByName(name) : of(null);
-        })
-      )
-      .subscribe((doctor) => {
-        this.doctor = doctor || null;
-        if (this.doctor) {
-          this.vendorsService.setChoices(
-            this.radiologistInstance,
-            this.doctor.id,
-            `${this.doctor.name}`
-          );
-          this.form.get('radiologistId')?.setValue(this.doctor.id);
-        }
-      });
   }
 
   getModalitiesData(): void {
@@ -287,5 +227,65 @@ export class UrgencyFormV2Component {
         this.closeModal();
       }, 100);
     });
+  }
+
+  private loadPatientsAndSelect(curp: string) {
+    this.patientService
+      .getFullData()
+      .pipe(
+        tap((response) => {
+          this.patients = response;
+          setTimeout(() => {
+            this.patientInstance = this.vendorsService.initChoices(
+              this.patientInstance,
+              this.patientRef
+            );
+          }, 100);
+        }),
+        switchMap(() => curp ? this.patientService.getByCurp(curp) : of(null))
+      )
+      .subscribe((patient) => {
+        this.patient = patient || null;
+        if (this.patient) {
+          setTimeout(() => {
+            this.vendorsService.setChoices(
+              this.patientInstance,
+              this.patient!.id,
+              `${this.patient!.firstName} ${this.patient!.lastName || ''}`
+            );
+            this.form.get('patientId')?.setValue(this.patient!.id);
+          }, 150);
+        }
+      });
+  }
+
+  private loadDoctorsAndSelect(name: string) {
+    this.doctorService
+      .getFullData()
+      .pipe(
+        tap((response) => {
+          this.doctors = response;
+          setTimeout(() => {
+            this.radiologistInstance = this.vendorsService.initChoices(
+              this.radiologistInstance,
+              this.radiologistRef
+            );
+          }, 100);
+        }),
+        switchMap(() => name ? this.doctorService.getByName(name) : of(null))
+      )
+      .subscribe((doctor) => {
+        this.doctor = doctor || null;
+        if (this.doctor) {
+          setTimeout(() => {
+            this.vendorsService.setChoices(
+              this.radiologistInstance,
+              this.doctor!.id,
+              `${this.doctor!.name}`
+            );
+            this.form.get('radiologistId')?.setValue(this.doctor!.id);
+          }, 150);
+        }
+      });
   }
 }

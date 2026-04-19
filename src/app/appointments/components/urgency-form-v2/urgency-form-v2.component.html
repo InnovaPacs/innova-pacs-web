@@ -11,6 +11,11 @@
       id="patientId"
     >
       <option value="none" selected>No ha seleccionado paciente</option>
+      @for (patient of patients; track patient.id) {
+        <option [value]="patient.id">
+          {{ patient.firstName }} {{ patient.lastName || '' }}
+        </option>
+      }
     </select>
     <label for="patientId">Paciente</label>
   </div>
@@ -40,6 +45,9 @@
       id="radiologistId"
     >
       <option value="none" selected>No ha seleccionado radiologo</option>
+      @for (doctor of doctors; track doctor.id) {
+        <option [value]="doctor.id">{{ doctor.name }}</option>
+      }
     </select>
   </div>
 
